@@ -17,10 +17,17 @@
             window.onload = function() {
                 var id = document.getElementById('inputEmail');
                 var remember = document.getElementById('inputRememberPassword');
+                var exception = getParameterByName('exception');
+                var loginA = document.getElementById('logina');
 
                 if(getCookie("id")) {
                     id.value = getCookie("id");
                     remember.checked = true;
+                }
+
+                if(exception != "") {
+                    history.replaceState({}, null, location.pathname);
+                    loginA.innerHTML=exception;
                 }
             }
 
@@ -74,6 +81,14 @@
 
                 loginForm.submit();
             }
+
+            // 파라미터 가져오기
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+                return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
         </script>
     </head>
     <body>
@@ -102,6 +117,7 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <button class="btn btn-primary" onclick="sendit(); return false;">로그인</button>
+                                                <a id="logina"></a>
                                             </div>
                                         </form>
                                     </div>

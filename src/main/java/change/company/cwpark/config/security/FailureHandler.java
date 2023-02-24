@@ -42,7 +42,7 @@ public class FailureHandler extends SimpleUrlAuthenticationFailureHandler {
         }
 
         // 기본 URL 지정
-        setDefaultFailureUrl("/login?error=true&exception=" + URLEncoder.encode(msg,"UTF-8"));
+        setDefaultFailureUrl("/?error=true&exception=" + URLEncoder.encode(msg,"UTF-8"));
 
         super.onAuthenticationFailure(request,response,exception);
     }
