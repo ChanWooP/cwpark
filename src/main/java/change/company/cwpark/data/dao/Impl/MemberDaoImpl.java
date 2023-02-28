@@ -3,12 +3,16 @@ package change.company.cwpark.data.dao.Impl;
 import change.company.cwpark.data.dao.MemberDao;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.repository.MemberRepository;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
-@Component
+@Service
+@Transactional
 public class MemberDaoImpl implements MemberDao {
 
     private final MemberRepository memberRepository;

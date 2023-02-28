@@ -1,9 +1,7 @@
 package change.company.cwpark.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.sun.java.swing.plaf.windows.WindowsTextAreaUI;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @DynamicUpdate  // 변경된 필드만 적용
 @DynamicInsert  // 같음
+@EqualsAndHashCode
 @Table(name = "member")
 public class Member extends Base{
 /*
@@ -54,4 +53,12 @@ CREATE TABLE member (
     @Column(name = "login_fail_cnt")
     private Integer loginFailCnt;
 
+    // 테스트를 위한 생성자
+    public Member(String name, String account, String password, LocalDateTime lastAccessDt, Integer loginFailCnt) {
+        this.name = name;
+        this.account = account;
+        this.password = password;
+        this.lastAccessDt = lastAccessDt;
+        this.loginFailCnt = loginFailCnt;
+    }
 }

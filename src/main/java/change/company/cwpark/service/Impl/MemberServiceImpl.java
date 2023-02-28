@@ -46,8 +46,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDto getMember(String Account) {
         Member member = memberDao.getMember(Account);
-        MemberDto memberDto = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
+        MemberDto memberDto = null;
 
+        if(member != null) {
+            memberDto = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
+        }
         return memberDto;
     }
 
@@ -65,7 +68,9 @@ public class MemberServiceImpl implements MemberService {
         member.setLoginFailCnt(0);
         member = memberDao.saveMember(member);
 
-        memberDtoRtn = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
+        if(member != null) {
+            memberDtoRtn = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
+        }
 
         return memberDtoRtn;
     }
