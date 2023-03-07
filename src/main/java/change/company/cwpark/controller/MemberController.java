@@ -47,18 +47,6 @@ public class MemberController {
         return "redirect:/login";
     }
 
-    // 세션체크
-    @GetMapping("/session")
-    public String session(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        if(session == null) {
-            return "redirect:/login";
-        }
-
-        return "pages/index";
-    }
-
     // 메인 화면
     @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping("/index")

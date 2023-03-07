@@ -15,28 +15,28 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @DynamicUpdate  // 변경된 필드만 적용
 @DynamicInsert  // 같음
-@EqualsAndHashCode
 @Table(name = "member")
 public class Member extends Base{
 /*
-CREATE TABLE member (
-	id INT NOT NULL AUTO_INCREMENT
-	, name VARCHAR(255) NOT NULL
-	, account VARCHAR(255) NOT NULL UNIQUE
-	, password VARCHAR(255) NOT NULL
-	, last_access_dt DATETIME
-	, reg_date DATETIME
-	, reg_id VARCHAR(255)
-	, upd_date DATETIME
-	, upd_id VARCHAR(255)
-	, login_fail_cnt INT
+CREATE TABLE MEMBER (
+	  ID INT NOT NULL AUTO_INCREMENT
+	, NAME VARCHAR(255) NOT NULL
+	, ACCOUNT VARCHAR(255) NOT NULL UNIQUE
+	, PASSWORD VARCHAR(255) NOT NULL
+	, AUTHORITY INT
+	, LOGIN_FAIL_CNT INT
+	, LAST_ACCESS_DT  DATETIME
+	, REG_DATE DATETIME
+	, REG_ID VARCHAR(255)
+	, UPD_DATE DATETIME
+	, UPD_ID VARCHAR(255)
 	, PRIMARY KEY (id)
 );
  */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 255, nullable = false)
     private String name;
