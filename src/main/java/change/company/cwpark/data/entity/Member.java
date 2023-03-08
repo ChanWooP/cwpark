@@ -1,6 +1,5 @@
 package change.company.cwpark.data.entity;
 
-import com.sun.java.swing.plaf.windows.WindowsTextAreaUI;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;

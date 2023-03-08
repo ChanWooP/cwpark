@@ -17,8 +17,8 @@ public class MenuRepositoryTest {
     @Transactional
     void findAllMenu() {
         // given
-
-        // when 흠... id 값이 밀리면 불러오지를 못하네?
+        
+        // when 흠... ROOT가 ID가 1이아니면 안되나..? 아무튼 저장 까지 해서 테스트 만들어보자
         Menu menu = menuRepository.findByDepth(0);
 
         System.out.println("S");
