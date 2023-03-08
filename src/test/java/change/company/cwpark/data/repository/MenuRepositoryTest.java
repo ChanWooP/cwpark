@@ -1,15 +1,11 @@
 package change.company.cwpark.data.repository;
 
-import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Menu;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class MenuRepositoryTest {
@@ -18,11 +14,12 @@ public class MenuRepositoryTest {
 
     @Test
     @DisplayName("전체 메뉴 가져오기")
+    @Transactional
     void findAllMenu() {
         // given
 
-        // when
-        List<Menu> menu = menuRepository.findAll();
+        // when 흠... id 값이 밀리면 불러오지를 못하네?
+        Menu menu = menuRepository.findByDepth(0);
 
         System.out.println("S");
     }
