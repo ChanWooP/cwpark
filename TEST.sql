@@ -15,6 +15,4 @@ VALUES (4, 1, 1, '대2');
 INSERT INTO menu(num, parent_num, depth, NAME) 
 VALUES (5, 4, 2, '중2');
 
-
-
 COMMIT;
