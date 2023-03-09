@@ -36,12 +36,8 @@ CREATE TABLE MENU (
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "num")
-    private Long num;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_num")
-    private Menu parent;
+    @Column(name = "parent_num")
+    private Long parentNum;
 
     @Column(name = "depth")
     private Integer depth;
@@ -49,7 +45,10 @@ CREATE TABLE MENU (
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Menu> children = new ArrayList<>();
+    public Menu(Long parentNum, Integer depth, String name) {
+        this.parentNum = parentNum;
+        this.depth = depth;
+        this.name = name;
+    }
 
 }

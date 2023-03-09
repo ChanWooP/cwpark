@@ -12,12 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenuDto {
-    private Long num;
+    private Long parentNum;
 
     private Integer depth;
 
     private String name;
-
-    private List<MenuDto> children;
 
 }
