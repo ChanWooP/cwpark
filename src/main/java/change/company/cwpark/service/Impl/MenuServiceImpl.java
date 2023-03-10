@@ -19,7 +19,14 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<Menu> getAllMenu() {
-        return menuDao.getAllMenu();
+    public List<MenuDto> getAllMenu() {
+        List<Menu> menu = menuDao.getAllMenu();
+        List<MenuDto> menuDto = new ArrayList<>();
+
+        for(Menu m : menu) {
+            menuDto.add(new MenuDto(m.getParentNum(), m.getDepth(), m.getName()));
+        }
+
+        return menuDto;
     }
 }
