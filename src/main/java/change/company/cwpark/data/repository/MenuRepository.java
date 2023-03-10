@@ -9,7 +9,9 @@ import java.util.List;
 public interface MenuRepository extends JpaRepository<Menu, Long> {
     Menu findByDepth(Integer depth);
 
-    @Query(value = "SELECT A.ID, A.NAME, B.NAME AS P_NAME, A.DEPTH " +
-            "          FROM menu A LEFT OUTER JOIN menu B ON A.PARENT_NUM = B.ID", nativeQuery = true)
+    @Query(value = "SELECT A.ID, A.PARENT_NUM, A.DEPTH, A.NAME "
+                 + "  FROM menu A LEFT OUTER JOIN menu B ON A.PARENT_NUM = B.ID"
+                 + " ORDER BY A.DEPTH"
+            , nativeQuery = true)
     List<Menu> findAllMenu();
 }

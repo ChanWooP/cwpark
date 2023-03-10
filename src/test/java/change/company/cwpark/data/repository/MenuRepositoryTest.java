@@ -1,6 +1,7 @@
 package change.company.cwpark.data.repository;
 
 import change.company.cwpark.data.entity.Menu;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,11 @@ public class MenuRepositoryTest {
         Menu menu3 = menuRepository.save(new Menu(menu2.getId(), 2, "중1"));
 
         // when
-        Menu menu = menuRepository.findByDepth(0);
         List<Menu> menuList = menuRepository.findAllMenu();
 
         // then
-        System.out.println("S");
+        Assertions.assertThat(menu1.getName()).isEqualTo(menuList.get(0).getName());
+        Assertions.assertThat(menu2.getName()).isEqualTo(menuList.get(1).getName());
+        Assertions.assertThat(menu3.getName()).isEqualTo(menuList.get(2).getName());
     }
 }
