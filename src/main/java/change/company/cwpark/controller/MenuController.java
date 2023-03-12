@@ -21,9 +21,11 @@ public class MenuController {
     }
 
     @GetMapping("/all")
-    public void getAllMenu(Model model) {
+    public String getAllMenu(Model model) {
         List<MenuDto> menu = menuService.getAllMenu();
 
         model.addAttribute("menu", menu);
+
+        return "pages/menu";
     }
 }
