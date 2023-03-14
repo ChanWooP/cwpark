@@ -57,19 +57,23 @@ public class MemberServiceImpl implements MemberService {
     // 사용자 회원가입
     @Override
     public MemberDto saveMember(MemberDto memberDto) {
-        Member member = new Member();
+        Member member = memberDao.getMember(memberDto.getAccount());
         MemberDto memberDtoRtn = null;
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        member.setName(memberDto.getName());
-        member.setAccount(memberDto.getAccount());
-        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        member.setLastAccessDt(LocalDateTime.now());
-        member.setLoginFailCnt(0);
-        member = memberDao.saveMember(member);
+        // 아이디 중복 체크
+        if(member == null) {
+            member = new Member();
+            member.setName(memberDto.getName());
+            member.setAccount(memberDto.getAccount());
+            member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+            member.setLastAccessDt(LocalDateTime.now());
+            member.setLoginFailCnt(0);
+            member = memberDao.saveMember(member);
 
-        if(member != null) {
-            memberDtoRtn = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
+            if(member != null) {
+                memberDtoRtn = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
+            }
         }
 
         return memberDtoRtn;

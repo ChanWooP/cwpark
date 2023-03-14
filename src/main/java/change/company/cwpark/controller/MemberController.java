@@ -5,6 +5,7 @@ import change.company.cwpark.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,9 +43,15 @@ public class MemberController {
 
     // 회원가입 전송
     @PostMapping("/register")
-    public String signup(MemberDto memberDto) {
-        memberService.saveMember(memberDto);
-        return "redirect:/login";
+    public String signup(MemberDto memberDto, Model model) {
+        MemberDto memberDto1 = memberService.saveMember(memberDto);
+
+        if(memberDto1 == null) {
+            model.addAttribute("overlap", "아이디가 중복되었습니다.");
+            return "pages/register";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     // 메인 화면
