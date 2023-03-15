@@ -7,6 +7,7 @@ import change.company.cwpark.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<MenuDto> getAllMenu() {
         List<Menu> menu = menuDao.getAllMenu();
-        List<MenuDto> menuDto = new ArrayList<>();
+        List<MenuDto> menuDto = new LinkedList<>();
 
         for(Menu m : menu) {
             menuDto.add(new MenuDto(m.getParentNum(), m.getDepth(), m.getName()));

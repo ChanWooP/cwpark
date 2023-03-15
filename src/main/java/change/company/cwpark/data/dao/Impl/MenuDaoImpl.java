@@ -21,7 +21,7 @@ public class MenuDaoImpl implements MenuDao {
     // 메뉴 전체 조회
     @Override
     public List<Menu> getAllMenu() {
-        List<Menu> menu = menuRepository.findAll();
+        List<Menu> menu = menuRepository.findAllMenu();
 
         return menu;
     }

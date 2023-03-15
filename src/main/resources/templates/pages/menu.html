@@ -1,10 +1,21 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
 <body>
-TEST
+<div id="div_menu" style="background-color:red; width:30%; float:left;">
+  <table>
+    <tr th:each="menu : ${menu}">
+      <td th:text="${menu.name}"></td>
+    </tr>
+  </table>
+</div>
+<div id="div_menu_detail" style="background-color:blue; width:70%; float:left;">
+  일단 네이티브쿼리 어떻게 사용하는지 확인이 필요할 듯 함...
+</div>
+
 </body>
 </html>
