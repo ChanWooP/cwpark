@@ -23,11 +23,12 @@ VALUES (4, 2, '중5');
 
 COMMIT;
 
+/* 공백은 스페이스바 아니고 문자사용 'ㅤ' */
 SELECT A.id
 	  , A.parent_num
 	  , A.depth
-	  , case A.depth when 1 then CONCAT(' └ ', A.name)
-	         		  when 2 then CONCAT('   └ ', A.name)
+	  , case A.depth when 1 then CONCAT('ㅤ└ ', A.name)
+	         		  when 2 then CONCAT('ㅤㅤ└ ', A.name)
 	         		  ELSE A.name END AS name
 	  , case A.depth when 1 then A.id
 	  					  when 2 then A.parent_num
