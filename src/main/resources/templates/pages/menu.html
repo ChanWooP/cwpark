@@ -3,17 +3,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>메뉴관리</title>
+  <link href="css/styles2.css" rel="stylesheet" />
 </head>
 <body>
-<div id="div_menu" style="background-color:red; width:30%; height:100%; float:left;">
-  <table>
-    <tr th:each="menu : ${menu}">
-      <td th:text="${menu.name}"></td>
-    </tr>
-  </table>
+<div id="div_menu" style="width:40%; float:left;">
+  <div class="card mb-4" style="width:80%; float:left;">
+    <table id="datatablesSimple">
+      <tbody>
+        <tr th:each="menu : ${menu}">
+          <td th:text="${menu.name}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="width:20%; float:left;">
+    <button class="button_2">추가</button>
+    <button class="button_2">삭제</button>
+  </div>
+
 </div>
-<div id="div_menu_detail" style="background-color:blue; width:70%; height:100%; float:left;">
+<div id="div_menu_detail" style="width:60%; float:left;">
   일단 해결됨
 </div>
 

@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+button.button_2 {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+  outline: none;
+  font-size: 10px;
+  background: black;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button.button_2:hover {
+  color: white;
+  background: orange;
+}
