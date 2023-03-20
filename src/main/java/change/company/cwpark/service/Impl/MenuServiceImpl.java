@@ -6,7 +6,6 @@ import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -27,9 +26,20 @@ public class MenuServiceImpl implements MenuService {
         List<MenuDto> menuDto = new LinkedList<>();
 
         for(Menu m : menu) {
-            menuDto.add(new MenuDto(m.getParentNum(), m.getDepth(), m.getName()));
+            menuDto.add(new MenuDto(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName()));
         }
 
         return menuDto;
+    }
+
+    @Override
+    public MenuDto saveMenu(MenuDto menuDto) {
+        Menu menu = menuDao.saveMenu(new Menu(menuDto.getId(), menuDto.getParentNum(), menuDto.getDepth()
+                , menuDto.getName(), menuDto.getPath(), menuDto.getMenuName()));
+
+        MenuDto menuDtoRtn = new MenuDto(menu.getId(), menu.getParentNum(), menu.getDepth()
+                , menu.getName(), menu.getPath(), menu.getMenuName());
+
+        return menuDtoRtn;
     }
 }

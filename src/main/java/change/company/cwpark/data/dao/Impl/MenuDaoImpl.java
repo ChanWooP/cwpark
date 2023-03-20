@@ -5,7 +5,7 @@ import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.data.reinterface.MenuInterface;
 import change.company.cwpark.data.repository.MenuRepository;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -28,9 +28,18 @@ public class MenuDaoImpl implements MenuDao {
         List<Menu> rtnMenu = new ArrayList<>();
 
         for(MenuInterface m : menu) {
-            rtnMenu.add(new Menu(m.getId(), m.getParentNum(), m.getDepth(), m.getName()));
+            rtnMenu.add(new Menu(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName()));
         }
 
         return rtnMenu;
     }
+
+    // 메뉴 저장
+    @Override
+    public Menu saveMenu(Menu menu) {
+        Menu menuRtn = menuRepository.save(menu);
+
+        return menuRtn;
+    }
+    
 }

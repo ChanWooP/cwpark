@@ -18,18 +18,19 @@ import java.util.List;
 @Table(name = "menu")
 public class Menu extends Base{
 /*
+-- 메뉴
 CREATE TABLE MENU (
 	  ID INT NOT NULL AUTO_INCREMENT
-	, NUM INT NOT NULL
 	, PARENT_NUM INT
 	, DEPTH INT
 	, NAME VARCHAR(100)
+	, PATH VARCHAR(100)
 	, REG_DATE DATETIME
 	, REG_ID VARCHAR(255)
 	, UPD_DATE DATETIME
 	, UPD_ID VARCHAR(255)
 	, PRIMARY KEY(id)
-);
+) DEFAULT CHARACTER SET UTF8;
 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +46,18 @@ CREATE TABLE MENU (
     @Column(name = "name")
     private String name;
 
-    public Menu(Long parentNum, Integer depth, String name) {
+    @Column(name = "path")
+    private String path;
+
+    @Transient
+    private String menuName;
+
+    public Menu(Long parentNum, Integer depth, String name, String path, String menuName) {
         this.parentNum = parentNum;
         this.depth = depth;
         this.name = name;
+        this.path = path;
+        this.menuName = menuName;
     }
 
 }

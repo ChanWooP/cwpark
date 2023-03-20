@@ -12,11 +12,13 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     Menu findByDepth(Integer depth);
 
     @Query(value = "SELECT A.id /* 공백은 스페이스바 아니고 문자사용 'ㅤ' */ "
-                 + "	   , A.parent_num "
-                 + "	   , A.depth "
+                 + "	   , A.parent_num AS parentNum "
+                 + "	   , A.depth"
                  + "	   , case A.depth when 1 then CONCAT('ㅤ└ ', A.name) "
                  + "	         		      when 2 then CONCAT('ㅤㅤ└ ', A.name) "
-                 + "	         	       	ELSE A.name END AS name "
+                 + "	         	       	ELSE A.name END AS menuName "
+                 + "	   , A.name "
+                 + "	   , A.path "
                  + "  FROM menu A "
                  + "   LEFT OUTER JOIN menu B "
                  + "     ON A.parent_num = B.id "

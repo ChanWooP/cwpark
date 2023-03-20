@@ -12,10 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenuDto {
+    private Long id;
+    
     private Long parentNum;
 
     private Integer depth;
 
     private String name;
+
+    private String path;
+
+    private String menuName;
 
 }

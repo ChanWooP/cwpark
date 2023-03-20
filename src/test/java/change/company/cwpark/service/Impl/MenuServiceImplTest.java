@@ -30,9 +30,9 @@ public class MenuServiceImplTest {
     public void getAllMenuTest() {
         // given
         List<Menu> menu = new ArrayList<>();
-        menu.add(new Menu(null, 0, "ROOT"));
-        menu.add(new Menu(1L, 0, "대1"));
-        menu.add(new Menu(2L, 0, "중1"));
+        menu.add(new Menu(null, 0, "ROOT", "", ""));
+        menu.add(new Menu(1L, 0, "대1", "", ""));
+        menu.add(new Menu(2L, 0, "중1", "", ""));
 
         Mockito.when(menuDao.getAllMenu()).thenReturn(menu);
 

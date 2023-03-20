@@ -5,7 +5,31 @@
   <meta charset="UTF-8">
   <title>메뉴관리</title>
   <link href="css/styles2.css" rel="stylesheet"/>
-  <script src="js/scripts2.js"></script>
+  <script>
+  let dv;
+
+  // 메뉴 클릭
+  function font_onclick(targetId) {
+      if(dv != null) {
+          dv.style.color = 'black';
+      }
+
+      dv = event.currentTarget;
+
+      dv.style.color = 'blue';
+
+      alert(targetId.dataset.depth);
+  }
+
+  // 값 체크
+  function fn_check() {
+    let name = document.getElementById('menuName');
+    let path = document.getElementById('menuPath');
+    let Id = document.getElementById('menuId');
+    let parentNum = document.getElementById('menuParentNum');
+    let depth = document.getElementById('menuDepth');
+  }
+  </script>
 </head>
 <body>
 <div id="div_menu" style="width:30%; float:left; height:100%;">
@@ -14,7 +38,14 @@
       <table id="datatablesSimple">
         <tbody>
           <tr th:each="menu : ${menu}">
-            <td th:text="${menu.name}" style="cursor:pointer; font-weight:bold;" onclick="font_onclick();"></td>
+            <td style="cursor:pointer; font-weight:bold;" onclick="font_onclick(this);"
+                th:text="${menu.menuName}"
+                th:id="${menu.id}"
+                th:data-parentNum="${menu.parentNum}"
+                th:data-depth="${menu.depth}"
+                th:data-path="${menu.path}"
+                th:data-name="${menu.name}">
+            </td>
           </tr>
         </tbody>
       </table>
@@ -27,9 +58,18 @@
 
 </div>
 <div id="div_menu_detail" class="card mb-4" style="width:70%; height:100%; float:left; height:100%;">
-  <div class="card-body">
-    <form>
-
+  <div class="card-body" id="menuInput">
+    <form th:action="@{/menu/save}" method="post">
+      <lable id="menuNameL" style="visibility:hidden">메뉴명 :</lable>
+      <input type="text" name="name" id="menuName" style="visibility:hidden">
+      <br><br>
+      <lable id="menuPathL" style="visibility:hidden">경로 :</lable>
+      <input type="text" name="path" id="menuPath" style="visibility:hidden">
+      <br><br>
+      <input type="hidden" name="id" id="menuId">
+      <input type="hidden" name="parentNum" id="menuParentNum">
+      <input type="hidden" name="depth" id="menuDepth">
+      <button class="button_2" onclick="fn_check(); return false;" style="visibility:hidden">저장</button>
     </form>
   </div>
 </div>

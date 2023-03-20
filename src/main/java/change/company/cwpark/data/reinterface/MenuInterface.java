@@ -5,4 +5,6 @@ public interface MenuInterface {
     Long getParentNum();
     Integer getDepth();
     String getName();
+    String getPath();
+    String getMenuName();
 }
