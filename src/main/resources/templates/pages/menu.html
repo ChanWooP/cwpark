@@ -8,26 +8,30 @@
   <script src="js/scripts2.js"></script>
 </head>
 <body>
-<div id="div_menu" style="width:30%; float:left;">
-  <div class="card mb-4" style="width:70%; float:left;">
+<div id="div_menu" style="width:30%; float:left; height:100%;">
+  <div class="card mb-4" style="width:73%; float:left; height:100%;">
     <div class="card-body">
       <table id="datatablesSimple">
         <tbody>
           <tr th:each="menu : ${menu}">
-            <td th:text="${menu.name}" style="cursor:pointer;" onclick="font_onclick();"></td>
+            <td th:text="${menu.name}" style="cursor:pointer; font-weight:bold;" onclick="font_onclick();"></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <div style="width:30%; float:left; padding-left:5px;">
+  <div style="width:27%; float:left; padding-left:5px; height:100%;">
     <button class="button_2">추가</button>
     <button class="button_2">삭제</button>
   </div>
 
 </div>
-<div id="div_menu_detail" style="width:70%; float:left;">
-  일단 해결됨
+<div id="div_menu_detail" class="card mb-4" style="width:70%; height:100%; float:left; height:100%;">
+  <div class="card-body">
+    <form>
+
+    </form>
+  </div>
 </div>
 
 </body>
