@@ -9,7 +9,7 @@
   let dv;
 
   // 메뉴 클릭
-  function font_onclick(targetId) {
+  function font_onclick() {
       if(dv != null) {
           dv.style.color = 'black';
       }
@@ -17,8 +17,35 @@
       dv = event.currentTarget;
 
       dv.style.color = 'blue';
+  }
 
-      alert(targetId.dataset.depth);
+  // 메뉴 추가
+  function fn_add() {
+
+    if(dv == null) {
+      alert('메뉴를 추가할 곳을 선택해주세요.');
+      return false;
+    } else if(dv.dataset.depth == 2) {
+      alert('마지막 메뉴입니다.');
+      return false;
+    }
+
+    let parentDepth = dv.dataset.depth;
+    let table = document.getElementById('datatablesSimple');
+    let row = table.insertRow();
+    let cell = row.insertCell(0);
+
+    alert(parentDepth); // 뎁스값 체크해서 부모 뎁스가 2이면 추가못하도록하고 그 다음에 뎁스 1인경우 행추가 만들기
+
+    cell.innerText = parentDepth == 0 ? 'ㅤ└ '  + '새 메뉴' : 'ㅤㅤ└ ' + '새 메뉴';
+    cell.style.cursor = 'pointer';
+    cell.style.fontWeight = 'bold';
+    cell.addEventListener("click", () => { font_onclick(); });
+    cell.id = null;
+    cell.dataset.parentNum = dv.id;
+    cell.dataset.depth = parentDepth+1;
+    cell.dataset.path = '경로';
+    cell.dataset.name = '이름';
   }
 
   // 값 체크
@@ -38,7 +65,7 @@
       <table id="datatablesSimple">
         <tbody>
           <tr th:each="menu : ${menu}">
-            <td style="cursor:pointer; font-weight:bold;" onclick="font_onclick(this);"
+            <td style="cursor:pointer; font-weight:bold;" onclick="font_onclick();"
                 th:text="${menu.menuName}"
                 th:id="${menu.id}"
                 th:data-parentNum="${menu.parentNum}"
@@ -52,8 +79,8 @@
     </div>
   </div>
   <div style="width:27%; float:left; padding-left:5px; height:100%;">
-    <button class="button_2">추가</button>
-    <button class="button_2">삭제</button>
+    <button class="button_2" onclick="fn_add();">추가</button>
+    <button class="button_2" onclick="fn_del();">삭제</button>
   </div>
 
 </div>
