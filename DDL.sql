@@ -13,7 +13,8 @@ CREATE TABLE MENU (
 ) DEFAULT CHARACTER SET UTF8;
 
 INSERT INTO menu(parent_num, depth, NAME, path) 
-VALUES (NULL, 0, '메뉴', null);
+VALUES (NULL, 0, '메뉴', NULL);
+COMMIT;
 
 -- 사용자
 CREATE TABLE MEMBER (

@@ -21,6 +21,7 @@
 
   // 메뉴 추가
   function fn_add() {
+    let parentDepth = dv.dataset.depth;
 
     if(dv == null) {
       alert('메뉴를 추가할 곳을 선택해주세요.');
@@ -28,22 +29,35 @@
     } else if(dv.dataset.depth == 2) {
       alert('마지막 메뉴입니다.');
       return false;
+    }  else if(!dv.id) {
+      alert('저장 후 하위에 메뉴 추가가 가능합니다.');
+      return false;
     }
 
-    let parentDepth = dv.dataset.depth;
     let table = document.getElementById('datatablesSimple');
-    let row = table.insertRow();
-    let cell = row.insertCell(0);
+    let row;
+    let cell;
 
-    cell.innerText = parentDepth == 0 ? 'ㅤ└ '  + '새 메뉴' : 'ㅤㅤ└ ' + '새 메뉴';
+    if(parentDepth == 0) {
+      row = table.insertRow();
+      cell = row.insertCell(0);
+      cell.innerText = 'ㅤ└ '  + '새 메뉴';
+    } else if(parentDepth == 1) {
+      row = table.insertRow(dv.rowIndex+1);
+      cell = row.insertCell(0);
+      cell.innerText = 'ㅤㅤ└ ' + '새 메뉴';
+    }
+
+    row.addEventListener("click", () => { font_onclick(); });
+    row.dataset.parentNum = dv.id;
+    row.dataset.depth = Number(parentDepth)+1;
+    row.dataset.path = '경로';
+    row.dataset.name = '이름';
+    row.id = '';
     cell.style.cursor = 'pointer';
     cell.style.fontWeight = 'bold';
-    cell.addEventListener("click", () => { font_onclick(); });
-    cell.id = null;
-    cell.dataset.parentNum = dv.id;
-    cell.dataset.depth = Number(parentDepth)+1;
-    cell.dataset.path = '경로';
-    cell.dataset.name = '이름';
+
+    // 삭제기능추가하자
   }
 
   // 값 체크
@@ -62,14 +76,14 @@
     <div class="card-body">
       <table id="datatablesSimple">
         <tbody>
-          <tr th:each="menu : ${menu}">
-            <td style="cursor:pointer; font-weight:bold;" onclick="font_onclick();"
-                th:text="${menu.menuName}"
-                th:id="${menu.id}"
-                th:data-parentNum="${menu.parentNum}"
-                th:data-depth="${menu.depth}"
-                th:data-path="${menu.path}"
-                th:data-name="${menu.name}">
+          <tr th:each="menu : ${menu}" onclick="font_onclick();"
+              th:id="${menu.id}"
+              th:data-parentNum="${menu.parentNum}"
+              th:data-depth="${menu.depth}"
+              th:data-path="${menu.path}"
+              th:data-name="${menu.name}">
+            <td style="cursor:pointer; font-weight:bold;"
+                th:text="${menu.menuName}">
             </td>
           </tr>
         </tbody>
