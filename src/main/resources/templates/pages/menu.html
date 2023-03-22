@@ -35,15 +35,13 @@
     let row = table.insertRow();
     let cell = row.insertCell(0);
 
-    alert(parentDepth); // 뎁스값 체크해서 부모 뎁스가 2이면 추가못하도록하고 그 다음에 뎁스 1인경우 행추가 만들기
-
     cell.innerText = parentDepth == 0 ? 'ㅤ└ '  + '새 메뉴' : 'ㅤㅤ└ ' + '새 메뉴';
     cell.style.cursor = 'pointer';
     cell.style.fontWeight = 'bold';
     cell.addEventListener("click", () => { font_onclick(); });
     cell.id = null;
     cell.dataset.parentNum = dv.id;
-    cell.dataset.depth = parentDepth+1;
+    cell.dataset.depth = Number(parentDepth)+1;
     cell.dataset.path = '경로';
     cell.dataset.name = '이름';
   }
