@@ -78,11 +78,30 @@
       row.addEventListener("click", () => { font_onclick(); });
       row.dataset.parentNum = dv.id;
       row.dataset.depth = Number(parentDepth)+1;
-      row.dataset.path = '경로';
-      row.dataset.name = '이름';
+      row.dataset.path = '';
+      row.dataset.name = '';
       row.id = '';
       cell.style.cursor = 'pointer';
       cell.style.fontWeight = 'bold';
+  }
+
+  // 메뉴 삭제
+  function fn_del() {
+      let table = document.getElementById('datatablesSimple');
+
+      if(dv.id == '') {
+          table.deleteRow(dv.rowIndex);
+      } else {
+          if(dv.dataset.depth == 0) {
+              alert("대메뉴는 삭제할 수 없습니다.");
+              return false;
+          } else if(dv.dataset.depth == 1) {
+
+          } else {
+
+          }
+      }
+
   }
 
   // 값 체크
