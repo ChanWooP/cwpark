@@ -10,6 +10,12 @@
 
   // 메뉴 클릭
   function font_onclick() {
+      let menuNameL = document.getElementById('menuNameL');
+      let menuName = document.getElementById('menuName');
+      let menuPathL = document.getElementById('menuPathL');
+      let menuPath = document.getElementById('menuPath');
+      let saveBtn = document.getElementById('saveBtn');
+
       if(dv != null) {
           dv.style.color = 'black';
       }
@@ -17,47 +23,66 @@
       dv = event.currentTarget;
 
       dv.style.color = 'blue';
+
+      if(dv.dataset.depth == 2) {
+        menuNameL.style.visibility = "visible";
+        menuName.style.visibility = "visible";
+        menuPathL.style.visibility = "visible";
+        menuPath.style.visibility = "visible";
+        saveBtn.style.visibility = "visible";
+      } else if(dv.dataset.depth == 1) {
+        menuNameL.style.visibility = "visible";
+        menuName.style.visibility = "visible";
+        menuPathL.style.visibility = "hidden";
+        menuPath.style.visibility = "hidden";
+        saveBtn.style.visibility = "visible";
+      } else {
+        menuNameL.style.visibility = "hidden";
+        menuName.style.visibility = "hidden";
+        menuPathL.style.visibility = "hidden";
+        menuPath.style.visibility = "hidden";
+        saveBtn.style.visibility = "hidden";
+      }
+
+
   }
 
   // 메뉴 추가
   function fn_add() {
-    let parentDepth = dv.dataset.depth;
+      if(dv == null) {
+        alert('메뉴를 추가할 곳을 선택해주세요.');
+        return false;
+      } else if(dv.dataset.depth == 2) {
+        alert('마지막 메뉴입니다.');
+        return false;
+      }  else if(!dv.id) {
+        alert('저장 후 하위에 메뉴 추가가 가능합니다.');
+        return false;
+      }
 
-    if(dv == null) {
-      alert('메뉴를 추가할 곳을 선택해주세요.');
-      return false;
-    } else if(dv.dataset.depth == 2) {
-      alert('마지막 메뉴입니다.');
-      return false;
-    }  else if(!dv.id) {
-      alert('저장 후 하위에 메뉴 추가가 가능합니다.');
-      return false;
-    }
+      let parentDepth = dv.dataset.depth;
+      let table = document.getElementById('datatablesSimple');
+      let row;
+      let cell;
 
-    let table = document.getElementById('datatablesSimple');
-    let row;
-    let cell;
+      if(parentDepth == 0) {
+        row = table.insertRow();
+        cell = row.insertCell(0);
+        cell.innerText = 'ㅤ└ '  + '새 메뉴';
+      } else if(parentDepth == 1) {
+        row = table.insertRow(dv.rowIndex+1);
+        cell = row.insertCell(0);
+        cell.innerText = 'ㅤㅤ└ ' + '새 메뉴';
+      }
 
-    if(parentDepth == 0) {
-      row = table.insertRow();
-      cell = row.insertCell(0);
-      cell.innerText = 'ㅤ└ '  + '새 메뉴';
-    } else if(parentDepth == 1) {
-      row = table.insertRow(dv.rowIndex+1);
-      cell = row.insertCell(0);
-      cell.innerText = 'ㅤㅤ└ ' + '새 메뉴';
-    }
-
-    row.addEventListener("click", () => { font_onclick(); });
-    row.dataset.parentNum = dv.id;
-    row.dataset.depth = Number(parentDepth)+1;
-    row.dataset.path = '경로';
-    row.dataset.name = '이름';
-    row.id = '';
-    cell.style.cursor = 'pointer';
-    cell.style.fontWeight = 'bold';
-
-    // 삭제기능추가하자
+      row.addEventListener("click", () => { font_onclick(); });
+      row.dataset.parentNum = dv.id;
+      row.dataset.depth = Number(parentDepth)+1;
+      row.dataset.path = '경로';
+      row.dataset.name = '이름';
+      row.id = '';
+      cell.style.cursor = 'pointer';
+      cell.style.fontWeight = 'bold';
   }
 
   // 값 체크
@@ -99,16 +124,16 @@
 <div id="div_menu_detail" class="card mb-4" style="width:70%; height:100%; float:left; height:100%;">
   <div class="card-body" id="menuInput">
     <form th:action="@{/menu/save}" method="post">
-      <lable id="menuNameL" style="visibility:hidden">메뉴명 :</lable>
-      <input type="text" name="name" id="menuName" style="visibility:hidden">
+      <lable id="menuNameL" style="visibility:hidden;">메뉴명 :</lable>
+      <input type="text" name="name" id="menuName" style="visibility:hidden;">
       <br><br>
-      <lable id="menuPathL" style="visibility:hidden">경로 :</lable>
-      <input type="text" name="path" id="menuPath" style="visibility:hidden">
+      <lable id="menuPathL" style="visibility:hidden;">경로 :</lable>
+      <input type="text" name="path" id="menuPath" style="visibility:hidden;">
       <br><br>
       <input type="hidden" name="id" id="menuId">
       <input type="hidden" name="parentNum" id="menuParentNum">
       <input type="hidden" name="depth" id="menuDepth">
-      <button class="button_2" onclick="fn_check(); return false;" style="visibility:hidden">저장</button>
+      <button class="button_2" id="saveBtn" onclick="fn_check(); return false;" style="visibility:hidden;">저장</button>
     </form>
   </div>
 </div>
