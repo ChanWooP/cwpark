@@ -6,6 +6,7 @@
   <title>메뉴관리</title>
   <link href="css/styles2.css" rel="stylesheet"/>
   <script>
+  // 현재 선택된 컴포넌트
   let dv;
 
   // 메뉴 클릭
@@ -16,55 +17,67 @@
       let menuPath = document.getElementById('menuPath');
       let saveBtn = document.getElementById('saveBtn');
 
+      // 이전에 선택한 컴포넌트 원상복구
       if(dv != null) {
           dv.style.color = 'black';
       }
 
+      // 선택한 컴포넌트
       dv = event.currentTarget;
 
+      // 선택한 컴포넌츠 색상 변경
       dv.style.color = 'blue';
 
+      // 뎁스 0 : 폼 전체 숨김
+      // 뎁스 1 : 메뉴명, 저장버튼 보이기
+      // 뎁스 2 : 메뉴명, 경로, 저장버튼 보이기
       if(dv.dataset.depth == 2) {
         menuNameL.style.visibility = "visible";
         menuName.style.visibility = "visible";
         menuPathL.style.visibility = "visible";
         menuPath.style.visibility = "visible";
-        saveBtn.style.visibility = "visible";
+        //saveBtn.style.visibility = "visible";
       } else if(dv.dataset.depth == 1) {
         menuNameL.style.visibility = "visible";
         menuName.style.visibility = "visible";
         menuPathL.style.visibility = "hidden";
         menuPath.style.visibility = "hidden";
-        saveBtn.style.visibility = "visible";
+        //saveBtn.style.visibility = "visible";
       } else {
         menuNameL.style.visibility = "hidden";
         menuName.style.visibility = "hidden";
         menuPathL.style.visibility = "hidden";
         menuPath.style.visibility = "hidden";
-        saveBtn.style.visibility = "hidden";
+        //saveBtn.style.visibility = "hidden";
       }
-
-
   }
 
   // 메뉴 추가
   function fn_add() {
+
+      // 메뉴 선택 필수
       if(dv == null) {
         alert('메뉴를 추가할 곳을 선택해주세요.');
         return false;
+      // 뎁스 2 인경우 하위에 메뉴 추가 막기
       } else if(dv.dataset.depth == 2) {
         alert('마지막 메뉴입니다.');
         return false;
-      }  else if(!dv.id) {
+      // 신규 추가인 경우 하위 메뉴 추가 막기
+      } else if(!dv.id) {
         alert('저장 후 하위에 메뉴 추가가 가능합니다.');
         return false;
       }
 
+      // 상위 메뉴 뎁스
       let parentDepth = dv.dataset.depth;
+
+      // 테이블
       let table = document.getElementById('datatablesSimple');
       let row;
       let cell;
 
+      // 뎁스 별 메뉴 모양
       if(parentDepth == 0) {
         row = table.insertRow();
         cell = row.insertCell(0);
@@ -75,11 +88,12 @@
         cell.innerText = 'ㅤㅤ└ ' + '새 메뉴';
       }
 
+      // 신규 추가 시 초기화
       row.addEventListener("click", () => { font_onclick(); });
       row.dataset.parentNum = dv.id;
       row.dataset.depth = Number(parentDepth)+1;
       row.dataset.path = '';
-      row.dataset.name = '';
+      row.dataset.name = '새 메뉴';
       row.id = '';
       cell.style.cursor = 'pointer';
       cell.style.fontWeight = 'bold';
@@ -87,10 +101,18 @@
 
   // 메뉴 삭제
   function fn_del() {
+      // 테이블
       let table = document.getElementById('datatablesSimple');
+
+      // 신규 추가인 경우 그냥 삭제
+      if(dv == null) {
+          alert("삭제할 메뉴를 선택해주세요.");
+          return false;
+      }
 
       if(dv.id == '') {
           table.deleteRow(dv.rowIndex);
+      // 기존 데이터인 경우 조건에 따라 처리
       } else {
           if(dv.dataset.depth == 0) {
               alert("대메뉴는 삭제할 수 없습니다.");
@@ -102,16 +124,9 @@
           }
       }
 
+      dv = null;
   }
 
-  // 값 체크
-  function fn_check() {
-    let name = document.getElementById('menuName');
-    let path = document.getElementById('menuPath');
-    let Id = document.getElementById('menuId');
-    let parentNum = document.getElementById('menuParentNum');
-    let depth = document.getElementById('menuDepth');
-  }
   </script>
 </head>
 <body>
@@ -126,9 +141,7 @@
               th:data-depth="${menu.depth}"
               th:data-path="${menu.path}"
               th:data-name="${menu.name}">
-            <td style="cursor:pointer; font-weight:bold;"
-                th:text="${menu.menuName}">
-            </td>
+            <td style="cursor:pointer; font-weight:bold;" th:text="${menu.menuName}">
           </tr>
         </tbody>
       </table>
@@ -138,24 +151,16 @@
     <button class="button_2" onclick="fn_add();">추가</button>
     <button class="button_2" onclick="fn_del();">삭제</button>
   </div>
-
 </div>
 <div id="div_menu_detail" class="card mb-4" style="width:70%; height:100%; float:left; height:100%;">
   <div class="card-body" id="menuInput">
-    <form th:action="@{/menu/save}" method="post">
       <lable id="menuNameL" style="visibility:hidden;">메뉴명 :</lable>
       <input type="text" name="name" id="menuName" style="visibility:hidden;">
       <br><br>
       <lable id="menuPathL" style="visibility:hidden;">경로 :</lable>
       <input type="text" name="path" id="menuPath" style="visibility:hidden;">
-      <br><br>
-      <input type="hidden" name="id" id="menuId">
-      <input type="hidden" name="parentNum" id="menuParentNum">
-      <input type="hidden" name="depth" id="menuDepth">
-      <button class="button_2" id="saveBtn" onclick="fn_check(); return false;" style="visibility:hidden;">저장</button>
-    </form>
+      <!--<button class="button_2" id="saveBtn" onclick="fn_check(); return false;" style="visibility:hidden;">저장</button>-->
   </div>
 </div>
-
 </body>
 </html>
