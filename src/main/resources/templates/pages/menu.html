@@ -127,11 +127,21 @@
       dv = null;
   }
 
+  function fn_check() {
+
+  }
+
   </script>
 </head>
 <body>
 <div id="div_menu" style="width:30%; float:left; height:100%;">
-  <div class="card mb-4" style="width:73%; float:left; height:100%;">
+  <div class="card mb-4" style="width:100%; float:left; height:100%;">
+    <div id="btnZone1" style="float:left; margin:5px 5px 5px 5px;">
+      <nav style="float:right; display:inline-block;">
+        <button class="button_2" onclick="fn_add();">추가</button>
+        <button class="button_2" onclick="fn_del();">삭제</button>
+      </nav>
+    </div>
     <div class="card-body">
       <table id="datatablesSimple">
         <tbody>
@@ -147,19 +157,20 @@
       </table>
     </div>
   </div>
-  <div style="width:27%; float:left; padding-left:5px; height:100%;">
-    <button class="button_2" onclick="fn_add();">추가</button>
-    <button class="button_2" onclick="fn_del();">삭제</button>
-  </div>
 </div>
-<div id="div_menu_detail" class="card mb-4" style="width:70%; height:100%; float:left; height:100%;">
+<div style="width:1%; float:left;">ㅤ</div>
+<div id="div_menu_detail" class="card mb-4" style="width:69%; height:100%; float:left; height:100%;">
+  <div id="btnZone2" style="margin:5px 5px 5px 5px;">
+    <nav style="float:right; display:inline-block;">
+      <button class="button_2" id="saveBtn" onclick="fn_check(); return false;">저장</button>
+    </nav>
+  </div>
   <div class="card-body" id="menuInput">
       <lable id="menuNameL" style="visibility:hidden;">메뉴명 :</lable>
       <input type="text" name="name" id="menuName" style="visibility:hidden;">
       <br><br>
       <lable id="menuPathL" style="visibility:hidden;">경로 :</lable>
       <input type="text" name="path" id="menuPath" style="visibility:hidden;">
-      <!--<button class="button_2" id="saveBtn" onclick="fn_check(); return false;" style="visibility:hidden;">저장</button>-->
   </div>
 </div>
 </body>
