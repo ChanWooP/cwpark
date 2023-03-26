@@ -1,6 +1,6 @@
 package change.company.cwpark.data.multiRow;
 
-import change.company.cwpark.data.entity.Menu;
+import change.company.cwpark.data.dto.MenuDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MultiMenu {
-    private List<Menu> menus;
+    private List<MenuDto> menus;
 
 }

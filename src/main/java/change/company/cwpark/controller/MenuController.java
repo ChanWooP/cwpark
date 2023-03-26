@@ -1,11 +1,13 @@
 package change.company.cwpark.controller;
 
 import change.company.cwpark.data.dto.MenuDto;
+import change.company.cwpark.data.multiRow.MultiMenu;
 import change.company.cwpark.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,8 +33,8 @@ public class MenuController {
     }
 
     @PostMapping("/save")
-    public String saveMenu(MenuDto menuDto, Model model) {
-        menuService.saveMenu(menuDto);
+    public String saveMenu(@ModelAttribute MultiMenu menus, Model model) {
+        menuService.saveMenu(menus);
 
         model.addAttribute("page", "/pages/menu");
 

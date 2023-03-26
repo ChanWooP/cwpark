@@ -8,6 +8,34 @@
   <script>
   // 현재 선택된 컴포넌트
   let dv;
+  let num = 0;
+
+  // 저장 데이터
+  function saveTable(event, iRow) {
+      let temp = document.getElementById('tempTable');
+      let row;
+      let cell;
+
+      // 값이 변경되었을때도 들어가도록
+      // 삭제가 되었을때 index 등...
+      // 저장 알럿창
+
+      if(event == "insert") {
+          row = temp.insertRow();
+          row.id = 'data_' + iRow.id;
+
+          cell = row.insertCell(0);
+          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].parentNum\" value=\"' + iRow.dataset.parentNum + '\"/>';
+          cell = row.insertCell(1);
+          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].depth\" value=\"' + iRow.dataset.depth + '\"/>';
+          cell = row.insertCell(2);
+          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].name\" value=\"' + iRow.dataset.name + '\"/>';
+          cell = row.insertCell(3);
+          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].path\" value=\"' + iRow.dataset.path + '\"/>';
+      } else if(event == "delete") {
+          document.getElementById('data_' + iRow.id).remove();
+      }
+  }
 
   // 메뉴 클릭
   function font_onclick() {
@@ -50,11 +78,12 @@
         menuPath.style.visibility = "hidden";
         //saveBtn.style.visibility = "hidden";
       }
+
+      menuName.value = dv.dataset.name;
   }
 
   // 메뉴 추가
   function fn_add() {
-
       // 메뉴 선택 필수
       if(dv == null) {
         alert('메뉴를 추가할 곳을 선택해주세요.');
@@ -64,7 +93,7 @@
         alert('마지막 메뉴입니다.');
         return false;
       // 신규 추가인 경우 하위 메뉴 추가 막기
-      } else if(!dv.id) {
+      } else if(dv.dataset.status == 'new') {
         alert('저장 후 하위에 메뉴 추가가 가능합니다.');
         return false;
       }
@@ -94,9 +123,12 @@
       row.dataset.depth = Number(parentDepth)+1;
       row.dataset.path = '';
       row.dataset.name = '새 메뉴';
-      row.id = '';
+      row.dataset.status = 'new';
+      row.id = 'new'+(num++);
       cell.style.cursor = 'pointer';
       cell.style.fontWeight = 'bold';
+
+      saveTable('insert', row);
   }
 
   // 메뉴 삭제
@@ -110,7 +142,9 @@
           return false;
       }
 
-      if(dv.id == '') {
+      saveTable('delete', dv);
+
+      if(dv.dataset.status == 'new') {
           table.deleteRow(dv.rowIndex);
       // 기존 데이터인 경우 조건에 따라 처리
       } else {
@@ -127,8 +161,11 @@
       dv = null;
   }
 
-  function fn_check() {
+  // 저장
+  function fn_save() {
+      var menuForm = document.getElementById('menuForm');
 
+      menuForm.submit();
   }
 
   </script>
@@ -150,7 +187,8 @@
               th:data-parentNum="${menu.parentNum}"
               th:data-depth="${menu.depth}"
               th:data-path="${menu.path}"
-              th:data-name="${menu.name}">
+              th:data-name="${menu.name}"
+              th:data-status="default">
             <td style="cursor:pointer; font-weight:bold;" th:text="${menu.menuName}">
           </tr>
         </tbody>
@@ -162,7 +200,7 @@
 <div id="div_menu_detail" class="card mb-4" style="width:69%; height:100%; float:left; height:100%;">
   <div id="btnZone2" style="margin:5px 5px 5px 5px;">
     <nav style="float:right; display:inline-block;">
-      <button class="button_2" id="saveBtn" onclick="fn_check(); return false;">저장</button>
+      <button class="button_2" id="saveBtn" onclick="fn_save(); return false;">저장</button>
     </nav>
   </div>
   <div class="card-body" id="menuInput">
@@ -172,6 +210,10 @@
       <lable id="menuPathL" style="visibility:hidden;">경로 :</lable>
       <input type="text" name="path" id="menuPath" style="visibility:hidden;">
   </div>
+  <form th:action="@{/menu/save}" method="post" id="menuForm">
+    <table id="tempTable">
+    </table>
+  </form>
 </div>
 </body>
 </html>

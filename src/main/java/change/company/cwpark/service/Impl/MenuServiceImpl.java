@@ -3,6 +3,7 @@ package change.company.cwpark.service.Impl;
 import change.company.cwpark.data.dao.MenuDao;
 import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.entity.Menu;
+import change.company.cwpark.data.multiRow.MultiMenu;
 import change.company.cwpark.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,9 +34,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuDto saveMenu(MenuDto menuDto) {
-        Menu menu = menuDao.saveMenu(new Menu(menuDto.getId(), menuDto.getParentNum(), menuDto.getDepth()
+    public MenuDto saveMenu(MultiMenu menus) {
+        Menu menu = null;
+
+        for(MenuDto menuDto : menus.getMenus()) {
+            menu = menuDao.saveMenu(new Menu(menuDto.getId(), menuDto.getParentNum(), menuDto.getDepth()
                 , menuDto.getName(), menuDto.getPath(), menuDto.getMenuName()));
+        }
 
         MenuDto menuDtoRtn = new MenuDto(menu.getId(), menu.getParentNum(), menu.getDepth()
                 , menu.getName(), menu.getPath(), menu.getMenuName());
