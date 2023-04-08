@@ -7,4 +7,5 @@ public interface MenuInterface {
     String getName();
     String getPath();
     String getMenuName();
+    Integer getChildCnt();
 }

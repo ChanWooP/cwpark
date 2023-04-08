@@ -24,4 +24,5 @@ public class MenuDto {
 
     private String menuName;
 
+    private Integer childCnt;
 }

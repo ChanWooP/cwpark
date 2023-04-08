@@ -33,7 +33,9 @@
           cell = row.insertCell(3);
           cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].path\" value=\"' + iRow.dataset.path + '\"/>';
       } else if(event == "delete") {
-          document.getElementById('data_' + iRow.id).remove();
+          if(document.getElementById('data_' + iRow.id) != null) {
+              document.getElementById('data_' + iRow.id).remove();
+          }
       }
   }
 
@@ -142,19 +144,29 @@
           return false;
       }
 
-      saveTable('delete', dv);
-
       if(dv.dataset.status == 'new') {
           table.deleteRow(dv.rowIndex);
+          saveTable('delete', dv);
       // 기존 데이터인 경우 조건에 따라 처리
       } else {
           if(dv.dataset.depth == 0) {
               alert("대메뉴는 삭제할 수 없습니다.");
               return false;
+          // 기존데이터 삭제의 경우 구분값을 주어 Service 에서 처리
+          // 그러나 기존에 값이 존재하는 경우는 삭제못함
+          // 삭제의 경우 색깔을 레드로 변경
+          // 세이브테이블 저장 시 구분값이 필요할듯
           } else if(dv.dataset.depth == 1) {
 
-          } else {
+              if(dv.dataset.childcnt != 0) {
+                  alert("하위에 메뉴가 존재하는 경우 삭제가 불가능 합니다.");
+                  return false;
+              }
 
+              dv.style.color = 'red';
+              saveTable('insert', dv);
+          } else {
+              saveTable('insert', dv);
           }
       }
 
@@ -188,6 +200,7 @@
               th:data-depth="${menu.depth}"
               th:data-path="${menu.path}"
               th:data-name="${menu.name}"
+              th:data-childcnt="${menu.childCnt}"
               th:data-status="default">
             <td style="cursor:pointer; font-weight:bold;" th:text="${menu.menuName}">
           </tr>

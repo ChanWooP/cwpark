@@ -35,6 +35,7 @@ SELECT A.id
 	  					  ELSE A.id END AS order_id
 	  , A.path
 	  , A.name
+	  , (SELECT NVL(COUNT(1), 0) FROM menu WHERE parent_num = A.id) AS childCnt
   FROM menu A 
   LEFT OUTER JOIN menu B 
     ON A.parent_num = B.id

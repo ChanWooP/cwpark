@@ -19,6 +19,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
                  + "	         	       	ELSE A.name END AS menuName "
                  + "	   , A.name "
                  + "	   , A.path "
+                 + "     , (SELECT COUNT(1) FROM menu WHERE parent_num = A.id) AS childCnt "
                  + "  FROM menu A "
                  + "   LEFT OUTER JOIN menu B "
                  + "     ON A.parent_num = B.id "

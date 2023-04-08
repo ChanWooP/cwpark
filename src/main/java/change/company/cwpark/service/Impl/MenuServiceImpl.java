@@ -27,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
         List<MenuDto> menuDto = new LinkedList<>();
 
         for(Menu m : menu) {
-            menuDto.add(new MenuDto(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName()));
+            menuDto.add(new MenuDto(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName(), m.getChildCnt()));
         }
 
         return menuDto;
@@ -39,11 +39,11 @@ public class MenuServiceImpl implements MenuService {
 
         for(MenuDto menuDto : menus.getMenus()) {
             menu = menuDao.saveMenu(new Menu(menuDto.getId(), menuDto.getParentNum(), menuDto.getDepth()
-                , menuDto.getName(), menuDto.getPath(), menuDto.getMenuName()));
+                , menuDto.getName(), menuDto.getPath(), menuDto.getMenuName(), menuDto.getChildCnt()));
         }
 
         MenuDto menuDtoRtn = new MenuDto(menu.getId(), menu.getParentNum(), menu.getDepth()
-                , menu.getName(), menu.getPath(), menu.getMenuName());
+                , menu.getName(), menu.getPath(), menu.getMenuName(), menu.getChildCnt());
 
         return menuDtoRtn;
     }

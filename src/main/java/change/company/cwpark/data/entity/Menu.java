@@ -52,12 +52,16 @@ CREATE TABLE MENU (
     @Transient
     private String menuName;
 
-    public Menu(Long parentNum, Integer depth, String name, String path, String menuName) {
+    @Transient
+    private Integer childCnt;
+
+    public Menu(Long parentNum, Integer depth, String name, String path, String menuName, Integer childCnt) {
         this.parentNum = parentNum;
         this.depth = depth;
         this.name = name;
         this.path = path;
         this.menuName = menuName;
+        this.childCnt = childCnt;
     }
 
 }

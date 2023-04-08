@@ -28,7 +28,7 @@ public class MenuDaoImpl implements MenuDao {
         List<Menu> rtnMenu = new ArrayList<>();
 
         for(MenuInterface m : menu) {
-            rtnMenu.add(new Menu(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName()));
+            rtnMenu.add(new Menu(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName(), m.getChildCnt()));
         }
 
         return rtnMenu;
