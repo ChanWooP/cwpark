@@ -55,6 +55,9 @@ CREATE TABLE MENU (
     @Transient
     private Integer childCnt;
 
+    @Transient
+    private String colStatus;
+
     public Menu(Long parentNum, Integer depth, String name, String path, String menuName, Integer childCnt) {
         this.parentNum = parentNum;
         this.depth = depth;

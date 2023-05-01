@@ -8,5 +8,5 @@ import java.util.List;
 public interface MenuService {
     List<MenuDto> getAllMenu();
 
-    MenuDto saveMenu(MultiMenu menus);
+    void saveMenu(MultiMenu menus);
 }

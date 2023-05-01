@@ -28,7 +28,7 @@ public class MenuDaoImpl implements MenuDao {
         List<Menu> rtnMenu = new ArrayList<>();
 
         for(MenuInterface m : menu) {
-            rtnMenu.add(new Menu(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName(), m.getChildCnt()));
+            rtnMenu.add(new Menu(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName(), m.getChildCnt(), ""));
         }
 
         return rtnMenu;
@@ -36,10 +36,14 @@ public class MenuDaoImpl implements MenuDao {
 
     // 메뉴 저장
     @Override
-    public Menu saveMenu(Menu menu) {
-        Menu menuRtn = menuRepository.save(menu);
-
-        return menuRtn;
+    public void saveMenu(Menu menu) {
+        menuRepository.save(menu);
     }
-    
+
+    // 메뉴 삭제
+    @Override
+    public void deleteMenu(Menu menu) {
+        menuRepository.deleteById(menu.getId());
+    }
+
 }

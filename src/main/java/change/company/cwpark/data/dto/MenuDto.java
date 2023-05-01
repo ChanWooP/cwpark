@@ -25,4 +25,6 @@ public class MenuDto {
     private String menuName;
 
     private Integer childCnt;
+
+    private String colStatus;
 }

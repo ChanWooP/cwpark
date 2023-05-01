@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface MenuDao {
     List<Menu> getAllMenu();
-    Menu saveMenu(Menu menu);
+    void saveMenu(Menu menu);
+    void deleteMenu(Menu menu);
 }

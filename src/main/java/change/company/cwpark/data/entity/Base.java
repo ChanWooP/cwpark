@@ -1,5 +1,6 @@
 package change.company.cwpark.data.entity;
 
+import javax.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
