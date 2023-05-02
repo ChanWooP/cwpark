@@ -21,16 +21,21 @@
       let temp = document.getElementById('tempTable');
       let row;
       let cell;
-      let id;
-      let path
+      let idx = document.getElementById('data_' + iRow.id);
+      let id = iRow.dataset.id == null ? '' : iRow.dataset.id;;
+      let path = iRow.dataset.path == null ? '' : iRow.dataset.path;
 
-      // 수정인 경우도 저장 데이터로 들어가도록 개발(수정데이터가 ...)
-      // 저장 알럿창 개발
       if(event == "insert") {
+          // 업데이트
+          if(idx != null) {
+              document.getElementsByName('menus[' + idx.rowIndex + '].name')[0].value = iRow.dataset.name;
+              document.getElementsByName('menus[' + idx.rowIndex + '].path')[0].value = path;
+
+              return true;
+          }
+
           row = temp.insertRow();
           row.id = 'data_' + iRow.id;
-          id = iRow.dataset.id == null ? '' : iRow.dataset.id;
-          path = iRow.dataset.path == null ? '' : iRow.dataset.path;
 
           cell = row.insertCell(0);
           cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].parentNum\" value=\"' + iRow.dataset.parentnum + '\"/>';
@@ -45,8 +50,8 @@
           cell = row.insertCell(5);
           cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].colStatus\" value=\"' + colStatus + '\"/>';
       } else if(event == "delete") {
-          if(document.getElementById('data_' + iRow.id) != null) {
-              document.getElementById('data_' + iRow.id).remove();
+          if(idx != null) {
+              idx.remove();
           }
       }
   }
@@ -201,13 +206,23 @@
       } else if(check == "path") {
           dv.dataset.path = obj.value;
       }
+
+      saveTable('insert', dv, 'N');
   }
 
   // 메뉴 저장
   function fn_save() {
-      var menuForm = document.getElementById('menuForm');
+      let menuForm = document.getElementById('menuForm');
+      let temp = document.getElementById('tempTable');
 
-      menuForm.submit();
+      if(temp.rows[0] == null) {
+          alert('저장할 데이터가 존재하지 않습니다.');
+          return false;
+      }
+
+      if(confirm('저장하시겠습니까?')) {
+        menuForm.submit();
+      }
   }
 
   </script>
