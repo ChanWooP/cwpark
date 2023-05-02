@@ -65,7 +65,8 @@
       dv.style.color = 'blue';
 
       fn_compSet(dv.dataset.depth);
-      menuName.value = dv.dataset.name;
+      menuName.value = dv.dataset.name == null ? '' : dv.dataset.name;
+      menuPath.value = dv.dataset.path == null ? '' : dv.dataset.path;
   }
 
   // 메뉴 컴포넌트 설정
@@ -116,6 +117,9 @@
       let row;
       let cell;
 
+      // 자식메뉴 갯수 추가
+      dv.dataset.childcnt++;
+
       // 뎁스 별 메뉴 모양
       if(parentDepth == 0) {
         row = table.insertRow();
@@ -134,9 +138,11 @@
       row.dataset.path = '';
       row.dataset.name = '새 메뉴';
       row.dataset.status = 'new';
+      row.dataset.childcnt = 0;
       row.id = 'new'+(num++);
       cell.style.cursor = 'pointer';
       cell.style.fontWeight = 'bold';
+      cell.id = row.id + 'td';
 
       saveTable('insert', row, 'N');
   }
@@ -145,6 +151,7 @@
   function fn_del() {
       // 테이블
       let table = document.getElementById('datatablesSimple');
+      let parent = document.getElementById(dv.dataset.parentnum);
 
       // 신규 추가인 경우 그냥 삭제
       if(dv == null) {
@@ -156,6 +163,7 @@
           table.deleteRow(dv.rowIndex);
           saveTable('delete', dv, 'N');
           fn_compSet(0);
+          parent.dataset.childcnt--;
       // 기존 데이터인 경우 조건에 따라 처리
       } else {
           if(dv.dataset.depth == 0) {
@@ -163,26 +171,37 @@
               return false;
           } else if(dv.dataset.depth == 1) {
               if(dv.dataset.childcnt != 0) {
-                  // 신규하위메뉴가 있는 경우에도 삭제가 불가능 해야함 아니면 다 삭제되던지
                   alert("하위에 메뉴가 존재하는 경우 삭제가 불가능 합니다.");
                   return false;
               }
 
               table.deleteRow(dv.rowIndex);
-              alert(dv.dataset.parentnum);
               saveTable('insert', dv, 'D');
               fn_compSet(0);
+              parent.dataset.childcnt--;
           } else {
               table.deleteRow(dv.rowIndex);
               saveTable('insert', dv, 'D');
               fn_compSet(0);
+              parent.dataset.childcnt--;
           }
       }
 
       dv = null;
   }
 
-  // 기존데이터 수정의 경우 어떻게 처리할지 고민해보기
+  // 메뉴 수정
+  function fn_update(obj, check) {
+      var tdEle = document.getElementById(dv.id+'td');
+      var depth = dv.dataset.depth == 1 ? 'ㅤ└ ' : 'ㅤㅤ└ ';
+
+      if(check == "name") {
+          dv.dataset.name = obj.value;
+          tdEle.innerText = depth + obj.value;
+      } else if(check == "path") {
+          dv.dataset.path = obj.value;
+      }
+  }
 
   // 메뉴 저장
   function fn_save() {
@@ -214,7 +233,7 @@
               th:data-name="${menu.name}"
               th:data-childcnt="${menu.childCnt}"
               th:data-status="default">
-            <td style="cursor:pointer; font-weight:bold;" th:text="${menu.menuName}">
+            <td th:id="${menu.id}+td" style="cursor:pointer; font-weight:bold;" th:text="${menu.menuName}">
           </tr>
         </tbody>
       </table>
@@ -230,10 +249,10 @@
   </div>
   <div class="card-body" id="menuInput">
       <lable id="menuNameL" style="visibility:hidden;">메뉴명 :</lable>
-      <input type="text" name="name" id="menuName" style="visibility:hidden;">
+      <input type="text" name="name" id="menuName" onchange="fn_update(this, 'name'); return false;" style="visibility:hidden;">
       <br><br>
       <lable id="menuPathL" style="visibility:hidden;">경로 :</lable>
-      <input type="text" name="path" id="menuPath" style="visibility:hidden;">
+      <input type="text" name="path" id="menuPath" onchange="fn_update(this, 'path'); return false;" style="visibility:hidden;">
   </div>
   <form th:action="@{/menu/save}" method="post" id="menuForm">
     <table id="tempTable">
