@@ -38,8 +38,6 @@ public class MenuController {
 
         model.addAttribute("page", "/menu/all");
 
-
-        // pages/index : index로 가기는 갔는데... UI기능이 먹히지 않는 것 같음? 모르게따
         return "pages/index";
     }
 }
