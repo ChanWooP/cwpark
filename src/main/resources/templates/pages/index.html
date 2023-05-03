@@ -10,19 +10,23 @@
         <meta name="author" content="" />
         <title>배용비즈니스</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" href="/img/favicon.png">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script th:inline="javascript">
             window.onload = function() {
-                //let page = [[${page}]];
-                //alert(page);
+                let page = [[${page}]];
+
+                if(page != null) {
+                    alert(page);
+                    sendData(page);
+                }
             }
 
-            function sendData() {
+            function sendData(url) {
                 $.ajax({
-                    url: "/menu/all",
+                    url: url,
                     type: "GET",
                 })
                 .done(function (fragment) {
@@ -50,7 +54,7 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">설정</a></li>
-                        <li><a class="dropdown-item" onclick="sendData();">메뉴 관리</a></li>
+                        <li><a class="dropdown-item" onclick="sendData('/menu/all');">메뉴 관리</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item"  sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a></li>
                     </ul>
@@ -694,13 +698,13 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src="/js/scripts.js"></script>
         <!--
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         -->
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
+        <script src="/js/datatables-simple-demo.js"></script>
     </body>
 </html>
