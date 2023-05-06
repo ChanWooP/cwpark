@@ -4,6 +4,7 @@ import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.multiRow.MultiMenu;
 import change.company.cwpark.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ public class MenuController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAllMenu(Model model) {
         List<MenuDto> menu = menuService.getAllMenu();
 

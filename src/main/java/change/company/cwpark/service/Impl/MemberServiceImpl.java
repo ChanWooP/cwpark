@@ -35,8 +35,13 @@ public class MemberServiceImpl implements MemberService {
         List<GrantedAuthority> authorityList = new ArrayList<>();
         User user = null;
 
-        // 관리자 권한으로 로그인 하고 싶으면 ROLE_MEMBER -> ROLE_ADMIN 으로 변경
-        authorityList.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        if(member.getAccount().equals("ADMIN")) {
+            authorityList.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+            authorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else {
+            authorityList.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+        }
+
         user = new User(member.getAccount(), member.getPassword(), authorityList);
 
         return user;
