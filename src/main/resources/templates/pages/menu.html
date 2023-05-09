@@ -39,17 +39,17 @@
           row.id = 'data_' + iRow.id;
 
           cell = row.insertCell(0);
-          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].parentNum\" value=\"' + iRow.dataset.parentnum + '\"/>';
+          cell.innerHTML = '<input type=\"hidden\" name=\"menus[' + row.rowIndex + '].parentNum\" value=\"' + iRow.dataset.parentnum + '\"/>';
           cell = row.insertCell(1);
-          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].depth\" value=\"' + iRow.dataset.depth + '\"/>';
+          cell.innerHTML = '<input type=\"hidden\" name=\"menus[' + row.rowIndex + '].depth\" value=\"' + iRow.dataset.depth + '\"/>';
           cell = row.insertCell(2);
-          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].name\" value=\"' + iRow.dataset.name + '\"/>';
+          cell.innerHTML = '<input type=\"hidden\" name=\"menus[' + row.rowIndex + '].name\" value=\"' + iRow.dataset.name + '\"/>';
           cell = row.insertCell(3);
-          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].path\" value=\"' + path + '\"/>';
+          cell.innerHTML = '<input type=\"hidden\" name=\"menus[' + row.rowIndex + '].path\" value=\"' + path + '\"/>';
           cell = row.insertCell(4);
-          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].id\" value=\"' + id + '\"/>';
+          cell.innerHTML = '<input type=\"hidden\" name=\"menus[' + row.rowIndex + '].id\" value=\"' + id + '\"/>';
           cell = row.insertCell(5);
-          cell.innerHTML = '<input type=\"text\" name=\"menus[' + row.rowIndex + '].colStatus\" value=\"' + colStatus + '\"/>';
+          cell.innerHTML = '<input type=\"hidden\" name=\"menus[' + row.rowIndex + '].colStatus\" value=\"' + colStatus + '\"/>';
       } else if(event == "delete") {
           if(idx != null) {
               idx.remove();
@@ -278,7 +278,7 @@
       </table>
   </div>
   <form th:action="@{/menu/save}" method="post" id="menuForm">
-    <table id="tempTable">
+    <table id="tempTable" style="visibility:hidden;">
     </table>
   </form>
 </div>
