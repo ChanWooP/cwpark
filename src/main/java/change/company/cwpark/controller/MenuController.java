@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value="/menu")
@@ -34,9 +35,10 @@ public class MenuController {
         return "pages/menu";
     }
 
-    @PostMapping("/save")
-    public String saveMenu(@ModelAttribute MultiMenu menus, Model model) {
-        menuService.saveMenu(menus);
+    @RequestMapping(value ="/save",  method = {RequestMethod.GET, RequestMethod.POST})
+    public String saveMenu(Model model) {
+        System.out.print("SS");
+        //menuService.saveMenu(menus);
 
         model.addAttribute("page", "/menu/all");
 
