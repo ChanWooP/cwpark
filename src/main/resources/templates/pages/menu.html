@@ -6,6 +6,8 @@
   <title>메뉴관리</title>
   <link href="/css/styles2.css" rel="stylesheet"/>
   <link href="/css/styles.css" rel="stylesheet" />
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
   // 현재 선택된 컴포넌트
@@ -214,12 +216,18 @@
   // 흠... 일단 ajax 통신은 성공적임
   // 근데 json 데이터는 어떻게 해야하나?
   // 아무래도 csrf는 아닌거같고 json 라이브러리 추가해야할 듯
+     var header = $("meta[name='_csrf_header']").attr("content");
+     var token = $("meta[name='_csrf']").attr("content");
+
       $.ajax({
-          type: "GET"
+          type: "POST"
         , url : "/menu/save"
-        //, dataType: "json"
-        //, contentType : "application/json"
-        , data : "saveJson"
+        ,beforeSend: function(xhr){
+          xhr.setRequestHeader(header, token);
+		    }
+        , dataType: "json"
+        , contentType : "application/json"
+        , data : JSON.stringify(saveJson)
         , success : function(data) {
           alert("success");
         }

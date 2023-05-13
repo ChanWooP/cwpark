@@ -15,6 +15,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -96,6 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxSessionsPreventsLogin(false) // false이면 중복 로그인 시 이전 로그인이 풀림
                 .expiredUrl("/")
                 .sessionRegistry(sessionRegistry());
+
+        http.headers().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         
     }
 
