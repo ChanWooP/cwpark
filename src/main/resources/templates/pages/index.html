@@ -25,8 +25,8 @@
 
             function sendData(url) {
                 $.ajax({
-                    url: url,
-                    type: "GET",
+                     url: url
+                    ,type: "GET"
                 })
                 .done(function (fragment) {
                     $('#mainDiv').html(fragment);

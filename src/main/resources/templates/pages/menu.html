@@ -10,19 +10,25 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-  // 현재 선택된 컴포넌트
-  let dv;
-  let num = 0;
+      // 현재 선택된 컴포넌트
+      var dv;
+      var num = 0;
 
-  // 고정 컴포넌트
-  let menuNameL = document.getElementById('menuNameL');
-  let menuName = document.getElementById('menuName');
-  let menuPathL = document.getElementById('menuPathL');
-  let menuPath = document.getElementById('menuPath');
+      // 고정 컴포넌트
+      var menuNameL = document.getElementById('menuNameL');
+      var menuName = document.getElementById('menuName');
+      var menuPathL = document.getElementById('menuPathL');
+      var menuPath = document.getElementById('menuPath');
 
-  // Json 배열
-  let saveJson = new Array();
-  let saveCnt = 0;
+      // Json 배열
+      var header = $("meta[name='_csrf_header']").attr("content");
+      var token = $("meta[name='_csrf']").attr("content");
+      var saveJson = new Array();
+      var saveCnt = 0;
+
+  $(function(){
+      fn_view();
+  });
 
   // 저장 데이터
   function saveTable(event, iRow, colStatus) {
@@ -211,25 +217,36 @@
       saveTable('insert', dv, 'N');
   }
 
-  // 메뉴 저장
-  function fn_save() {
-  // 흠... 일단 ajax 통신은 성공적임
-  // 근데 json 데이터는 어떻게 해야하나?
-  // 아무래도 csrf는 아닌거같고 json 라이브러리 추가해야할 듯
-     var header = $("meta[name='_csrf_header']").attr("content");
-     var token = $("meta[name='_csrf']").attr("content");
+  // 메뉴 조회
+  function fn_view() {
+      let subDiv = document.getElementById('subDiv');
 
       $.ajax({
-          type: "POST"
-        , url : "/menu/save"
-        ,beforeSend: function(xhr){
-          xhr.setRequestHeader(header, token);
-		    }
-        , dataType: "json"
-        , contentType : "application/json"
-        , data : JSON.stringify(saveJson)
+          type: "GET"
+        , url : "/menu/view"
         , success : function(data) {
-          alert(data);
+          let menuView = JSON.parse(data);
+          let tableString = '<table id=\"datatablesSimple\"> ';
+              tableString += '  <tbody> ';
+
+          for(let i=0; i<menuView.length; i++) {
+              tableString += '    <tr onclick=\"font_onclick();\" ';
+              tableString += '        id=\"' + menuView[i].id + '\"';
+              tableString += '        data-id=\"' + menuView[i].id + '\"';
+              tableString += '        data-parentnum=\"' + menuView[i].parentNum + '\"';
+              tableString += '        data-depth=\"' + menuView[i].depth + '\"';
+              tableString += '        data-path=\"' + menuView[i].path + '\"';
+              tableString += '        data-name=\"' + menuView[i].name + '\"';
+              tableString += '        data-childcnt=\"' + menuView[i].childCnt + '\"';
+              tableString += '        data-status=\"default\"> ';
+              tableString += '      <td id=\"' + menuView[i].id + 'td\" style=\"cursor:pointer; font-weight:bold;\">' + menuView[i].menuName + '</td>';
+              tableString += '    </tr> ';
+
+          }
+          tableString += '  </tbody> ';
+          tableString += '</table> ';
+
+          subDiv.innerHTML = tableString;
         }
         , error : function(e) {
           alert(e.responseText);
@@ -237,6 +254,40 @@
       });
   }
 
+  // 메뉴 저장
+  function fn_save() {
+      if(saveJson.length <= 0) {
+          alert('저장할 데이터가 없습니다');
+          return false;
+      }
+
+
+      $.ajax({
+          type: "POST"
+        , url : "/menu/save"
+        ,beforeSend: function(xhr){
+          xhr.setRequestHeader(header, token);
+        }
+        , dataType : "text" // dataType에 따라 실패가 될 수도 있음
+        , contentType : "application/json"
+        , data : JSON.stringify(saveJson)
+      })
+      .done(successFunction)
+      .fail(failFunction);
+
+  }
+
+  function successFunction(){
+      alert('저장되었습니다.');
+      fn_compSet(0);
+      saveCnt = 0;
+      saveJson = new Array();
+      fn_view();
+  }
+
+  function failFunction(){
+      alert("관리자에게 문의 바랍니다.");
+  }
   </script>
 </head>
 <body>
@@ -248,22 +299,7 @@
         <button class="button_2" onclick="fn_del();">삭제</button>
       </nav>
     </div>
-    <div id="mainDiv" class="card-body">
-      <table id="datatablesSimple">
-        <tbody>
-          <tr th:each="menu : ${menu}" onclick="font_onclick();"
-              th:id="${menu.id}"
-              th:data-id="${menu.id}"
-              th:data-parentnum="${menu.parentNum}"
-              th:data-depth="${menu.depth}"
-              th:data-path="${menu.path}"
-              th:data-name="${menu.name}"
-              th:data-childcnt="${menu.childCnt}"
-              th:data-status="default">
-            <td th:id="${menu.id}+td" style="cursor:pointer; font-weight:bold;" th:text="${menu.menuName}">
-          </tr>
-        </tbody>
-      </table>
+    <div id="subDiv" class="card-body">
     </div>
   </div>
 </div>
@@ -271,6 +307,7 @@
 <div id="div_menu_detail" class="card mb-4" style="width:69%; height:100%; float:left; height:100%;">
   <div id="btnZone2" style="margin:5px 5px 5px 5px;">
     <nav style="float:right; display:inline-block;">
+      <button class="button_2" id="viewBtn" onclick="fn_view(); return false;">조회</button>
       <button class="button_2" id="saveBtn" onclick="fn_save(); return false;">저장</button>
     </nav>
   </div>

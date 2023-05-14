@@ -36,11 +36,17 @@ public class MenuController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAllMenu(Model model) {
-        List<MenuDto> menu = menuService.getAllMenu();
-
-        model.addAttribute("menu", menu);
-
         return "pages/menu";
+    }
+
+    @ResponseBody
+    @GetMapping("/view")
+    public String viewMenu() {
+        List<MenuDto> menu = menuService.getAllMenu();
+        Gson gson = new Gson();
+        String menuJson = gson.toJson(menu);
+
+        return menuJson;
     }
 
     @ResponseBody
