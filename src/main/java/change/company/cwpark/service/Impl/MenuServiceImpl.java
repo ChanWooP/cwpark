@@ -35,8 +35,8 @@ public class MenuServiceImpl implements MenuService {
 
     // 로그찍는거 만들기
     @Override
-    public void saveMenu(MultiMenu menus) {
-        for(MenuDto menuDto : menus.getMenus()) {
+    public void saveMenu(List<MenuDto> menus) {
+        for(MenuDto menuDto : menus) {
             if(menuDto.getColStatus().equals("D")) {
                 menuDao.deleteMenu(new Menu(menuDto.getId(), menuDto.getParentNum(), menuDto.getDepth()
                     , menuDto.getName(), menuDto.getPath(), menuDto.getMenuName(), menuDto.getChildCnt(), ""));

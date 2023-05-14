@@ -229,7 +229,7 @@
         , contentType : "application/json"
         , data : JSON.stringify(saveJson)
         , success : function(data) {
-          alert("success");
+          alert(data);
         }
         , error : function(e) {
           alert(e.responseText);
@@ -248,7 +248,7 @@
         <button class="button_2" onclick="fn_del();">삭제</button>
       </nav>
     </div>
-    <div class="card-body">
+    <div id="mainDiv" class="card-body">
       <table id="datatablesSimple">
         <tbody>
           <tr th:each="menu : ${menu}" onclick="font_onclick();"

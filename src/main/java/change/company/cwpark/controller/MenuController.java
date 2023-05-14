@@ -1,9 +1,12 @@
 package change.company.cwpark.controller;
 
 import change.company.cwpark.data.dto.MenuDto;
+import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.data.multiRow.MultiMenu;
 import change.company.cwpark.data.vo.MenuVO;
 import change.company.cwpark.service.MenuService;
+import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +46,15 @@ public class MenuController {
     @ResponseBody
     @PostMapping("/save")
     public String saveMenu(@RequestBody MenuVO[] menuVOs, Model model) {
-        // json 값 처리하여 저장기능 활성화
-        // 저장 후 내용 새로고침
-        //menuService.saveMenu(menus);
+        List<MenuDto> menuList = new ArrayList<>();
 
-        model.addAttribute("page", "/menu/all");
+        for(MenuVO m : menuVOs) {
+            menuList.add(new MenuDto(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath()
+                ,"", 0, m.getColStatus()));
+        }
 
-        return "pages/index";
+        menuService.saveMenu(menuList);
+
+        return "저장되었습니다.";
     }
 }
