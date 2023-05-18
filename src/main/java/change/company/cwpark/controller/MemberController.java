@@ -2,6 +2,7 @@ package change.company.cwpark.controller;
 
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.service.MemberService;
+import change.company.cwpark.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, MenuService menuService) {
         this.memberService = memberService;
     }
 
@@ -57,7 +58,9 @@ public class MemberController {
     // 메인 화면
     @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping("/index")
-    public String indexView() {
+    public String indexView(Model model) {
+        model.addAttribute("menu", memberService.getMenu());
+
         return "pages/index";
     }
 

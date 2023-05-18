@@ -1,9 +1,15 @@
 package change.company.cwpark.service.Impl;
 
 import change.company.cwpark.data.dao.MemberDao;
+import change.company.cwpark.data.dao.MenuDao;
 import change.company.cwpark.data.dto.MemberDto;
+import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.entity.Member;
+import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.service.MemberService;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,10 +28,12 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberDao memberDao;
+    private final MenuDao menuDao;
 
     @Autowired
-    public MemberServiceImpl(MemberDao memberDao) {
+    public MemberServiceImpl(MemberDao memberDao, MenuDao menuDao) {
         this.memberDao = memberDao;
+        this.menuDao = menuDao;
     }
 
     // 사용자 인증
@@ -113,6 +121,24 @@ public class MemberServiceImpl implements MemberService {
         memberDtoRtn = new MemberDto(member.getName(), member.getAccount(), member.getPassword(), member.getLastAccessDt(), member.getLoginFailCnt());
 
         return memberDtoRtn;
+    }
+
+    @Override
+    public Map<MenuDto, List<MenuDto>> getMenu() {
+        List<Menu> menu = menuDao.getAllMenu();
+        Map<MenuDto, List<MenuDto>> map = new LinkedHashMap<>();
+        List<MenuDto> list = null;
+
+        for(Menu m : menu) {
+            if(m.getDepth() == 1) {
+                list = new LinkedList<>();
+                map.put(new MenuDto(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName(), m.getChildCnt(), ""), list);
+            } else if(m.getDepth() == 2) {
+                list.add(new MenuDto(m.getId(), m.getParentNum(), m.getDepth(), m.getName(), m.getPath(), m.getMenuName(), m.getChildCnt(), ""));
+            }
+        }
+
+        return map;
     }
 
 }
