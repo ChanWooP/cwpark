@@ -1,9 +1,3 @@
-DROP TABLE menu;
-
-DELETE FROM menu;
-
-SELECT * FROM menu;
-
 INSERT INTO menu(parent_num, depth, NAME, path) 
 VALUES (NULL, 0, '메뉴', null);
 INSERT INTO menu(parent_num, depth, NAME) 

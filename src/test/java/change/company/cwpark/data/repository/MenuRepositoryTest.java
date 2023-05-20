@@ -2,6 +2,11 @@ package change.company.cwpark.data.repository;
 
 import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.data.reinterface.MenuInterface;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +26,9 @@ public class MenuRepositoryTest {
     @Transactional
     void findAllMenu() {
         // given
-        Menu menu1 = menuRepository.save(new Menu(null, 0, "ROOT", "", ""));
-        Menu menu2 = menuRepository.save(new Menu(menu1.getId(), 1, "대1", "", ""));
-        Menu menu3 = menuRepository.save(new Menu(menu2.getId(), 2, "중1", "", ""));
+        Menu menu1 = menuRepository.save(new Menu(null, null, 0, "root", "", "", 0, ""));
+        Menu menu2 = menuRepository.save(new Menu(null, menu1.getId(), 1, "대1", "", "", 0, ""));
+        Menu menu3 = menuRepository.save(new Menu(null, menu2.getId(), 2, "중1", "", "", 0, ""));
 
         // when
         List<MenuInterface> menuList = menuRepository.findAllMenu();
