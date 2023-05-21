@@ -35,3 +35,5 @@ SELECT A.id
     ON A.parent_num = B.id
 ORDER BY order_id, A.id
 ;
+
+SELECT * FROM store;

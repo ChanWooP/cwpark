@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>점포관리</title>
+  <link href="/css/styles2.css" rel="stylesheet"/>
+  <link href="/css/styles.css" rel="stylesheet" />
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+
+  </script>
+</head>
+<body>
+<div id="div_menu" style="width:30%; float:left; height:100%;">
+  <div class="card mb-4" style="width:100%; float:left; height:100%;">
+    <div id="btnZone1" style="float:left; margin:5px 5px 5px 5px;">
+      <nav style="float:right; display:inline-block;">
+        <button class="button_2" onclick="fn_add();">추가</button>
+        <button class="button_2" onclick="fn_del();">삭제</button>
+      </nav>
+    </div>
+    <div id="subDiv" class="card-body">
+    </div>
+  </div>
+</div>
+<div style="width:1%; float:left;">ㅤ</div>
+<div id="div_menu_detail" class="card mb-4" style="width:69%; height:100%; float:left; height:100%;">
+  <div id="btnZone2" style="margin:5px 5px 5px 5px;">
+    <nav style="float:right; display:inline-block;">
+      <button class="button_2" id="viewBtn" onclick="fn_view(); return false;">조회</button>
+      <button class="button_2" id="saveBtn" onclick="fn_save(); return false;">저장</button>
+    </nav>
+  </div>
+  <div class="card-body" id="menuInput">
+      <table>
+        <tr>
+          <td><lable id="menuNameL" style="visibility:hidden;">메뉴명</lable></td>
+          <td></td>
+          <td><input type="text" name="name" id="menuName" onchange="fn_update(this, 'name'); return false;" style="visibility:hidden;"></td>
+        </tr>
+        <tr>
+          <td><lable id="menuPathL" style="visibility:hidden;">경로</lable></td>
+          <td></td>
+          <td><input type="text" name="path" id="menuPath" onchange="fn_update(this, 'path'); return false;" style="visibility:hidden;"></td>
+        </tr>
+      </table>
+  </div>
+</div>
+</body>
+</html>

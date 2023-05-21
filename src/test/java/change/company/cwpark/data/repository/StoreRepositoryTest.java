@@ -1,6 +1,7 @@
 package change.company.cwpark.data.repository;
 
 import change.company.cwpark.data.emb.Address;
+import change.company.cwpark.data.emb.Biz;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Store;
 import java.util.ArrayList;
@@ -28,10 +29,11 @@ public class StoreRepositoryTest {
         // given
         List<Store> storeList = new ArrayList<>();
         Member member = new Member(null, "test3", "test3", "test", null, 0);
-        Address address = new Address("서울시", "송파구");
+        Biz biz = new Biz("123456", "test");
+        Address address = new Address("서울시", "송파구", "1234");
 
         member = memberRepository.save(member);
-        storeList.add(new Store(null, member, "test1", "test2", "01011112222", "1234", 0, "", address));
+        storeList.add(new Store(null, member, "test1", "01011112222", "1234", 0, "", biz , address));
         storeRepository.saveAll(storeList);
 
         // when

@@ -11,8 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
-    private String address1;
-    private String address2;
-    private String zipcode;
+public class Biz {
+  private String bizNo;
+  private String bizName;
 }

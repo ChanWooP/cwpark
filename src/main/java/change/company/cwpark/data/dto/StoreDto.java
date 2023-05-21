@@ -22,8 +22,6 @@ public class StoreDto {
 
     private String storeName;
 
-    private String repreName;
-
     private String tel;
 
     private String operTime;
@@ -32,7 +30,13 @@ public class StoreDto {
 
     private String etc;
 
+    private String bizNo;
+
+    private String bizName;
+
     private String address1;
 
     private String address2;
+
+    private String zipcode;
 }

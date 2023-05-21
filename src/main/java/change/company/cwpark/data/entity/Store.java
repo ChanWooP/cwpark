@@ -1,6 +1,7 @@
 package change.company.cwpark.data.entity;
 
 import change.company.cwpark.data.emb.Address;
+import change.company.cwpark.data.emb.Biz;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -31,9 +32,10 @@ public class Store extends Base{
 -- 점포
 CREATE TABLE Store (
 	  ID INT NOT NULL AUTO_INCREMENT
-	, ACCOUNT VARCHAR(255) NOT NULL UNIQUE
+	, ACCOUNT INT NOT NULL UNIQUE
 	, STORE_NAME VARCHAR(255) NOT NULL
-	, REPRE_NAME VARCHAR(255) NOT NULL
+	, BIZ_NO VARCHAR(255) NOT NULL
+	, BIZ_NAME VARCHAR(255) NOT NULL
 	, ADDRESS1 VARCHAR(255)
 	, ADDRESS2 VARCHAR(255)
 	, TEL VARCHAR(255)
@@ -45,7 +47,7 @@ CREATE TABLE Store (
 	, UPD_DATE DATETIME
 	, UPD_ID VARCHAR(255)
 	, PRIMARY KEY (id)
-	, FOREIGN KEY (ACCOUNT) REFERENCES MEMBER (id)
+	, FOREIGN KEY (ACCOUNT) REFERENCES MEMBER (ID)
 ) DEFAULT CHARACTER SET UTF8;
   */
 
@@ -61,9 +63,6 @@ CREATE TABLE Store (
   @Column(name = "store_name")
   private String storeName;
 
-  @Column(name = "REPRE_NAME")
-  private String repreName;
-
   @Column(name = "TEL")
   private String tel;
 
@@ -77,6 +76,12 @@ CREATE TABLE Store (
   private String etc;
 
   @Embedded
+  @AttributeOverride(name = "bizNo", column = @Column(name = "BIZ_NO"))
+  @AttributeOverride(name = "bizName", column = @Column(name = "BIZ_NAME"))
+  private Biz biz;
+
+  @Embedded
+  @AttributeOverride(name = "zipcode", column = @Column(name = "zipcode"))
   @AttributeOverride(name = "address1", column = @Column(name = "address1"))
   @AttributeOverride(name = "address2", column = @Column(name = "address2"))
   private Address address;

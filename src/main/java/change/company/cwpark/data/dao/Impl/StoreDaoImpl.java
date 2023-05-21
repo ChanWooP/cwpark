@@ -4,14 +4,16 @@ import change.company.cwpark.data.dao.StoreDao;
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.StoreDto;
 import change.company.cwpark.data.emb.Address;
+import change.company.cwpark.data.emb.Biz;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.repository.StoreRepository;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class StoreDaoImpl implements StoreDao {
 
   private StoreRepository storeRepository;
@@ -29,9 +31,9 @@ public class StoreDaoImpl implements StoreDao {
       storeDtoList.add(new StoreDto(s.getId()
           , new MemberDto(s.getAccount().getName(),s.getAccount().getAccount(), s.getAccount().getPassword()
           , s.getAccount().getLastAccessDt(), s.getAccount().getLoginFailCnt())
-          , s.getStoreName(), s.getRepreName()
-          , s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc(), s.getAddress().getAddress1()
-          , s.getAddress().getAddress2()));
+          , s.getStoreName(), s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc()
+          , s.getBiz().getBizNo(), s.getBiz().getBizName()
+          , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode()));
     }
 
     return storeDtoList;
@@ -45,9 +47,10 @@ public class StoreDaoImpl implements StoreDao {
       storeList.add(new Store(s.getId()
           , new Member(s.getAccount().getName(), s.getAccount().getAccount(),s.getAccount().getPassword()
           , s.getAccount().getLastAccessDt() ,s.getAccount().getLoginFailCnt())
-          , s.getStoreName(), s.getRepreName(), s.getTel()
+          , s.getStoreName(), s.getTel()
           , s.getOperTime() ,s.getLikeCnt(), s.getEtc()
-          , new Address(s.getAddress1(), s.getAddress2())));
+          , new Biz(s.getBizNo(), s.getBizName())
+          , new Address(s.getAddress1(), s.getAddress2(), s.getZipcode())));
     }
 
     storeRepository.saveAll(storeList);
