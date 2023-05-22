@@ -9,83 +9,69 @@
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <style>
-    table caption {
-      padding: .5em 0;
-    }
-
-    table.dataTable th,
-    table.dataTable td {
-      white-space: nowrap;
-    }
-
-    .p {
-      text-align: center;
-      padding-top: 140px;
-      font-size: 14px;
-    }
-  </style>
+  <script src="/js/datatables-simple-demo.js"></script>
+  <script src="/js/scripts.js"></script>
   <script>
+  $(function(){
+        const datatablesSimple = document.getElementById('datatablesSimple');
+        if (datatablesSimple) {
+            new simpleDatatables.DataTable(datatablesSimple);
+        }
+  });
   </script>
 </head>
 <body>
-<div style="width:100%; height:10%">
-  <div class="card" style="height:90%">
-    <div id="btnZone2" style="margin:5px 5px 5px 5px;">
+<div id="div_menu" style="width:70%; float:left; height:100%;">
+  <div class="card" style="width:100%; float:left; height:100%;">
+    <div id="btnZone1" style="float:left; margin:5px 5px 5px 5px;">
       <nav style="float:left; display:inline-block;font-size:12px;">
         점포명 : <input type="text">
       </nav>
-      <nav style="float:right; display:inline-block;font-size:10px;">
+      <nav style="float:right; display:inline-block;">
+        <button class="button_2" onclick="fn_add();">추가</button>
+        <button class="button_2" onclick="fn_del();">삭제</button>
         <button class="button_2" id="viewBtn" onclick="fn_view(); return false;">조회</button>
         <button class="button_2" id="saveBtn" onclick="fn_save(); return false;">저장</button>
       </nav>
     </div>
-  </div>
-</div>
-<div id="div_menu" style="width:70%; float:left; height:90%;">
-  <div class="card" style="width:100%; float:left; height:100%;">
-    <div id="btnZone1" style="float:left; margin:5px 5px 5px 5px;">
-      <nav style="float:right; display:inline-block;">
-        <button class="button_2" onclick="fn_add();">추가</button>
-        <button class="button_2" onclick="fn_del();">삭제</button>
-      </nav>
-    </div>
-    <div id="subDiv" class="card-body" style="overflow:auto;">
-      <table class="table table-bordered table-hover dt-responsive">
-        <thead>
-        <tr>
-          <th>점포코드</th>
-          <th>점포명</th>
-          <th>계정</th>
-          <th>사업자번호</th>
-          <th>사업자명</th>
-          <th>전화번호</th>
-          <th>운영시간</th>
-          <th>좋아요 수</th>
-          <th>점포설명</th>
-          <th>주소</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>1</td>
-          <td>슬기네집밥</td>
-          <td>jamong</td>
-          <td>7777777777</td>
-          <td>최슬기</td>
-          <td>01012343444</td>
-          <td>0000</td>
-          <td>12</td>
-          <td>운영시간은떙떙입니다</td>
-          <td>경기도 김포시 사우동 111</td>
-        </tr>
-        </tbody>
-      </table>
+    <div style="width:100%; overflow:auto;">
+      <div id="subDiv" style="width:1500px; height:400px; font-size:12px;">
+        <table id="datatablesSimple">
+          <thead>
+          <tr>
+            <th>점포코드</th>
+            <th>점포명</th>
+            <th>계정</th>
+            <th>사업자번호</th>
+            <th>사업자명</th>
+            <th>전화번호</th>
+            <th>운영시간</th>
+            <th>좋아요 수</th>
+            <th>점포설명</th>
+            <th>주소</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="tr_hover1">
+            <td>1</td>
+            <td>슬기네집밥</td>
+            <td>jamong</td>
+            <td>7777777777</td>
+            <td>최슬기</td>
+            <td>01012343444</td>
+            <td>0000</td>
+            <td>12</td>
+            <td>운영시간은떙떙입니다</td>
+            <td>경기도 김포시 사우동 111</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
 <div style="width:1%; float:left;">ㅤ</div>
-<div id="div_menu_detail" class="card mb-4" style="width:29%; height:100%; float:left; height:90%;">
+<div id="div_menu_detail" class="card mb-4" style="width:29%; height:100%; float:left; height:100%;">
   <div class="card-body" id="menuInput">
       <table>
         <tr>

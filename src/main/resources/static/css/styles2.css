@@ -16,3 +16,8 @@ button.button_2:hover {
   color: white;
   background: orange;
 }
+
+tr.tr_hover1:hover td
+{
+	background:#aba5a5;
+}

@@ -20,8 +20,8 @@
                 var exception = getParameterByName('exception');
                 var loginA = document.getElementById('logina');
 
-                if(getCookie("id")) {
-                    id.value = getCookie("id");
+                if(getCookie("ids")) {
+                    id.value = getCookie("ids");
                     remember.checked = true;
                 }
 
@@ -74,9 +74,9 @@
                 }
 
                 if(remember.checked == true) {
-                    setCookie("id", id.value, 7);
+                    setCookie("ids", id.value, 7);
                 } else {
-                    setCookie("id", id.value, 0);
+                    setCookie("ids", id.value, 0);
                 }
 
                 loginForm.submit();
