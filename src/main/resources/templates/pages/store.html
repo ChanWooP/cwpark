@@ -13,11 +13,58 @@
   <script src="/js/scripts.js"></script>
   <script>
   $(function(){
-        const datatablesSimple = document.getElementById('datatablesSimple');
-        if (datatablesSimple) {
-            new simpleDatatables.DataTable(datatablesSimple);
-        }
+
   });
+
+  function fn_view() {
+    let subDiv = document.getElementById('subDiv');
+
+    let str = '<table>';
+        str += '  <thead>';
+        str += '    <tr>';
+        str += '      <th class=\"td_border\">점포코드</th>';
+        str += '      <th class=\"td_border\">점포명</th>';
+        str += '      <th class=\"td_border\">계정</th>';
+        str += '      <th class=\"td_border\">사업자번호</th>';
+        str += '      <th class=\"td_border\">사업자명</th>';
+        str += '      <th class=\"td_border\">전화번호</th>';
+        str += '      <th class=\"td_border\">운영시간</th>';
+        str += '      <th class=\"td_border\">좋아요 수</th>';
+        str += '      <th class=\"td_border\">점포설명</th>';
+        str += '      <th class=\"td_border\">주소</th>';
+        str += '    </tr>';
+        str += '  </thead>';
+        str += '  <tbody>';
+        str += '    <tr class=\"tr_hover1\" onclick=\"tr_onclick(this);\" ';
+        str += '        id=\"' + 1 + '\"';
+        str += '        data-id=\"' + 2 + '\"';
+        str += '        data-parentnum=\"' + 3 + '\"';
+        str += '        data-depth=\"' + 4 + '\"';
+        str += '        data-path=\"' + 5 + '\"';
+        str += '        data-name=\"' + 6 + '\"';
+        str += '        data-childcnt=\"' + 7 + '\"';
+        str += '        data-status=\"default\"> ';
+        str += '      <td class=\"td_border\">1</td>';
+        str += '      <td class=\"td_border\">슬기네집</td>';
+        str += '      <td class=\"td_border\">skkim</td>';
+        str += '      <td class=\"td_border\">7777777777</td>';
+        str += '      <td class=\"td_border\">자몽쓰</td>';
+        str += '      <td class=\"td_border\">01077777777</td>';
+        str += '      <td class=\"td_border\">뭐였더라</td>';
+        str += '      <td class=\"td_border\">1334</td>';
+        str += '      <td class=\"td_border\">운영시간은 0000~2359</td>';
+        str += '      <td class=\"td_border\">경기도 김포시 풍무동 땡댕댕댕 아라비아 12호</td>';
+        str += '    </tr>';
+        str += '  </tbody>';
+        str += '</table>';
+
+     subDiv.innerHTML = str;
+  }
+
+  function tr_onclick(obj) {
+    alert(obj.id);
+  }
+
   </script>
 </head>
 <body>
@@ -35,8 +82,8 @@
       </nav>
     </div>
     <div style="width:100%; overflow:auto;">
-      <div id="subDiv" style="width:1500px; height:400px; font-size:12px;">
-        <table id="datatablesSimple">
+      <div id="subDiv" style="width:1000px; height:400px; font-size:12px;">
+        <table>
           <thead>
           <tr>
             <th>점포코드</th>
@@ -52,18 +99,6 @@
           </tr>
           </thead>
           <tbody>
-          <tr class="tr_hover1">
-            <td>1</td>
-            <td>슬기네집밥</td>
-            <td>jamong</td>
-            <td>7777777777</td>
-            <td>최슬기</td>
-            <td>01012343444</td>
-            <td>0000</td>
-            <td>12</td>
-            <td>운영시간은떙떙입니다</td>
-            <td>경기도 김포시 사우동 111</td>
-          </tr>
           </tbody>
         </table>
       </div>
