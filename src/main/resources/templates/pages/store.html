@@ -19,19 +19,19 @@
   function fn_view() {
     let subDiv = document.getElementById('subDiv');
 
-    let str = '<table>';
+    let str = '<table style=\"margin-left:5px;\">';
         str += '  <thead>';
         str += '    <tr>';
-        str += '      <th class=\"td_border\">점포코드</th>';
-        str += '      <th class=\"td_border\">점포명</th>';
-        str += '      <th class=\"td_border\">계정</th>';
-        str += '      <th class=\"td_border\">사업자번호</th>';
-        str += '      <th class=\"td_border\">사업자명</th>';
-        str += '      <th class=\"td_border\">전화번호</th>';
-        str += '      <th class=\"td_border\">운영시간</th>';
-        str += '      <th class=\"td_border\">좋아요 수</th>';
-        str += '      <th class=\"td_border\">점포설명</th>';
-        str += '      <th class=\"td_border\">주소</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">점포코드</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">점포명</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">계정</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">사업자번호</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">사업자명</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">전화번호</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">운영유형</th>';
+        str += '      <th style="width:100px;" class=\"td_border2\">좋아요 수</th>';
+        str += '      <th style="width:200px;" class=\"td_border2\">주소</th>';
+        str += '      <th style="width:300px;" class=\"td_border2\">점포설명</th>';
         str += '    </tr>';
         str += '  </thead>';
         str += '  <tbody>';
@@ -52,8 +52,8 @@
         str += '      <td class=\"td_border\">01077777777</td>';
         str += '      <td class=\"td_border\">뭐였더라</td>';
         str += '      <td class=\"td_border\">1334</td>';
-        str += '      <td class=\"td_border\">운영시간은 0000~2359</td>';
         str += '      <td class=\"td_border\">경기도 김포시 풍무동 땡댕댕댕 아라비아 12호</td>';
+        str += '      <td class=\"td_border\">운영시간은 0000~2359</td>';
         str += '    </tr>';
         str += '  </tbody>';
         str += '</table>';
@@ -82,20 +82,20 @@
       </nav>
     </div>
     <div style="width:100%; overflow:auto;">
-      <div id="subDiv" style="width:1000px; height:400px; font-size:12px;">
-        <table>
+      <div id="subDiv" style="width:1310px; height:400px; font-size:13px;">
+        <table style="margin-left:5px;">
           <thead>
           <tr>
-            <th>점포코드</th>
-            <th>점포명</th>
-            <th>계정</th>
-            <th>사업자번호</th>
-            <th>사업자명</th>
-            <th>전화번호</th>
-            <th>운영시간</th>
-            <th>좋아요 수</th>
-            <th>점포설명</th>
-            <th>주소</th>
+            <th style="width:100px;" class="td_border2">점포코드</th>
+            <th style="width:100px;" class="td_border2">점포명</th>
+            <th style="width:100px;" class="td_border2">계정</th>
+            <th style="width:100px;" class="td_border2">사업자번호</th>
+            <th style="width:100px;" class="td_border2">사업자명</th>
+            <th style="width:100px;" class="td_border2">전화번호</th>
+            <th style="width:100px;" class="td_border2">운영유형</th>
+            <th style="width:100px;" class="td_border2">좋아요 수</th>
+            <th style="width:200px;" class="td_border2">주소</th>
+            <th style="width:300px;" class="td_border2">점포설명</th>
           </tr>
           </thead>
           <tbody>
@@ -106,18 +106,51 @@
   </div>
 </div>
 <div style="width:1%; float:left;">ㅤ</div>
-<div id="div_menu_detail" class="card mb-4" style="width:29%; height:100%; float:left; height:100%;">
+<div id="div_menu_detail" class="card mb-4" style="width:29%; height:100%; float:left; height:100%; font-size:13px;">
   <div class="card-body" id="menuInput">
       <table>
         <tr>
-          <td><lable id="menuNameL" style="visibility:hidden;">메뉴명</lable></td>
-          <td></td>
-          <td><input type="text" name="name" id="menuName" onchange="fn_update(this, 'name'); return false;" style="visibility:hidden;"></td>
+          <td><lable class="label1" id="storeNameL">점포명</lable></td>
+          <td><input class="input1" type="text" id="storeNameI" onchange="fn_update(this, 'name'); return false;"></td>
         </tr>
         <tr>
-          <td><lable id="menuPathL" style="visibility:hidden;">경로</lable></td>
+          <td><lable class="label1" id="storeAccountL">계정</lable></td>
+          <td><input class="input1" type="text" id="storeAccountI" onchange="fn_update(this, 'path'); return false;"></td>
+        </tr>
+        <tr>
+          <td><lable class="label1" id="storeBisNumL">사업자번호</lable></td>
+          <td><input class="input1" type="text" id="storeBisNumI" onchange="fn_update(this, 'name'); return false;"></td>
+        </tr>
+        <tr>
+          <td><lable class="label1" id="storeBisNameL">사업자명</lable></td>
+          <td><input class="input1" type="text" id="storeBisNameI" onchange="fn_update(this, 'path'); return false;"></td>
+        </tr>
+        <tr>
+          <td><lable class="label1" id="storePhoneL">전화번호</lable></td>
+          <td><input class="input1" type="text" id="storePhoneI" onchange="fn_update(this, 'name'); return false;"></td>
+        </tr>
+        <tr>
+          <td><lable class="label1" id="storeOperTimeL">운영유형</lable></td>
+          <td><input class="input1" type="text" id="storeOperTimeI" onchange="fn_update(this, 'path'); return false;"></td>
+        </tr>
+        <tr>
+          <td height="25.1px"><lable class="label1" id="storeAddressL">주소</lable></td>
+          <td>
+            <input class="input1" style="width:120px;" type="text" id="storeAddressI1" onchange="fn_update(this, 'name'); return false;">
+            <button class="button_1"><img style="width:15px; height:15px;" src="/img/find.png"></button>
+          </td>
+        </tr>
+        <tr>
           <td></td>
-          <td><input type="text" name="path" id="menuPath" onchange="fn_update(this, 'path'); return false;" style="visibility:hidden;"></td>
+          <td><input class="input1" type="text" id="storeAddressI2" onchange="fn_update(this, 'name'); return false;"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input class="input1" type="text" id="storeAddressI3" onchange="fn_update(this, 'name'); return false;"></td>
+        </tr>
+        <tr>
+          <td><lable class="label1" id="storeEtcL">점포설명</lable></td>
+          <td><textarea class="input1" style="height:100px; resize:none;" id="storeEtcI" onchange="fn_update(this, 'path'); return false;"></textarea></td>
         </tr>
       </table>
   </div>
