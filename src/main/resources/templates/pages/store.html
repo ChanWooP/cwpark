@@ -11,11 +11,31 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="/js/datatables-simple-demo.js"></script>
   <script src="/js/scripts.js"></script>
+  <script src="/js/scripts2.js"></script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script>
+  // 현재 선택된 컴포넌트
+  var dv;
+  var num = 0;
+
+  // 내용 설정 컴포넌트
+  var storeNameI = document.getElementById('storeNameI');
+  var storeAccountI = document.getElementById('storeAccountI');
+  var storeBisNumI = document.getElementById('storeBisNumI');
+  var storeBisNameI = document.getElementById('storeBisNameI');
+  var storePhoneI = document.getElementById('storePhoneI');
+  var storeOperTimeI = document.getElementById('storeOperTimeI');
+  var storeAddressI1 = document.getElementById('storeAddressI1');
+  var storeAddressI2 = document.getElementById('storeAddressI2');
+  var storeAddressI3 = document.getElementById('storeAddressI3');
+  var storeEtcI = document.getElementById('storeEtcI');
+
+  // 초기화
   $(function(){
 
   });
 
+  // 조회
   function fn_view() {
     let subDiv = document.getElementById('subDiv');
 
@@ -37,12 +57,18 @@
         str += '  <tbody>';
         str += '    <tr class=\"tr_hover1\" onclick=\"tr_onclick(this);\" ';
         str += '        id=\"' + 1 + '\"';
-        str += '        data-id=\"' + 2 + '\"';
-        str += '        data-parentnum=\"' + 3 + '\"';
-        str += '        data-depth=\"' + 4 + '\"';
-        str += '        data-path=\"' + 5 + '\"';
-        str += '        data-name=\"' + 6 + '\"';
-        str += '        data-childcnt=\"' + 7 + '\"';
+        str += '        data-id=\"' + 1 + '\"';
+        str += '        data-storename=\"' + 3 + '\"';
+        str += '        data-account=\"' + 4 + '\"';
+        str += '        data-bizno=\"' + 5 + '\"';
+        str += '        data-bizname=\"' + 6 + '\"';
+        str += '        data-tel=\"' + 10 + '\"';
+        str += '        data-opertime=\"' + 'A' + '\"';
+        str += '        data-likecnt=\"' + 12 + '\"';
+        str += '        data-zipcode=\"' + 7 + '\"';
+        str += '        data-address1=\"' + 8 + '\"';
+        str += '        data-address2=\"' + 9 + '\"';
+        str += '        data-etc=\"' + 13 + '\"';
         str += '        data-status=\"default\"> ';
         str += '      <td class=\"td_border\">1</td>';
         str += '      <td class=\"td_border\">슬기네집</td>';
@@ -61,8 +87,153 @@
      subDiv.innerHTML = str;
   }
 
+  // 추가
+  function fn_add() {
+    // 테이블
+    let table = document.getElementById('datatable');
+    let row;
+    let cell;
+    let array = ['id', 'storename' ,'account' ,'bizno' ,'bizname','tel'
+                ,'opertime' ,'likecnt' ,'address' ,'etc'];
+
+    // 신규 추가 시 초기화
+    row = table.insertRow();
+
+    row.className = 'tr_hover1';
+    row.addEventListener("click", () => { tr_onclick(row); });
+    row.dataset.id = '';
+    row.dataset.storename = '';
+    row.dataset.account = '';
+    row.dataset.bizno = '';
+    row.dataset.bizname = '';
+    row.dataset.tel = '';
+    row.dataset.opertime = '';
+    row.dataset.likecnt = 0;
+    row.dataset.zipcode = '';
+    row.dataset.address1 = '';
+    row.dataset.address2 = '';
+    row.dataset.etc = '';
+    row.dataset.status = 'new';
+    row.id = 'new'+(num++);
+
+    for(var i=0; i<array.length; i++) {
+      cell = row.insertCell(i);
+      cell.id = row.id + array[i];
+      cell.className = 'td_border';
+      cell.innerHTML = 'ㅤ';
+    }
+  }
+
+  // 데이터 변경
+  function fn_update(obj, str) {
+    var tdEle1 = document.getElementById(dv.id+'storename');
+    var tdEle2 = document.getElementById(dv.id+'account');
+    var tdEle3 = document.getElementById(dv.id+'bizno');
+    var tdEle4 = document.getElementById(dv.id+'bizname');
+    var tdEle5 = document.getElementById(dv.id+'tel');
+    var tdEle6 = document.getElementById(dv.id+'opertime');
+    var tdEle7 = document.getElementById(dv.id+'address');
+    var tdEle8 = document.getElementById(dv.id+'etc');
+
+    if(str == 'storename') {
+      tdEle1.innerHTML = obj.value;
+    } else if (str == 'account') {
+      tdEle2.innerHTML = obj.value;
+    } else if (str == 'bizno') {
+      tdEle3.innerHTML = obj.value;
+    } else if (str == 'bizname') {
+      tdEle4.innerHTML = obj.value;
+    } else if (str == 'tel') {
+      tdEle5.innerHTML = obj.value;
+    } else if (str == 'opertime') {
+      tdEle6.innerHTML = obj.value; // 흠...
+    } else if (str == 'address') {
+      tdEle7.innerHTML = fn_global_null(storeAddressI1.value) + fn_global_null(storeAddressI2.value)
+                       + fn_global_null(storeAddressI3.value);
+    } else if (str == 'etc') {
+      tdEle8.innerHTML = obj.value;
+    }
+  }
+
+  // 행 선택
   function tr_onclick(obj) {
-    alert(obj.id);
+    // 이전에 선택한 컴포넌트 원상복구
+    if(dv != null) {
+        dv.style.background = '';
+    }
+
+    // 선택한 컴포넌트
+    dv = event.currentTarget;
+
+    // 선택한 컴포넌츠 색상 변경
+    dv.style.background = '#F2F2F2';
+
+    storeNameI.value = obj.dataset.storename;
+    storeAccountI.value = obj.dataset.account;
+    storeBisNumI.value = obj.dataset.bizno;
+    storeBisNameI.value = obj.dataset.bizname;
+    storePhoneI.value = obj.dataset.tel;
+    storeOperTimeI.value = obj.dataset.opertime;
+    storeAddressI1.value = obj.dataset.zipcode;
+    storeAddressI2.value = obj.dataset.address1;
+    storeAddressI3.value = obj.dataset.address2;
+    storeEtcI.value = obj.dataset.etc;
+  }
+
+  // 주소 찾기
+  function fn_address(obj)
+  {
+    if(dv == null) {
+      alert('대상을 선택해야합니다.');
+      return false;
+    }
+
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+                // 조합된 참고항목을 해당 필드에 넣는다.
+                data.zonezode = data.zonezode + extraAddr;
+
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('storeAddressI1').value = data.zonecode;
+            document.getElementById("storeAddressI2").value = addr;
+
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("storeAddressI3").focus();
+
+            fn_update(obj, 'address');
+        }
+    }).open();
   }
 
   </script>
@@ -83,7 +254,7 @@
     </div>
     <div style="width:100%; overflow:auto;">
       <div id="subDiv" style="width:1310px; height:400px; font-size:13px;">
-        <table style="margin-left:5px;">
+        <table id="datatable" style="margin-left:5px;">
           <thead>
           <tr>
             <th style="width:100px;" class="td_border2">점포코드</th>
@@ -111,46 +282,53 @@
       <table>
         <tr>
           <td><lable class="label1" id="storeNameL">점포명</lable></td>
-          <td><input class="input1" type="text" id="storeNameI" onchange="fn_update(this, 'name'); return false;"></td>
+          <td><input class="input1" type="text" id="storeNameI" onchange="fn_update(this, 'storename'); return false;"></td>
         </tr>
         <tr>
           <td><lable class="label1" id="storeAccountL">계정</lable></td>
-          <td><input class="input1" type="text" id="storeAccountI" onchange="fn_update(this, 'path'); return false;"></td>
+          <td><input class="input1" type="text" id="storeAccountI" onchange="fn_update(this, 'account'); return false;"></td>
         </tr>
         <tr>
           <td><lable class="label1" id="storeBisNumL">사업자번호</lable></td>
-          <td><input class="input1" type="text" id="storeBisNumI" onchange="fn_update(this, 'name'); return false;"></td>
+          <td><input class="input1" type="text" id="storeBisNumI" onchange="fn_update(this, 'bizno'); return false;"></td>
         </tr>
         <tr>
           <td><lable class="label1" id="storeBisNameL">사업자명</lable></td>
-          <td><input class="input1" type="text" id="storeBisNameI" onchange="fn_update(this, 'path'); return false;"></td>
+          <td><input class="input1" type="text" id="storeBisNameI" onchange="fn_update(this, 'bizname'); return false;"></td>
         </tr>
         <tr>
           <td><lable class="label1" id="storePhoneL">전화번호</lable></td>
-          <td><input class="input1" type="text" id="storePhoneI" onchange="fn_update(this, 'name'); return false;"></td>
+          <td><input class="input1" type="text" id="storePhoneI" onchange="fn_update(this, 'tel'); return false;"></td>
         </tr>
         <tr>
           <td><lable class="label1" id="storeOperTimeL">운영유형</lable></td>
-          <td><input class="input1" type="text" id="storeOperTimeI" onchange="fn_update(this, 'path'); return false;"></td>
+          <td>
+            <select class="input1" id="storeOperTimeI" onchange="fn_update(this, 'opertime'); return false;">
+              <option value="">- 선택 -</option>
+              <option value="A">운영중</option>
+              <option value="B">휴점</option>
+              <option value="C">폐업</option>
+            </select>
+          </td>
         </tr>
         <tr>
           <td height="25.1px"><lable class="label1" id="storeAddressL">주소</lable></td>
           <td>
-            <input class="input1" style="width:120px;" type="text" id="storeAddressI1" onchange="fn_update(this, 'name'); return false;">
-            <button class="button_1"><img style="width:15px; height:15px;" src="/img/find.png"></button>
+            <input class="input1" style="width:120px;" type="text" id="storeAddressI1" onchange="fn_update(this, 'address'); return false;" placeholder="우편번호 입력">
+            <button class="button_1" onclick="fn_address(this);"><img style="width:15px; height:15px;" src="/img/find.png"></button>
           </td>
         </tr>
         <tr>
           <td></td>
-          <td><input class="input1" type="text" id="storeAddressI2" onchange="fn_update(this, 'name'); return false;"></td>
+          <td><input class="input1" type="text" id="storeAddressI2" onchange="fn_update(this, 'address'); return false;" placeholder="도로명 또는 지번명 입력"></td>
         </tr>
         <tr>
           <td></td>
-          <td><input class="input1" type="text" id="storeAddressI3" onchange="fn_update(this, 'name'); return false;"></td>
+          <td><input class="input1" type="text" id="storeAddressI3" onchange="fn_update(this, 'address'); return false;" placeholder="상세주소 입력"></td>
         </tr>
         <tr>
           <td><lable class="label1" id="storeEtcL">점포설명</lable></td>
-          <td><textarea class="input1" style="height:100px; resize:none;" id="storeEtcI" onchange="fn_update(this, 'path'); return false;"></textarea></td>
+          <td><textarea class="input1" style="height:100px; resize:none;" id="storeEtcI" onchange="fn_update(this, 'etc'); return false;"></textarea></td>
         </tr>
       </table>
   </div>
