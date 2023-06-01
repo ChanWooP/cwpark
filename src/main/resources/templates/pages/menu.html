@@ -221,6 +221,9 @@
   function fn_view() {
       let subDiv = document.getElementById('subDiv');
 
+      saveCnt = 0;
+      saveJson = new Array();
+
       $.ajax({
           type: "GET"
         , url : "/menu/view"
