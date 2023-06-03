@@ -18,7 +18,9 @@ public class StoreDto {
 
     private Long id;
 
-    private MemberDto account;
+    private Long accountid;
+
+    private String account;
 
     private String storeName;
 

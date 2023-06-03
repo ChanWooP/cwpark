@@ -9,8 +9,10 @@ import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.repository.StoreRepository;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,8 +31,7 @@ public class StoreDaoImpl implements StoreDao {
 
     for(Store s : storeList) {
       storeDtoList.add(new StoreDto(s.getId()
-          , new MemberDto(s.getAccount().getName(),s.getAccount().getAccount(), s.getAccount().getPassword()
-          , s.getAccount().getLastAccessDt(), s.getAccount().getLoginFailCnt())
+          , s.getAccount().getId(), s.getAccount().getAccount()
           , s.getStoreName(), s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc()
           , s.getBiz().getBizNo(), s.getBiz().getBizName()
           , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode()));
@@ -40,13 +41,15 @@ public class StoreDaoImpl implements StoreDao {
   }
 
   @Override
-  public void saveStore(List<StoreDto> storeDtoList) {
+  public void saveStore(Map<StoreDto, Member> storeDtoList) {
     List<Store> storeList = new ArrayList<>();
+    Iterator<StoreDto> keys = storeDtoList.keySet().iterator();
 
-    for(StoreDto s : storeDtoList) {
+    while( keys.hasNext() ){
+      StoreDto s = keys.next();
+
       storeList.add(new Store(s.getId()
-          , new Member(s.getAccount().getName(), s.getAccount().getAccount(),s.getAccount().getPassword()
-          , s.getAccount().getLastAccessDt() ,s.getAccount().getLoginFailCnt())
+          , storeDtoList.get(s)
           , s.getStoreName(), s.getTel()
           , s.getOperTime() ,s.getLikeCnt(), s.getEtc()
           , new Biz(s.getBizNo(), s.getBizName())

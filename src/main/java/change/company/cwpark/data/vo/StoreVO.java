@@ -15,27 +15,29 @@ public class StoreVO {
 
   private Long id;
 
-  private MemberDto account;
+  private Long accountid;
 
-  private String storeName;
+  private String storename;
+
+  private String account;
+
+  private String bizno;
+
+  private String bizname;
 
   private String tel;
 
-  private String operTime;
+  private String opertime;
 
-  private Integer likeCnt;
+  private Integer likecnt;
 
-  private String etc;
-
-  private String bizNo;
-
-  private String bizName;
+  private String zipcode;
 
   private String address1;
 
   private String address2;
 
-  private String zipcode;
+  private String etc;
 
   private String colStatus;
 }

@@ -3,12 +3,14 @@ package change.company.cwpark.controller;
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.dto.StoreDto;
+import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.vo.MenuVO;
 import change.company.cwpark.data.vo.StoreVO;
 import change.company.cwpark.service.MenuService;
 import change.company.cwpark.service.StoreService;
 import com.google.gson.Gson;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +39,8 @@ public class StoreController {
     }
 
     @ResponseBody
-    @GetMapping("/view")
-    public String viewMenu(@RequestBody String storeName) {
+    @PostMapping("/view")
+    public String viewStore(@RequestBody String storeName) {
         List<StoreDto> storeDtoList = storeService.getStore(storeName);
         Gson gson = new Gson();
         String storeJson = gson.toJson(storeDtoList);
@@ -48,20 +50,17 @@ public class StoreController {
 
     @ResponseBody
     @PostMapping("/save")
-    public String saveMenu(@RequestBody StoreVO[] StoreVOs, Model model) {
+    public void saveStore(@RequestBody StoreVO[] StoreVOs, Model model) {
         List<StoreDto> storeDtoList = new ArrayList<>();
 
         for(StoreVO s : StoreVOs) {
             storeDtoList.add(new StoreDto(s.getId()
-                , new MemberDto(s.getAccount().getName(),s.getAccount().getAccount(), s.getAccount().getPassword()
-                , s.getAccount().getLastAccessDt(), s.getAccount().getLoginFailCnt())
-                , s.getStoreName(), s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc()
-                , s.getBizNo(), s.getBizName()
+                , s.getAccountid(), s.getAccount()
+                , s.getStorename(), s.getTel(), s.getOpertime(), s.getLikecnt(), s.getEtc()
+                , s.getBizno(), s.getBizname()
                 , s.getAddress1(), s.getAddress2(), s.getZipcode()));
         }
 
         storeService.saveStore(storeDtoList);
-
-        return "저장되었습니다.";
     }
 }

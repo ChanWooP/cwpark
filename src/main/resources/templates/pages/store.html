@@ -49,7 +49,6 @@
       if(event == "insert") {
           // 업데이트
           if(findIdx >= 0) {
-            alert('ss');
             saveJson[findIdx].storename = iRow.dataset.storename;
             saveJson[findIdx].account = iRow.dataset.account;
             saveJson[findIdx].bizno = iRow.dataset.bizno;
@@ -68,8 +67,9 @@
           saveJson[saveCnt++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
-            , "storename" : iRow.dataset.storename
+            , "accountid" : iRow.dataset.accountid
             , "account" : iRow.dataset.account
+            , "storename" : iRow.dataset.storename
             , "bizno" : iRow.dataset.bizno
             , "bizname" : iRow.dataset.bizname
             , "tel" : iRow.dataset.tel
@@ -93,56 +93,77 @@
   // 조회
   function fn_view() {
     let subDiv = document.getElementById('subDiv');
+    let str = document.getElementById('searchStore').value;
 
     saveCnt = 0;
     saveJson = new Array();
 
-    let str = '<table id=\"datatable\" style=\"margin-left:5px;\">';
-        str += '  <thead>';
-        str += '    <tr>';
-        str += '      <th style="width:100px;" class=\"td_border2\">점포코드</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">점포명</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">계정</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">사업자번호</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">사업자명</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">전화번호</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">운영유형</th>';
-        str += '      <th style="width:100px;" class=\"td_border2\">좋아요 수</th>';
-        str += '      <th style="width:200px;" class=\"td_border2\">주소</th>';
-        str += '      <th style="width:300px;" class=\"td_border2\">점포설명</th>';
-        str += '    </tr>';
-        str += '  </thead>';
-        str += '  <tbody>';
-        str += '    <tr class=\"tr_hover1\" onclick=\"tr_onclick(this);\" ';
-        str += '        id=\"' + 1 + '\"';
-        str += '        data-id=\"' + 1 + '\"';
-        str += '        data-storename=\"' + 3 + '\"';
-        str += '        data-account=\"' + 4 + '\"';
-        str += '        data-bizno=\"' + 5 + '\"';
-        str += '        data-bizname=\"' + 6 + '\"';
-        str += '        data-tel=\"' + 10 + '\"';
-        str += '        data-opertime=\"' + 'A' + '\"';
-        str += '        data-likecnt=\"' + 12 + '\"';
-        str += '        data-zipcode=\"' + 7 + '\"';
-        str += '        data-address1=\"' + 8 + '\"';
-        str += '        data-address2=\"' + 9 + '\"';
-        str += '        data-etc=\"' + 13 + '\"';
-        str += '        data-status=\"default\"> ';
-        str += '      <td class=\"td_border\">1</td>';
-        str += '      <td class=\"td_border\">슬기네집</td>';
-        str += '      <td class=\"td_border\">skkim</td>';
-        str += '      <td class=\"td_border\">7777777777</td>';
-        str += '      <td class=\"td_border\">자몽쓰</td>';
-        str += '      <td class=\"td_border\">01077777777</td>';
-        str += '      <td class=\"td_border\">뭐였더라</td>';
-        str += '      <td class=\"td_border\">1334</td>';
-        str += '      <td class=\"td_border\">경기도 김포시 풍무동 땡댕댕댕 아라비아 12호</td>';
-        str += '      <td class=\"td_border\">운영시간은 0000~2359</td>';
-        str += '    </tr>';
-        str += '  </tbody>';
-        str += '</table>';
+      $.ajax({
+          type: "POST"
+        , url : "/store/view"
+        , beforeSend: function(xhr){
+          xhr.setRequestHeader(header, token);
+        }
+        , contentType : "application/text"
+        , data : str == '' ? " " : str
+        , success : function(data) {
+          let view = JSON.parse(data);
+          let str = '<table id=\"datatable\" style=\"margin-left:5px;\">';
+              str += '  <thead>';
+              str += '    <tr>';
+              str += '      <th style="width:100px;" class=\"td_border2\">점포코드</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">점포명</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">계정</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">사업자번호</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">사업자명</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">전화번호</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">운영유형</th>';
+              str += '      <th style="width:100px;" class=\"td_border2\">좋아요 수</th>';
+              str += '      <th style="width:200px;" class=\"td_border2\">주소</th>';
+              str += '      <th style="width:300px;" class=\"td_border2\">점포설명</th>';
+              str += '    </tr>';
+              str += '  </thead>';
+              str += '  <tbody>';
 
-    subDiv.innerHTML = str;
+              for(let i=0; i<view.length; i++) {
+                str += '    <tr class=\"tr_hover1\" onclick=\"tr_onclick(this);\" ';
+                str += '        id=\"' + view[i].id + '\"';
+				        str += '        data-id=\"' + view[i].id + '\"';
+				        str += '        data-accountid=\"' + view[i].accountid + '\"';
+                str += '        data-storename=\"' + view[i].storename + '\"';
+                str += '        data-account=\"' + view[i].account + '\"';
+                str += '        data-bizno=\"' + view[i].bizno + '\"';
+                str += '        data-bizname=\"' + view[i].bizname + '\"';
+                str += '        data-tel=\"' + view[i].tel+ '\"';
+                str += '        data-opertime=\"' + view[i].opertime + '\"';
+                str += '        data-likecnt=\"' + view[i].likecnt + '\"';
+                str += '        data-zipcode=\"' + view[i].zipcode + '\"';
+                str += '        data-address1=\"' + view[i].address1 + '\"';
+                str += '        data-address2=\"' + view[i].address2 + '\"';
+                str += '        data-etc=\"' + view[i].etc + '\"';
+                str += '        data-status=\"default\"> ';
+                str += '      <td class=\"td_border\">' + view[i].id + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].storename + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].account + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].bizno + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].bizname + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].tel + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].opertime + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].likecnt + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].zipcode + view[i].address1 + view[i].address2 + '</td>';
+                str += '      <td class=\"td_border\">' + view[i].etc + '</td>';
+                str += '    </tr>';
+              }
+
+              str += '  </tbody>';
+              str += '</table>';
+
+          subDiv.innerHTML = str;
+        }
+        , error : function(e) {
+          alert(e.responseText);
+        }
+      });
 
     fn_compInit();
   }
@@ -154,13 +175,28 @@
           return false;
       }
 
+      for(var i=0; i<saveJson.length; i++) {
+        if (saveJson[i].account == '') {
+          alert('계정은 필수입력사항입니다.');
+          return false;
+        } else if (saveJson[i].storename == '') {
+          alert('점포명은 필수입력사항입니다.');
+          return false;
+        } else if (saveJson[i].bizno == '') {
+          alert('사업자번호는 필수입력사항입니다.');
+          return false;
+        } else if (saveJson[i].bizname == '' ) {
+          alert('사업자명은 필수입력사항입니다.');
+          return false;
+        }
+      }
+
       $.ajax({
           type: "POST"
         , url : "/store/save"
         ,beforeSend: function(xhr){
           xhr.setRequestHeader(header, token);
         }
-        , dataType : "text" // dataType에 따라 실패가 될 수도 있음
         , contentType : "application/json"
         , data : JSON.stringify(saveJson)
       })
@@ -195,6 +231,7 @@
     row.className = 'tr_hover1';
     row.addEventListener("click", () => { tr_onclick(row); });
     row.dataset.id = '';
+    row.dataset.accountid = '';
     row.dataset.storename = '';
     row.dataset.account = '';
     row.dataset.bizno = '';
@@ -242,6 +279,12 @@
 
   // 데이터 변경
   function fn_update(obj, str) {
+    if(dv == null) {
+      alert('대상을 선택해야 합니다.');
+      obj.value = '';
+      return false;
+    }
+
     var tdEle1 = document.getElementById(dv.id+'storename');
     var tdEle2 = document.getElementById(dv.id+'account');
     var tdEle3 = document.getElementById(dv.id+'bizno');
@@ -385,7 +428,7 @@
   <div class="card" style="width:100%; float:left; height:100%;">
     <div id="btnZone1" style="float:left; margin:5px 5px 5px 5px;">
       <nav style="float:left; display:inline-block;font-size:12px;">
-        점포명 : <input type="text">
+        점포명 : <input id="searchStore" type="text">
       </nav>
       <nav style="float:right; display:inline-block;">
         <button class="button_2" onclick="fn_add();">추가</button>
