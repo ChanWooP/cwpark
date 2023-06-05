@@ -31,15 +31,21 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public void saveStore(List<StoreDto> storeDtoList) {
-        Map<StoreDto, Member> map = new HashMap<>();
+        Map<StoreDto, Member> map1 = new HashMap<>();
+        Map<StoreDto, Member> map2 = new HashMap<>();
 
         for(StoreDto s : storeDtoList) {
-            Member member = memberDao.saveMember(new Member(s.getAccountid(), s.getStoreName(), s.getAccount()
+            Member member = memberDao.saveMember(new Member(s.getAccountid(), s.getStorename(), s.getAccount()
             ,s.getAccount(), null, 0));
 
-            map.put(s, member);
+            if(s.getColStatus().equals("D")) {
+                map2.put(s, member);
+            } else {
+                map1.put(s, member);
+            }
         }
 
-        storeDao.saveStore(map);
+        storeDao.saveStore(map1);
+        storeDao.deleteStore(map2);
     }
 }

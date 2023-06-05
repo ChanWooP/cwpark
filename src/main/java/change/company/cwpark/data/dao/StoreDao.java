@@ -10,5 +10,5 @@ import java.util.Map;
 public interface StoreDao {
     List<StoreDto> getStore(String storeName);
     void saveStore(Map<StoreDto, Member> storeDtoList);
-    void deleteStore(Store menu);
+    void deleteStore(Map<StoreDto, Member> storeDtoList);
 }

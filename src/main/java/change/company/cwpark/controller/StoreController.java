@@ -58,7 +58,7 @@ public class StoreController {
                 , s.getAccountid(), s.getAccount()
                 , s.getStorename(), s.getTel(), s.getOpertime(), s.getLikecnt(), s.getEtc()
                 , s.getBizno(), s.getBizname()
-                , s.getAddress1(), s.getAddress2(), s.getZipcode()));
+                , s.getAddress1(), s.getAddress2(), s.getZipcode(), s.getColStatus()));
         }
 
         storeService.saveStore(storeDtoList);

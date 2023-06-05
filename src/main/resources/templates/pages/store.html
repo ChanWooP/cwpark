@@ -142,16 +142,16 @@
                 str += '        data-address2=\"' + view[i].address2 + '\"';
                 str += '        data-etc=\"' + view[i].etc + '\"';
                 str += '        data-status=\"default\"> ';
-                str += '      <td class=\"td_border\">' + view[i].id + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].storename + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].account + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].bizno + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].bizname + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].tel + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].opertime + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].likecnt + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].zipcode + view[i].address1 + view[i].address2 + '</td>';
-                str += '      <td class=\"td_border\">' + view[i].etc + '</td>';
+                str += '      <td id=\"' + view[i].id + 'id'+ '\" class=\"td_border\">' + view[i].id + '</td>';
+                str += '      <td id=\"' + view[i].id + 'storename' + '\" class=\"td_border\">' + view[i].storename + '</td>';
+                str += '      <td id=\"' + view[i].id + 'account' + '\" class=\"td_border\">' + view[i].account + '</td>';
+                str += '      <td id=\"' + view[i].id + 'bizno' + '\" class=\"td_border\">' + view[i].bizno + '</td>';
+                str += '      <td id=\"' + view[i].id + 'bizname' + '\" class=\"td_border\">' + view[i].bizname + '</td>';
+                str += '      <td id=\"' + view[i].id + 'tel' + '\" class=\"td_border\">' + view[i].tel + '</td>';
+                str += '      <td id=\"' + view[i].id + 'opertime' + '\" class=\"td_border\">' + view[i].opertime + '</td>';
+                str += '      <td id=\"' + view[i].id + 'likecnt' + '\" class=\"td_border\">' + view[i].likecnt + '</td>';
+                str += '      <td id=\"' + view[i].id + 'address' + '\" class=\"td_border\">' + view[i].zipcode + view[i].address1 + view[i].address2 + '</td>';
+                str += '      <td id=\"' + view[i].id + 'etc' + '\" class=\"td_border\">' + view[i].etc + '</td>';
                 str += '    </tr>';
               }
 
@@ -338,6 +338,12 @@
 
     // 선택한 컴포넌츠 색상 변경
     dv.style.background = '#F2F2F2';
+
+    if(dv.dataset.status == "default") {
+      storeAccountI.disabled = true;
+    } else {
+      storeAccountI.disabled = false;
+    }
 
     storeNameI.value = obj.dataset.storename;
     storeAccountI.value = obj.dataset.account;

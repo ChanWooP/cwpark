@@ -26,15 +26,21 @@ public class StoreDaoImpl implements StoreDao {
 
   @Override
   public List<StoreDto> getStore(String storeName) {
-    List<Store> storeList = storeRepository.findByStoreNameContaining(storeName);
+    List<Store> storeList = null;
     List<StoreDto> storeDtoList = new LinkedList<>();
+
+    if(storeName.equals(" ")) {
+      storeList = storeRepository.findAllStore();
+    } else {
+      storeList = storeRepository.findLikeStoreName(storeName);
+    }
 
     for(Store s : storeList) {
       storeDtoList.add(new StoreDto(s.getId()
           , s.getAccount().getId(), s.getAccount().getAccount()
           , s.getStoreName(), s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc()
           , s.getBiz().getBizNo(), s.getBiz().getBizName()
-          , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode()));
+          , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode(), "default"));
     }
 
     return storeDtoList;
@@ -50,9 +56,9 @@ public class StoreDaoImpl implements StoreDao {
 
       storeList.add(new Store(s.getId()
           , storeDtoList.get(s)
-          , s.getStoreName(), s.getTel()
-          , s.getOperTime() ,s.getLikeCnt(), s.getEtc()
-          , new Biz(s.getBizNo(), s.getBizName())
+          , s.getStorename(), s.getTel()
+          , s.getOpertime() ,s.getLikecnt(), s.getEtc()
+          , new Biz(s.getBizno(), s.getBizname())
           , new Address(s.getAddress1(), s.getAddress2(), s.getZipcode())));
     }
 
@@ -60,7 +66,21 @@ public class StoreDaoImpl implements StoreDao {
   }
 
   @Override
-  public void deleteStore(Store menu) {
+  public void deleteStore(Map<StoreDto, Member> storeDtoList) {
+    List<Store> storeList = new ArrayList<>();
+    Iterator<StoreDto> keys = storeDtoList.keySet().iterator();
 
+    while( keys.hasNext() ){
+      StoreDto s = keys.next();
+
+      storeList.add(new Store(s.getId()
+          , storeDtoList.get(s)
+          , s.getStorename(), s.getTel()
+          , s.getOpertime() ,s.getLikecnt(), s.getEtc()
+          , new Biz(s.getBizno(), s.getBizname())
+          , new Address(s.getAddress1(), s.getAddress2(), s.getZipcode())));
+    }
+
+    storeRepository.deleteAll(storeList);
   }
 }
