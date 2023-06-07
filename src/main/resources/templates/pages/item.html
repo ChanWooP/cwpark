@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>점포관리</title>
+  <link href="/css/styles2.css" rel="stylesheet"/>
+  <link href="/css/styles.css" rel="stylesheet" />
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/js/scripts.js"></script>
+  <script src="/js/scripts2.js"></script>
+  <script>
+    var storeId = document.getElementById('storeId');
+    console.log(storeId.value);
+  </script>
+</head>
+<body>
+<div id="div_top" class="card" style="width:100%; height:5%">
+  <div id="btnZone1" style="float:left; margin:5px 5px 5px 5px;">
+    <nav style="float:right; display:inline-block;">
+      <button class="button_2" onclick="fn_add();">추가</button>
+      <button class="button_2" onclick="fn_del();">삭제</button>
+      <button class="button_2" id="viewBtn" onclick="fn_view(); return false;">조회</button>
+      <button class="button_2" id="saveBtn" onclick="fn_save(); return false;">저장</button>
+    </nav>
+  </div>
+</div>
+<div style="height:1%"></div>
+<div id="div_one" style="width:20%; float:left; height:95%;">
+  <div class="card" style="width:100%; float:left; height:100%;">
+    <div style="width:100%; height:100%; overflow:auto;">
+      <div id="subDiv" style="width:1310px; height:600px; font-size:13px;">
+      </div>
+    </div>
+  </div>
+</div>
+<div style="width:1%; float:left;">ㅤ</div>
+<div id="div_two" style="width:39%; float:left; height:95%;">
+  <div class="card" style="width:100%; float:left; height:100%;">
+    <div style="width:100%; height:100%; overflow:auto;">
+      <div id="subDiv" style="width:1310px; height:600px; font-size:13px;">
+      </div>
+    </div>
+  </div>
+</div>
+<div style="width:1%; float:left;">ㅤ</div>
+<div id="div_three" style="width:39%; float:left; height:95%;">
+  <div class="card" style="width:100%; float:left; height:100%;">
+    <div style="width:100%; height:100%; overflow:auto;">
+      <div id="subDiv" style="width:1310px; height:600px; font-size:13px;">
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

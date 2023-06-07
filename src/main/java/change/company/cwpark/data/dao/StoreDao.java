@@ -1,5 +1,6 @@
 package change.company.cwpark.data.dao;
 
+import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.StoreDto;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Menu;
@@ -11,4 +12,5 @@ public interface StoreDao {
     List<StoreDto> getStore(String storeName);
     void saveStore(Map<StoreDto, Member> storeDtoList);
     void deleteStore(Map<StoreDto, Member> storeDtoList);
+    StoreDto getAccount(Member account);
 }

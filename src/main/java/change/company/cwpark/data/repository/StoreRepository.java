@@ -18,4 +18,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
   @Query("select a from Store a join fetch a.account")
   List<Store> findAllStore();
+
+  List<Store> findByAccount(Member account);
 }

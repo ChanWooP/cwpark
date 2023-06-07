@@ -83,4 +83,15 @@ public class StoreDaoImpl implements StoreDao {
 
     storeRepository.deleteAll(storeList);
   }
+
+  @Override
+  public StoreDto getAccount(Member account) {
+    List<Store> s = storeRepository.findByAccount(account);
+
+    return new StoreDto(s.get(0).getId()
+        , s.get(0).getAccount().getId(), s.get(0).getAccount().getAccount()
+        , s.get(0).getStoreName(), s.get(0).getTel(), s.get(0).getOperTime(), s.get(0).getLikeCnt(), s.get(0).getEtc()
+        , s.get(0).getBiz().getBizNo(), s.get(0).getBiz().getBizName()
+        , s.get(0).getAddress().getAddress1(), s.get(0).getAddress().getAddress2(), s.get(0).getAddress().getZipcode(), "default");
+  }
 }

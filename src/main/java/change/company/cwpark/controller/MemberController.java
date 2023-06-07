@@ -60,6 +60,7 @@ public class MemberController {
     @GetMapping("/index")
     public String indexView(Model model) {
         model.addAttribute("menu", memberService.getMenu());
+        model.addAttribute("store", memberService.getStore());
 
         return "pages/index";
     }

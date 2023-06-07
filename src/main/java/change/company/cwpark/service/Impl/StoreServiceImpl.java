@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,10 +34,11 @@ public class StoreServiceImpl implements StoreService {
     public void saveStore(List<StoreDto> storeDtoList) {
         Map<StoreDto, Member> map1 = new HashMap<>();
         Map<StoreDto, Member> map2 = new HashMap<>();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         for(StoreDto s : storeDtoList) {
             Member member = memberDao.saveMember(new Member(s.getAccountid(), s.getStorename(), s.getAccount()
-            ,s.getAccount(), null, 0));
+            ,passwordEncoder.encode(s.getAccount()), null, 0));
 
             if(s.getColStatus().equals("D")) {
                 map2.put(s, member);

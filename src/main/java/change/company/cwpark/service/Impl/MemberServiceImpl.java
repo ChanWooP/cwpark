@@ -2,17 +2,23 @@ package change.company.cwpark.service.Impl;
 
 import change.company.cwpark.data.dao.MemberDao;
 import change.company.cwpark.data.dao.MenuDao;
+import change.company.cwpark.data.dao.StoreDao;
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.MenuDto;
+import change.company.cwpark.data.dto.StoreDto;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.service.MemberService;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,11 +35,13 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberDao memberDao;
     private final MenuDao menuDao;
+    private final StoreDao storeDao;
 
     @Autowired
-    public MemberServiceImpl(MemberDao memberDao, MenuDao menuDao) {
+    public MemberServiceImpl(MemberDao memberDao, MenuDao menuDao, StoreDao storeDao) {
         this.memberDao = memberDao;
         this.menuDao = menuDao;
+        this.storeDao = storeDao;
     }
 
     // 사용자 인증
@@ -139,6 +147,22 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return map;
+    }
+
+    @Override
+    public Long getStore() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+        Member account = memberDao.getMember(userDetails.getUsername());
+        StoreDto s = null;
+
+        if(iterator.next().getAuthority().equals("ROLE_MEMBER")) {
+            return storeDao.getAccount(account).getId();
+        } else {
+            return 0L;
+        }
     }
 
 }
