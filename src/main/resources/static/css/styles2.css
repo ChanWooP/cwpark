@@ -62,3 +62,22 @@ tr.tr_hover1:hover td
   background-color : #F7F7F7;
   border : 1px solid #e3e3e3;
 }
+
+h5
+{
+  margin:5px;
+  font-weight : bold;
+  cursor: pointer;
+}
+
+.cardChoice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 3px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}

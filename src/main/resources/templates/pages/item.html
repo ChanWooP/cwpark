@@ -13,7 +13,153 @@
   <script src="/js/scripts2.js"></script>
   <script>
     var storeId = document.getElementById('storeId');
-    console.log(storeId.value);
+    var div = document.getElementById('divTable1');
+    var table = document.getElementById('datatable1');
+    var divNum = 1;
+    var cnt = 0;
+
+    var dv1, dv2, dv3;
+
+    // 추가 공통
+    function fn_commonAdd(row, arr, num, dv, word) {
+      let cell;
+
+      if(dv == null) {
+          alert(word + '선택해야합니다.');
+          return false;
+      }
+
+      row.dataset.id = '';
+      row.dataset.status = 'new';
+      row.addEventListener("click", () => { fn_trOnClick(row, num); });
+      row.className = 'tr_hover1';
+      row.id = 'new'+(cnt++);
+
+      for(var i=0; i<arr.length; i++) {
+        cell = row.insertCell(i);
+        cell.id = row.id + arr[i];
+        cell.className = 'td_border';
+        cell.innerHTML = 'ㅤ';
+      }
+    }
+
+    // 추가
+    function fn_add() {
+      let row;
+      let array1 = ['categoryId', 'categoryName'];
+      let array2 = ['itemId', 'itemName', 'itemCost', 'itemImage'];
+      let array3 = ['plusItemId', 'itemName', 'itemCost'];
+
+      if(divNum == 1) {
+        row = table.insertRow();
+        row.dataset.storeId = storeId.value;
+        row.dataset.categoryName = '';
+        fn_commonAdd(row, array1, divNum, '', '');
+      } else if(divNum == 2) {
+        row = table.insertRow();
+        row.dataset.categoryId = '';
+        row.dataset.itemName = '';
+        row.dataset.itemCost = '';
+        row.dataset.itemImage = '';
+        fn_commonAdd(row, array2, divNum, dv1, '카테고리');
+      } else if(divNum == 3) {
+        row = table.insertRow();
+        row.dataset.itemId = '';
+        row.dataset.itemName = '';
+        row.dataset.itemCost = '';
+        fn_commonAdd(row, array3, divNum, dv2, '상품');
+      }
+    }
+
+    // 삭제 공통
+    function fn_commonDel(dv, num, word) {
+      if(dv == null) {
+        alert('삭제할 대상을 선택해주세요.');
+        return false;
+      } else if(num == 1 || num == 2) {
+        if(document.getElementById('datatable'+(num+1)).rows.length > 1) {
+          alert(word + '이(가) 존재합니다.');
+          return false;
+        }
+      }
+
+      table.deleteRow(dv.rowIndex);
+      return true;
+    }
+
+    // 삭제
+    function fn_del() {
+      // 테이블
+      if(divNum == 1) {
+        if(fn_commonDel(dv1, divNum, '상품')) {
+          dv1 = null;
+        }
+      } else if(divNum == 2) {
+        if(fn_commonDel(dv2, divNum, '추가상품')) {
+          dv2 = null;
+        }
+      } else if(divNum == 3) {
+        if(fn_commonDel(dv3, divNum)) {
+          dv3 = null;
+        }
+      }
+    }
+
+    // 행 선택 공통
+    function fn_commonTrOnClick(dv, num) {
+      if(dv != null) {
+        if(num == 1) {
+          if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
+            return dv;
+          }
+
+          $("#datatable2 tr:not(:first)").remove();
+          $("#datatable3 tr:not(:first)").remove();
+          dv2 = null;
+          dv3 = null;
+
+        } else if(num == 2) {
+          if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
+            return dv;
+          }
+
+          $("#datatable3 tr:not(:first)").remove();
+          dv3 = null;
+        }
+        dv.style.background = '';
+      }
+
+      dv = event.currentTarget;
+      dv.style.background = '#F2F2F2';
+
+      return dv;
+    }
+
+    // 행 선택
+    function fn_trOnClick(obj, num) {
+      if(num == 1) {
+        dv1 = fn_commonTrOnClick(dv1, num);
+      } else if(num == 2) {
+        dv2 = fn_commonTrOnClick(dv2, num);
+      } else if(num == 3) {
+        dv3 = fn_commonTrOnClick(dv3);
+      }
+    }
+
+    // div 선택
+    function fn_onClickDiv(num) {
+      let objDiv = document.getElementById('divTable'+num);
+      let objTable = document.getElementById('datatable'+num);
+
+      if(div != null) {
+        div.className = 'card';
+      }
+
+      div = objDiv;
+      divNum = num;
+      table = objTable;
+      div.className = 'cardChoice';
+    }
   </script>
 </head>
 <body>
@@ -29,27 +175,63 @@
 </div>
 <div style="height:1%"></div>
 <div id="div_one" style="width:20%; float:left; height:95%;">
-  <div class="card" style="width:100%; float:left; height:100%;">
+  <div id="divTable1" class="cardChoice" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div id="subDiv" style="width:1310px; height:600px; font-size:13px;">
+      <div style="width:210px; height:600px; font-size:13px;">
+        <h5 onclick="fn_onClickDiv(1); return false;">카테고리</h5>
+        <table id="datatable1" style="margin:5px;">
+          <thead>
+            <tr>
+              <th style="width:100px;" class="td_border2">카테고리 코드</th>
+              <th style="width:100px;" class="td_border2">카테고리 명</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 <div style="width:1%; float:left;">ㅤ</div>
 <div id="div_two" style="width:39%; float:left; height:95%;">
-  <div class="card" style="width:100%; float:left; height:100%;">
+  <div id="divTable2" class="card" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div id="subDiv" style="width:1310px; height:600px; font-size:13px;">
+      <div style="width:410px; height:600px; font-size:13px;">
+        <h5 onclick="fn_onClickDiv(2); return false;">상품</h5>
+        <table id="datatable2" style="margin:5px;">
+          <thead>
+          <tr>
+            <th style="width:100px;" class="td_border2">상품 코드</th>
+            <th style="width:100px;" class="td_border2">상품 명</th>
+            <th style="width:100px;" class="td_border2">상품 가격</th>
+            <th style="width:100px;" class="td_border2">상품 이미지</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 <div style="width:1%; float:left;">ㅤ</div>
 <div id="div_three" style="width:39%; float:left; height:95%;">
-  <div class="card" style="width:100%; float:left; height:100%;">
+  <div id="divTable3" class="card" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div id="subDiv" style="width:1310px; height:600px; font-size:13px;">
+      <div id="subDiv" style="width:310px; height:600px; font-size:13px;">
+        <h5 onclick="fn_onClickDiv(3); return false;">추가상품</h5>
+        <table id="datatable3" style="margin:5px;">
+          <thead>
+          <tr>
+            <th style="width:100px;" class="td_border2">상품 코드</th>
+            <th style="width:100px;" class="td_border2">상품 명</th>
+            <th style="width:100px;" class="td_border2">상품 가격</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
