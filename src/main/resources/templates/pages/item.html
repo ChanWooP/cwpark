@@ -20,9 +20,91 @@
 
     var dv1, dv2, dv3;
 
+    var saveJson = new Array();
+    var saveCnt = 0;
+    var saveCnt2 = 0;
+    var saveCnt3 = 0;
+
+    // 저장 데이터
+    function fn_saveData(event, num, iRow, colStatus, category, item) {
+      let id = iRow.dataset.id == null ? '' : iRow.dataset.id;
+      let findIdx = saveJson.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+      let array = ['0', '0']
+
+      if(event == 'check') {
+        if(num == 1) {
+          if(findIdx < 0) {
+            fn_saveData('insert', num, iRow, colStatus);
+          }
+
+          array[0] = saveJson.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+        } else if(num == 2) {
+          let itemIdx = saveJson[category].item.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+
+          if(itemIdx < 0) {
+            fn_saveData('insert', num, iRow, colStatus);
+          }
+
+          array[0] = category;
+          array[1] = saveJson[category].item.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+        }
+
+        return array;
+      }
+
+      if(event == 'insert') {
+        if(num == 1) {
+          saveJson[saveCnt++] = {
+              "rowId": "data_" + iRow.id
+            , "id" : id
+            , "storeId" : iRow.dataset.storeId
+            , "categoryName" : iRow.dataset.categoryName
+            , "item" : new Array()
+            , "colStatus" : colStatus
+          };
+        } else if(num == 2) {
+          saveJson[category].item[saveCnt2++] = {
+              "rowId": "data_" + iRow.id
+            , "id" : id
+            , "categoryId" : iRow.dataset.categoryId
+            , "itemName" : iRow.dataset.itemName
+            , "itemCost" : iRow.dataset.itemCost
+            , "itemImage" : iRow.dataset.itemImage
+            , "plusItem" : new Array()
+            , "colStatus" : colStatus
+          };
+        } else if(num == 3) {
+          saveJson[category].item[item].plusItem[saveCnt3++] = {
+              "rowId": "data_" + iRow.id
+            , "id" : id
+            , "itemId" : iRow.dataset.itemId
+            , "itemName" : iRow.dataset.itemName
+            , "itemCost" : iRow.dataset.itemCost
+            , "colStatus" : colStatus
+          };
+        }
+      } else if(event == 'delete') {
+        if(num == 1) {
+          saveJson.splice(findIdx, 1);
+          saveCnt--;
+        } else if(num == 2) {
+          let itemIdx = saveJson[category].item.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+          saveJson[category].item.splice(itemIdx, 1);
+          saveCnt2--;
+        } else if(num == 3) {
+          let itemIdx = saveJson[category].item[item].plusItem.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+          saveJson[category].item[item].plusItem.splice(itemIdx, 1);
+          saveCnt3--;
+        }
+      }
+
+      console.log(saveJson);
+    }
+
     // 추가 공통
     function fn_commonAdd(row, arr, num, dv, word) {
       let cell;
+      let array = ['0', '0'];
 
       if(dv == null) {
           alert(word + '선택해야합니다.');
@@ -41,6 +123,15 @@
         cell.className = 'td_border';
         cell.innerHTML = 'ㅤ';
       }
+
+      if(num == 2) {
+        array = fn_saveData('check', 1, dv1, 'N');
+      } else if(num == 3) {
+        array = fn_saveData('check', 1, dv1, 'N');
+        array = fn_saveData('check', 2, dv2, 'N', array[0]);
+      }
+
+      fn_saveData('insert', num, row, 'N', array[0], array[1]);
     }
 
     // 추가
@@ -73,6 +164,8 @@
 
     // 삭제 공통
     function fn_commonDel(dv, num, word) {
+      let array = ['0', '0'];
+
       if(dv == null) {
         alert('삭제할 대상을 선택해주세요.');
         return false;
@@ -83,7 +176,16 @@
         }
       }
 
+      if(num == 2) {
+        array = fn_saveData('check', 1, dv1, 'N');
+      } else if(num == 3) {
+        array = fn_saveData('check', 1, dv1, 'N');
+        array = fn_saveData('check', 2, dv2, 'N', array[0]);
+      }
+
+      fn_saveData('delete', num, dv, 'N', array[0], array[1]);
       table.deleteRow(dv.rowIndex);
+
       return true;
     }
 
@@ -107,11 +209,18 @@
 
     // 행 선택 공통
     function fn_commonTrOnClick(dv, num) {
+      let array;
+
       if(dv != null) {
         if(num == 1) {
           if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
             return dv;
           }
+          array = fn_saveData('check', 1, dv1, 'N');
+          array = fn_saveData('check', 2, dv2, 'N', array[0]);
+          saveJson[array[0]].item = new Array();
+          saveCnt2 = 0;
+          saveCnt3 = 0;
 
           $("#datatable2 tr:not(:first)").remove();
           $("#datatable3 tr:not(:first)").remove();
@@ -122,6 +231,11 @@
           if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
             return dv;
           }
+
+          array = fn_saveData('check', 1, dv1, 'N');
+          array = fn_saveData('check', 2, dv2, 'N', array[0]);
+          saveJson[array[0]].item[array[1]].plusItem = new Array();
+          saveCnt3 = 0;
 
           $("#datatable3 tr:not(:first)").remove();
           dv3 = null;
