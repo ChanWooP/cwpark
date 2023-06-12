@@ -18,12 +18,18 @@
     var divNum = 1;
     var cnt = 0;
 
-    var dv1, dv2, dv3;
+    var dv1 = null;
+    var dv2 = null;
+    var dv3 = null;
 
     var saveJson = new Array();
     var saveCnt = 0;
     var saveCnt2 = 0;
     var saveCnt3 = 0;
+
+    var array1 = ['categoryId', 'categoryName'];
+    var array2 = ['itemId', 'itemName', 'itemCost', 'itemImage'];
+    var array3 = ['plusItemId', 'itemName', 'itemCost'];
 
     // 저장 데이터
     function fn_saveData(event, num, iRow, colStatus, category, item) {
@@ -137,9 +143,6 @@
     // 추가
     function fn_add() {
       let row;
-      let array1 = ['categoryId', 'categoryName'];
-      let array2 = ['itemId', 'itemName', 'itemCost', 'itemImage'];
-      let array3 = ['plusItemId', 'itemName', 'itemCost'];
 
       if(divNum == 1) {
         row = table.insertRow();
@@ -210,14 +213,20 @@
     // 행 선택 공통
     function fn_commonTrOnClick(dv, num) {
       let array;
+      let arrayTemp = new Array();
+      let eventTarget = event.currentTarget;
+
+      if(dv == eventTarget) {
+        return dv;
+      }
 
       if(dv != null) {
         if(num == 1) {
           if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
             return dv;
           }
+
           array = fn_saveData('check', 1, dv1, 'N');
-          array = fn_saveData('check', 2, dv2, 'N', array[0]);
           saveJson[array[0]].item = new Array();
           saveCnt2 = 0;
           saveCnt3 = 0;
@@ -226,6 +235,9 @@
           $("#datatable3 tr:not(:first)").remove();
           dv2 = null;
           dv3 = null;
+
+          arrayTemp[0] = document.getElementById('temp0').value;
+          document.getElementById(dv.id + array1[1]).innerHTML = arrayTemp[0];
 
         } else if(num == 2) {
           if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
@@ -239,12 +251,43 @@
 
           $("#datatable3 tr:not(:first)").remove();
           dv3 = null;
+
+          arrayTemp[0] = document.getElementById('temp1').value;
+          arrayTemp[1] = document.getElementById('temp2').value;
+          arrayTemp[2] = document.getElementById('temp3').value;
+
+          document.getElementById(dv.id + array2[1]).innerHTML = arrayTemp[0];
+          document.getElementById(dv.id + array2[2]).innerHTML = arrayTemp[1];
+          document.getElementById(dv.id + array2[3]).innerHTML = arrayTemp[2];
+        } else {
+          arrayTemp[0] = document.getElementById('temp4').value;
+          arrayTemp[1] = document.getElementById('temp5').value;
+          document.getElementById(dv.id + array3[1]).innerHTML = arrayTemp[0];
+          document.getElementById(dv.id + array3[2]).innerHTML = arrayTemp[1];
         }
         dv.style.background = '';
       }
 
-      dv = event.currentTarget;
+      dv = eventTarget;
       dv.style.background = '#F2F2F2';
+
+      if(num == 1) {
+        arrayTemp[0] = document.getElementById(dv.id + array1[1]).innerHTML;
+        document.getElementById(dv.id + array1[1]).innerHTML = '<input id=\"temp0\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[0] + '\">';
+      } else if(num == 2) {
+        arrayTemp[0] = document.getElementById(dv.id + array2[1]).innerHTML;
+        arrayTemp[1] = document.getElementById(dv.id + array2[2]).innerHTML;
+        arrayTemp[2] = document.getElementById(dv.id + array2[3]).innerHTML;
+
+        document.getElementById(dv.id + array2[1]).innerHTML = '<input id=\"temp1\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[0] + '\">';
+        document.getElementById(dv.id + array2[2]).innerHTML = '<input id=\"temp2\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[1] + '\">';
+        document.getElementById(dv.id + array2[3]).innerHTML = '<input id=\"temp3\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[2] + '\">';
+      } else {
+        arrayTemp[0] = document.getElementById(dv.id + array3[1]).innerHTML;
+        arrayTemp[1] = document.getElementById(dv.id + array3[2]).innerHTML;
+        document.getElementById(dv.id + array3[1]).innerHTML = '<input id=\"temp4\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[0] + '\">';
+        document.getElementById(dv.id + array3[2]).innerHTML = '<input id=\"temp5\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[1] + '\">';
+      }
 
       return dv;
     }
