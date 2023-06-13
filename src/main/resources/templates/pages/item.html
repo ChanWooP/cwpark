@@ -127,7 +127,14 @@
         cell = row.insertCell(i);
         cell.id = row.id + arr[i];
         cell.className = 'td_border';
-        cell.innerHTML = 'ㅤ';
+
+        if(arr[i] == 'itemImage') {
+        cell.innerHTML = '<img id=\"' + row.id + arr[i] + 'img' + '\" style=\"width:100px;height:100px;\"></img>'
+                       + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\">';
+        } else {
+        cell.innerHTML = '<a id=\"' + row.id + arr[i] + 'a' + '\">ㅤ</a>'
+                       + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\">';
+        }
       }
 
       if(num == 2) {
@@ -236,8 +243,10 @@
           dv2 = null;
           dv3 = null;
 
-          arrayTemp[0] = document.getElementById('temp0').value;
-          document.getElementById(dv.id + array1[1]).innerHTML = arrayTemp[0];
+          arrayTemp[0] = document.getElementById(dv.id + array1[1] + 'temp0').value;
+          document.getElementById(dv.id + array1[1] + 'a').innerHTML = arrayTemp[0]
+          document.getElementById(dv.id + array1[1] + 'a').style.display = 'block';
+          document.getElementById(dv.id + array1[1] + 'temp0').style.display = 'none';
 
         } else if(num == 2) {
           if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
@@ -252,18 +261,24 @@
           $("#datatable3 tr:not(:first)").remove();
           dv3 = null;
 
-          arrayTemp[0] = document.getElementById('temp1').value;
-          arrayTemp[1] = document.getElementById('temp2').value;
-          arrayTemp[2] = document.getElementById('temp3').value;
-
-          document.getElementById(dv.id + array2[1]).innerHTML = arrayTemp[0];
-          document.getElementById(dv.id + array2[2]).innerHTML = arrayTemp[1];
-          document.getElementById(dv.id + array2[3]).innerHTML = arrayTemp[2];
+          arrayTemp[0] = document.getElementById(dv.id + array2[1] + 'temp0').value;
+          arrayTemp[1] = document.getElementById(dv.id + array2[2] + 'temp0').value;
+          document.getElementById(dv.id + array2[1] + 'a').innerHTML = arrayTemp[0]
+          document.getElementById(dv.id + array2[2] + 'a').innerHTML = arrayTemp[1]
+          document.getElementById(dv.id + array2[1] + 'a').style.display = 'block';
+          document.getElementById(dv.id + array2[2] + 'a').style.display = 'block';
+          document.getElementById(dv.id + array2[1] + 'temp0').style.display = 'none';
+          document.getElementById(dv.id + array2[2] + 'temp0').style.display = 'none';
+          document.getElementById(dv.id + array2[3] + 'temp0').style.display = 'none';
         } else {
-          arrayTemp[0] = document.getElementById('temp4').value;
-          arrayTemp[1] = document.getElementById('temp5').value;
-          document.getElementById(dv.id + array3[1]).innerHTML = arrayTemp[0];
-          document.getElementById(dv.id + array3[2]).innerHTML = arrayTemp[1];
+          arrayTemp[0] = document.getElementById(dv.id + array3[1] + 'temp0').value;
+          arrayTemp[1] = document.getElementById(dv.id + array3[2] + 'temp0').value;
+          document.getElementById(dv.id + array3[1] + 'a').innerHTML = arrayTemp[0]
+          document.getElementById(dv.id + array3[2] + 'a').innerHTML = arrayTemp[1]
+          document.getElementById(dv.id + array3[1] + 'a').style.display = 'block';
+          document.getElementById(dv.id + array3[2] + 'a').style.display = 'block';
+          document.getElementById(dv.id + array3[1] + 'temp0').style.display = 'none';
+          document.getElementById(dv.id + array3[2] + 'temp0').style.display = 'none';
         }
         dv.style.background = '';
       }
@@ -272,21 +287,29 @@
       dv.style.background = '#F2F2F2';
 
       if(num == 1) {
-        arrayTemp[0] = document.getElementById(dv.id + array1[1]).innerHTML;
-        document.getElementById(dv.id + array1[1]).innerHTML = '<input id=\"temp0\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[0] + '\">';
+        arrayTemp[0] = document.getElementById(dv.id + array1[1] + 'a').innerHTML;
+        document.getElementById(dv.id + array1[1] + 'temp0').value = arrayTemp[0]
+        document.getElementById(dv.id + array1[1] + 'a').style.display = 'none';
+        document.getElementById(dv.id + array1[1] + 'temp0').style.display = 'block';
       } else if(num == 2) {
-        arrayTemp[0] = document.getElementById(dv.id + array2[1]).innerHTML;
-        arrayTemp[1] = document.getElementById(dv.id + array2[2]).innerHTML;
-        arrayTemp[2] = document.getElementById(dv.id + array2[3]).innerHTML;
-
-        document.getElementById(dv.id + array2[1]).innerHTML = '<input id=\"temp1\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[0] + '\">';
-        document.getElementById(dv.id + array2[2]).innerHTML = '<input id=\"temp2\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[1] + '\">';
-        document.getElementById(dv.id + array2[3]).innerHTML = '<input id=\"temp3\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[2] + '\">';
+        arrayTemp[0] = document.getElementById(dv.id + array2[1] + 'a').innerHTML;
+        arrayTemp[1] = document.getElementById(dv.id + array2[2] + 'a').innerHTML;
+        document.getElementById(dv.id + array2[1] + 'temp0').value = arrayTemp[0]
+        document.getElementById(dv.id + array2[2] + 'temp0').value = arrayTemp[1]
+        document.getElementById(dv.id + array2[1] + 'a').style.display = 'none';
+        document.getElementById(dv.id + array2[2] + 'a').style.display = 'none';
+        document.getElementById(dv.id + array2[1] + 'temp0').style.display = 'block';
+        document.getElementById(dv.id + array2[2] + 'temp0').style.display = 'block';
+        document.getElementById(dv.id + array2[3] + 'temp0').style.display = 'block';
       } else {
-        arrayTemp[0] = document.getElementById(dv.id + array3[1]).innerHTML;
-        arrayTemp[1] = document.getElementById(dv.id + array3[2]).innerHTML;
-        document.getElementById(dv.id + array3[1]).innerHTML = '<input id=\"temp4\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[0] + '\">';
-        document.getElementById(dv.id + array3[2]).innerHTML = '<input id=\"temp5\" type=\"text\" style=\"width:100px;\" value=\"' + arrayTemp[1] + '\">';
+        arrayTemp[0] = document.getElementById(dv.id + array3[1] + 'a').innerHTML;
+        arrayTemp[1] = document.getElementById(dv.id + array3[2] + 'a').innerHTML;
+        document.getElementById(dv.id + array3[1] + 'temp0').value = arrayTemp[0]
+        document.getElementById(dv.id + array3[2] + 'temp0').value = arrayTemp[1]
+        document.getElementById(dv.id + array3[1] + 'a').style.display = 'none';
+        document.getElementById(dv.id + array3[2] + 'a').style.display = 'none';
+        document.getElementById(dv.id + array3[1] + 'temp0').style.display = 'block';
+        document.getElementById(dv.id + array3[2] + 'temp0').style.display = 'block';
       }
 
       return dv;
@@ -300,6 +323,21 @@
         dv2 = fn_commonTrOnClick(dv2, num);
       } else if(num == 3) {
         dv3 = fn_commonTrOnClick(dv3);
+      }
+    }
+
+    // 셀 값 변경
+    function fn_changeValue(obj) {
+      if(obj.type == 'file') {
+        if (obj.files && obj.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            document.getElementById(dv2.id + array2[3] + 'img').src = e.target.result;
+          };
+          reader.readAsDataURL(obj.files[0]);
+        } else {
+          document.getElementById(dv2.id + array2[3] + 'img').src = "";
+        }
       }
     }
 
@@ -354,7 +392,7 @@
 <div id="div_two" style="width:39%; float:left; height:95%;">
   <div id="divTable2" class="card" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div style="width:410px; height:600px; font-size:13px;">
+      <div style="width:510px; height:600px; font-size:13px;">
         <h5 onclick="fn_onClickDiv(2); return false;">상품</h5>
         <table id="datatable2" style="margin:5px;">
           <thead>
@@ -362,7 +400,7 @@
             <th style="width:100px;" class="td_border2">상품 코드</th>
             <th style="width:100px;" class="td_border2">상품 명</th>
             <th style="width:100px;" class="td_border2">상품 가격</th>
-            <th style="width:100px;" class="td_border2">상품 이미지</th>
+            <th style="width:200px;" class="td_border2">상품 이미지</th>
           </tr>
           </thead>
           <tbody>
