@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>점포관리</title>
+  <title>상품등록</title>
   <link href="/css/styles2.css" rel="stylesheet"/>
   <link href="/css/styles.css" rel="stylesheet" />
   <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -30,6 +30,28 @@
     var array1 = ['categoryId', 'categoryName'];
     var array2 = ['itemId', 'itemName', 'itemCost', 'itemImage'];
     var array3 = ['plusItemId', 'itemName', 'itemCost'];
+
+    // 저장 만들시 ajax
+    //contentType: false,               // * 중요 *
+    //processData: false,               // * 중요 *
+    //enctype : 'multipart/form-data',  // * 중요 *
+
+
+    // 저장
+    function fn_save() {
+      let formData = new FormData();
+      let fileInput = $('.files');
+
+      for (var i = 0; i < fileInput.length; i++) {
+        if (fileInput[i].files.length > 0) {
+          for (var j = 0; j < fileInput[i].files.length; j++) {
+            formData.append('file', $('.files')[i].files[j]);
+            formData.append('fileId', $('.files')[i].id);
+          }
+        }
+      }
+      formData.append('json', JSON.stringify(saveJson));
+    }
 
     // 저장 데이터
     function fn_saveData(event, num, iRow, colStatus, category, item) {
@@ -60,6 +82,11 @@
 
       if(event == 'insert') {
         if(num == 1) {
+          if(findIdx >= 0) {
+            saveJson[findIdx].categoryName = iRow.dataset.categoryName;
+            return;
+          }
+
           saveJson[saveCnt++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
@@ -69,6 +96,15 @@
             , "colStatus" : colStatus
           };
         } else if(num == 2) {
+          let itemIdx = saveJson[category].item.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+
+          if(itemIdx >= 0) {
+            saveJson[category].item[itemIdx].itemName = iRow.dataset.itemName;
+            saveJson[category].item[itemIdx].itemCost = iRow.dataset.itemCost;
+            saveJson[category].item[itemIdx].itemImage = iRow.dataset.itemImage;
+            return;
+          }
+
           saveJson[category].item[saveCnt2++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
@@ -80,6 +116,14 @@
             , "colStatus" : colStatus
           };
         } else if(num == 3) {
+          let itemIdx = saveJson[category].item[item].plusItem.findIndex(function(data){return data.rowId === "data_" + iRow.id});
+          console.log(iRow + '_' + itemIdx);
+          if(itemIdx >= 0) {
+            saveJson[category].item[item].plusItem[itemIdx].itemName = iRow.dataset.itemName;
+            saveJson[category].item[item].plusItem[itemIdx].itemCost = iRow.dataset.itemCost;
+            return;
+          }
+
           saveJson[category].item[item].plusItem[saveCnt3++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
@@ -130,10 +174,10 @@
 
         if(arr[i] == 'itemImage') {
         cell.innerHTML = '<img id=\"' + row.id + arr[i] + 'img' + '\" style=\"width:100px;height:100px;\"></img>'
-                       + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\">';
+                       + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\" class=\"files\">';
         } else {
         cell.innerHTML = '<a id=\"' + row.id + arr[i] + 'a' + '\">ㅤ</a>'
-                       + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\">';
+                       + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + num + ',\'' + arr[i] + '\')\">';
         }
       }
 
@@ -327,16 +371,48 @@
     }
 
     // 셀 값 변경
-    function fn_changeValue(obj) {
+    function fn_changeValue(obj, num, type) {
+      let array = ['0', '0'];
+
       if(obj.type == 'file') {
         if (obj.files && obj.files[0]) {
           var reader = new FileReader();
+
+          dv2.dataset.itemImage = obj.files[0].name;
+          array = fn_saveData('check', 1, dv1, 'N');
+          fn_saveData('insert', 2, dv2, 'N', array[0]);
+
           reader.onload = function(e) {
             document.getElementById(dv2.id + array2[3] + 'img').src = e.target.result;
           };
           reader.readAsDataURL(obj.files[0]);
+
         } else {
           document.getElementById(dv2.id + array2[3] + 'img').src = "";
+        }
+      } else {
+        if(num == 1) {
+          dv1.dataset.categoryName = obj.value;
+          fn_saveData('insert', num, dv1, 'N');
+        } else if(num == 2) {
+          if(type == 'itemName') {
+            dv2.dataset.itemName = obj.value;
+          } else if(type == 'itemCost') {
+            dv2.dataset.itemCost = obj.value;
+          }
+
+          array = fn_saveData('check', 1, dv1, 'N');
+          fn_saveData('insert', num, dv2, 'N', array[0]);
+        } else {
+          if(type == 'itemName') {
+            dv3.dataset.itemName = obj.value;
+          } else if(type == 'itemCost') {
+            dv3.dataset.itemCost = obj.value;
+          }
+
+          array = fn_saveData('check', 1, dv1, 'N');
+          array = fn_saveData('check', 2, dv2, 'N', array[0]);
+          fn_saveData('insert', num, dv3, 'N', array[0], array[1]);
         }
       }
     }

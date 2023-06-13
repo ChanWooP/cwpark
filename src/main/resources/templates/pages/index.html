@@ -37,7 +37,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">BIZ Delivery</a>
+            <a class="navbar-brand ps-3">BIZ Delivery</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -52,12 +52,6 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <span sec:authorize="hasRole('ROLE_ADMIN')">
-                            <li><a class="dropdown-item" onclick="sendData('/store/');">점포 관리</a></li>
-                            <li><a class="dropdown-item" onclick="sendData('/menu/all');">메뉴 관리</a></li>
-                        </span>
-
-                        <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item"  sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a></li>
                     </ul>
                 </li>
@@ -72,6 +66,18 @@
                                 <input type="hidden" id="storeId" th:value="${store}">
                             </div>
                             <div class="sb-sidenav-menu-heading">메뉴</div>
+                            <span sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a class="nav-link collapsed">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    <div>운영관리</div>
+                                </a>
+                                <div>
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" data-path="/store/" onclick="fn_href(this); return false;">- 점포관리</a>
+                                        <a class="nav-link" data-path="/menu/all" onclick="fn_href(this); return false;">- 메뉴관리</a>
+                                    </nav>
+                                </div>
+                            </span>
                             <span th:each="menu : ${menu}">
                                 <a class="nav-link collapsed">
                                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
