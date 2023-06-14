@@ -22,6 +22,8 @@
     var dv2 = null;
     var dv3 = null;
 
+    var header = $("meta[name='_csrf_header']").attr("content");
+    var token = $("meta[name='_csrf']").attr("content");
     var saveJson = new Array();
     var saveCnt = 0;
     var saveCnt2 = 0;
@@ -31,11 +33,6 @@
     var array2 = ['itemId', 'itemName', 'itemCost', 'itemImage'];
     var array3 = ['plusItemId', 'itemName', 'itemCost'];
 
-    // 저장 만들시 ajax
-    //contentType: false,               // * 중요 *
-    //processData: false,               // * 중요 *
-    //enctype : 'multipart/form-data',  // * 중요 *
-
     $(function(){
       storeId.value = document.getElementById('storeId').value;
     });
@@ -44,7 +41,12 @@
     function fn_save() {
       let formData = new FormData();
       let fileInput = $('.files');
-      console.log(storeId.value);
+
+      if(saveJson.length <= 0) {
+          alert('저장할 데이터가 없습니다');
+          return false;
+      }
+
       for (var i = 0; i < fileInput.length; i++) {
         if (fileInput[i].files.length > 0) {
           for (var j = 0; j < fileInput[i].files.length; j++) {
@@ -53,7 +55,33 @@
           }
         }
       }
-      formData.append('json', JSON.stringify(saveJson));
+      formData.append('json', new Blob([ JSON.stringify(saveJson) ], {type : "application/json"}));
+
+      $.ajax({
+          type: "POST"
+        , url : "/item/save"
+        ,beforeSend: function(xhr){
+          xhr.setRequestHeader(header, token);
+        }
+        , contentType: false
+        , processData: false
+        , enctype : 'multipart/form-data'
+        , data : formData
+      })
+      .done(successFunction)
+      .fail(failFunction);
+    }
+
+    function successFunction(){
+      alert('저장되었습니다.');
+      saveJson = new Array();
+      saveCnt = 0;
+      saveCnt2 = 0;
+      saveCnt3 = 0;
+    }
+
+    function failFunction(){
+      alert("관리자에게 문의 바랍니다.");
     }
 
     // 저장 데이터
