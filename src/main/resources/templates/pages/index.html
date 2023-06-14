@@ -62,8 +62,11 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div>
-                                <input type="hidden" id="storeId" th:value="${store}">
+                            <div style="margin:5px;">
+                                <select id="storeId" th:field="*{store}" class="form-select">
+                                    <option th:each="s : ${store}" th:value="${s.id}"
+                                            th:text="${s.storename}"></option>
+                                </select>
                             </div>
                             <div class="sb-sidenav-menu-heading">메뉴</div>
                             <span sec:authorize="hasRole('ROLE_ADMIN')">

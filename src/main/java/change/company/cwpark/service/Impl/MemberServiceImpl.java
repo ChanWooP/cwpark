@@ -150,19 +150,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long getStore() {
+    public List<StoreDto> getStore() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+
         Member account = memberDao.getMember(userDetails.getUsername());
-        StoreDto s = null;
+        List<StoreDto> list = new ArrayList<>();
 
         if(iterator.next().getAuthority().equals("ROLE_MEMBER")) {
-            return storeDao.getAccount(account).getId();
+            list.add(storeDao.getAccount(account));
         } else {
-            return 0L;
+            list = storeDao.getStore(" ");
         }
+
+        return list;
     }
 
 }

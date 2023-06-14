@@ -16,5 +16,5 @@ public interface MemberService extends UserDetailsService {
     MemberDto loginSuccessMember(MemberDto memberDto);
     MemberDto loginFailureMember(MemberDto memberDto);
     Map<MenuDto, List<MenuDto>> getMenu();
-    Long getStore();
+    List<StoreDto> getStore();
 }
