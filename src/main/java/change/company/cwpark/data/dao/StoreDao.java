@@ -13,4 +13,5 @@ public interface StoreDao {
     void saveStore(Map<StoreDto, Member> storeDtoList);
     void deleteStore(Map<StoreDto, Member> storeDtoList);
     StoreDto getAccount(Member account);
+    Store getStores(Long storeId);
 }

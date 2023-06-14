@@ -36,7 +36,7 @@ public class Item extends Base {
   private String itemName;
 
   @Column(name="item_cost")
-  private Integer itemCost;
+  private int itemCost;
 
   @Column(name="item_image")
   private String itemImage;

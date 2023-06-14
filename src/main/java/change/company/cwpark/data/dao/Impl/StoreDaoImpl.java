@@ -13,9 +13,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class StoreDaoImpl implements StoreDao {
 
   private StoreRepository storeRepository;
@@ -94,4 +97,11 @@ public class StoreDaoImpl implements StoreDao {
         , s.get(0).getBiz().getBizNo(), s.get(0).getBiz().getBizName()
         , s.get(0).getAddress().getAddress1(), s.get(0).getAddress().getAddress2(), s.get(0).getAddress().getZipcode(), "default");
   }
+
+  @Override
+  public Store getStores(Long storeId) {
+    Optional<Store> storeWrapper = storeRepository.findById(storeId);
+    return storeWrapper.orElse(null);
+  }
+
 }
