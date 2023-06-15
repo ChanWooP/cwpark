@@ -4,8 +4,10 @@ import change.company.cwpark.data.dto.CategoryDto;
 import change.company.cwpark.data.dto.ItemDto;
 import change.company.cwpark.data.dto.PlusItemDto;
 import change.company.cwpark.data.dto.StoreDto;
+import change.company.cwpark.data.entity.Category;
 import change.company.cwpark.data.entity.PlusItem;
 import change.company.cwpark.data.entity.Store;
+import change.company.cwpark.data.vo.IdVO;
 import change.company.cwpark.data.vo.StoreVO;
 import change.company.cwpark.service.ItemService;
 import com.google.gson.Gson;
@@ -62,20 +64,20 @@ public class ItemController {
     return json;
   }
 
+  @ResponseBody
   @PostMapping("/view/item")
-  public String getItem(@RequestBody String categoryId) {
-    Long id = Long.valueOf(categoryId);
-    List<ItemDto> list = itemService.getItem(id);
+  public String getItem(@RequestBody IdVO[] categoryId) {
+    List<ItemDto> list = itemService.getItem(new CategoryDto(categoryId[0].getId(), null, null));
     Gson gson = new Gson();
     String json = gson.toJson(list);
 
     return json;
   }
 
+  @ResponseBody
   @PostMapping("/view/plusItem")
-  public String getPlusItem(@RequestBody String itemId) {
-    Long id = Long.valueOf(itemId);
-    List<PlusItemDto> list = itemService.getPlusItem(id);
+  public String getPlusItem(@RequestBody IdVO[] itemId) {
+    List<PlusItemDto> list = itemService.getPlusItem(new ItemDto(itemId[0].getId(), null, null, null, null));
     Gson gson = new Gson();
     String json = gson.toJson(list);
 

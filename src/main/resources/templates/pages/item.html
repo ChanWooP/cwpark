@@ -95,7 +95,7 @@
                 for(let i=0; i<view.length; i++) {
                   str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 1);\" ';
                   str += '         id=\"' + view[i].id + '\"';
-                  str += '         data-rowid=\"' + 'data_' + view[i].id + '\"';
+                  str += '         data-rowId=\"' + 'data_' + view[i].id + '\"';
 				          str += '         data-storeId=\"' + view[i].storeId + '\"';
 				          str += '         data-categoryName=\"' + view[i].categoryName + '\"';
 				          str += '         data-status=\"default\"> ';
@@ -382,7 +382,11 @@
     function fn_commonTrOnClick(dv, num) {
       let array;
       let arrayTemp = new Array();
+      let category = new Array();
       let eventTarget = event.currentTarget;
+
+      let div2 = document.getElementById('div2');
+      let div3 = document.getElementById('div3');
 
       if(dv == eventTarget) {
         return dv;
@@ -390,12 +394,17 @@
 
       if(dv != null) {
         if(num == 1) {
-          if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
-            return dv;
+          if($("#datatable2 tr:not(:first)").length > 0) {
+            if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
+              return dv;
+            }
           }
 
-          array = fn_saveData('check', 1, dv1, 'N');
-          saveJson[array[0]].item = new Array();
+          if(saveJson.length > 0) {
+            array = fn_saveData('check', 1, dv1, 'N');
+            saveJson[array[0]].item = new Array();
+          }
+
           saveCnt2 = 0;
           saveCnt3 = 0;
 
@@ -409,14 +418,86 @@
           document.getElementById(dv.id + array1[1] + 'a').style.display = 'block';
           document.getElementById(dv.id + array1[1] + 'temp0').style.display = 'none';
 
+          if(dv.dataset.id != '') {
+            category[0] = {
+                "id" : dv.id
+            };
+
+            $.ajax({
+                type: "POST"
+              , url : "/item/view/item"
+              , beforeSend: function(xhr){
+                xhr.setRequestHeader(header, token);
+              }
+              , contentType : "application/json"
+              , data : JSON.stringify(category)
+              , success : function(data) {
+                  let view = JSON.parse(data);
+                  let str = '<h5 onclick=\"fn_onClickDiv(2); return false;\">상품</h5>';
+                      str += '<table id=\"datatable2\" style=\"margin:5px;\">';
+                      str += '<thead>';
+                      str += '<tr>';
+                      str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 코드</th>';
+                      str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 명</th>';
+                      str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 가격</th>';
+                      str += '  <th style=\"width:200px;\" class=\"td_border2\">상품 이미지</th>';
+                      str += '</tr>';
+                      str += '</thead>';
+                      str += '<tbody>';
+
+                      for(let i=0; i<view.length; i++) {
+                        str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 2);\" ';
+                        str += '         id=\"' + view[i].id + 'item' + '\"';
+                        str += '         data-rowId=\"' + 'data_' + view[i].id + '\"';
+                        str += '         data-categoryId=\"' + view[i].categoryId + '\"';
+                        str += '         data-itemName=\"' + view[i].itemName + '\"';
+                        str += '         data-itemCost=\"' + view[i].itemCost + '\"';
+                        str += '         data-itemImage=\"' + view[i].itemImage + '\"';
+                        str += '         data-status=\"default\"> ';
+                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemId' + '\" class=\"td_border\">';
+                        str += '       <a id=\"' + view[i].id  + 'item' + array2[0] + 'a' + '\">' + view[i].id + '</a>';
+                        str += '       <input id=\"' + view[i].id  + 'item' + array2[0] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[0] + '\')\">';
+                        str += '    </td>';
+                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemName' + '\" class=\"td_border\">';
+                        str += '       <a id=\"' + view[i].id  + 'item' + array2[1] + 'a' + '\">' + view[i].itemName + '</a>';
+                        str += '       <input id=\"' + view[i].id  + 'item' + array2[1] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[1] + '\')\">';
+                        str += '    </td>';
+                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemCost' + '\" class=\"td_border\">';
+                        str += '       <a id=\"' + view[i].id  + 'item' + array2[2] + 'a' + '\">' + view[i].itemCost + '</a>';
+                        str += '       <input id=\"' + view[i].id  + 'item' + array2[2] + 'temp0' + '\" type=\"number\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[2] + '\')\">';
+                        str += '    </td>';
+                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemImage' + '\" class=\"td_border\">';
+                        str += '       <img id=\"' + view[i].id  + 'item' + array2[3] + 'img' + '\" style=\"width:100px;height:100px;\" accept=\".jpg, .png\" src=\"' + '/files/' + view[i].itemImage + '\"></img>';
+                        str += '       <input id=\"' + view[i].id  + 'item' + array2[3] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\" class=\"files\">';
+                        str += '    </td>';
+                        str += '  </tr>';
+                      }
+
+                      str += '</tbody>';
+                      str += '</table>';
+
+                  div2.innerHTML = str;
+              }
+              , error : function(e) {
+                alert(e.responseText);
+              }
+            });
+          }
         } else if(num == 2) {
-          if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
-            return dv;
+          if($("#datatable3 tr:not(:first)").length > 0) {
+            if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
+              return dv;
+            }
           }
 
-          array = fn_saveData('check', 1, dv1, 'N');
-          array = fn_saveData('check', 2, dv2, 'N', array[0]);
-          saveJson[array[0]].item[array[1]].plusItem = new Array();
+          if(saveJson.length > 0) {
+            array = fn_saveData('check', 1, dv1, 'N');
+            if(saveJson(array[0]).item.length > 0) {
+              array = fn_saveData('check', 2, dv2, 'N', array[0]);
+              saveJson[array[0]].item[array[1]].plusItem = new Array();
+            }
+          }
+
           saveCnt3 = 0;
 
           $("#datatable3 tr:not(:first)").remove();
@@ -448,7 +529,6 @@
       dv.style.background = '#F2F2F2';
 
       if(num == 1) {
-        console.log(dv.id + array1[1] + 'a');
         arrayTemp[0] = document.getElementById(dv.id + array1[1] + 'a').innerHTML;
         document.getElementById(dv.id + array1[1] + 'temp0').value = arrayTemp[0]
         document.getElementById(dv.id + array1[1] + 'a').style.display = 'none';
@@ -587,7 +667,7 @@
 <div id="div_two" style="width:39%; float:left; height:95%;">
   <div id="divTable2" class="card" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div style="width:510px; height:600px; font-size:13px;">
+      <div id="div2"  style="width:510px; height:600px; font-size:13px;">
         <h5 onclick="fn_onClickDiv(2); return false;">상품</h5>
         <table id="datatable2" style="margin:5px;">
           <thead>
@@ -609,7 +689,7 @@
 <div id="div_three" style="width:39%; float:left; height:95%;">
   <div id="divTable3" class="card" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div id="subDiv" style="width:310px; height:600px; font-size:13px;">
+      <div id="div3" style="width:310px; height:600px; font-size:13px;">
         <h5 onclick="fn_onClickDiv(3); return false;">추가상품</h5>
         <table id="datatable3" style="margin:5px;">
           <thead>

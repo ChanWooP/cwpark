@@ -6,5 +6,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlusItemRepository extends JpaRepository<PlusItem, Long> {
-  List<PlusItem> findByItemId(Long itemId);
+  List<PlusItem> findByItemId(Item itemId);
 }

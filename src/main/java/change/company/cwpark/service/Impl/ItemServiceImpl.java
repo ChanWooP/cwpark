@@ -96,20 +96,20 @@ public class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public List<ItemDto> getItem(Long categoryId) {
-    List<Item> list = itemDao.getItem(categoryId);
+  public List<ItemDto> getItem(CategoryDto categoryId) {
+    List<Item> list = itemDao.getItem(new Category(categoryId.getId(), null, null));
     List<ItemDto> rtn = new ArrayList<>();
 
     for(Item i : list) {
       rtn.add(new ItemDto(i.getId(), i.getCategoryId().getId(), i.getItemName(), i.getItemCost(), i.getItemImage()));
     }
 
-    return null;
+    return rtn;
   }
 
   @Override
-  public List<PlusItemDto> getPlusItem(Long ItemId) {
-    List<PlusItem> list = itemDao.getPlusItem(ItemId);
+  public List<PlusItemDto> getPlusItem(ItemDto ItemId) {
+    List<PlusItem> list = itemDao.getPlusItem(new Item(ItemId.getId(), null, null, 0, null));
     List<PlusItemDto> rtn = new ArrayList<>();
 
     for(PlusItem p : list) {

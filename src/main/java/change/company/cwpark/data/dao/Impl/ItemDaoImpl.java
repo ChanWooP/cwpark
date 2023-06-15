@@ -50,12 +50,12 @@ public class ItemDaoImpl implements ItemDao {
   }
 
   @Override
-  public List<Item> getItem(Long categoryId) {
+  public List<Item> getItem(Category categoryId) {
     return itemRepository.findByCategoryId(categoryId);
   }
 
   @Override
-  public List<PlusItem> getPlusItem(Long itemId) {
+  public List<PlusItem> getPlusItem(Item itemId) {
     return plusItemRepository.findByItemId(itemId);
   }
 }
