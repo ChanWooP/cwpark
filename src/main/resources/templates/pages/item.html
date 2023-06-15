@@ -50,8 +50,10 @@
       for (var i = 0; i < fileInput.length; i++) {
         if (fileInput[i].files.length > 0) {
           for (var j = 0; j < fileInput[i].files.length; j++) {
-            formData.append('file', $('.files')[i].files[j]);
-            formData.append('fileId', $('.files')[i].id);
+            formData.append('file', $('.files')[i].files[j], $('.files')[i].id);
+            $('.files')[i].files[j].name = 'test';
+
+            console.log($('.files')[i].files[j]);
           }
         }
       }
@@ -203,7 +205,7 @@
         cell.className = 'td_border';
 
         if(arr[i] == 'itemImage') {
-          cell.innerHTML = '<img id=\"' + row.id + arr[i] + 'img' + '\" style=\"width:100px;height:100px;\"></img>'
+          cell.innerHTML = '<img id=\"' + row.id + arr[i] + 'img' + '\" style=\"width:100px;height:100px;\" accept=\".jpg, .png\"></img>'
                          + '<input id=\"' + row.id + arr[i] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\" class=\"files\">';
         } else if(arr[i] == 'itemCost') {
           cell.innerHTML = '<a id=\"' + row.id + arr[i] + 'a' + '\">ㅤ</a>'
@@ -406,11 +408,11 @@
     // 셀 값 변경
     function fn_changeValue(obj, num, type) {
       let array = ['0', '0'];
+      let today = new Date();
 
       if(obj.type == 'file') {
         if (obj.files && obj.files[0]) {
           var reader = new FileReader();
-
           dv2.dataset.itemImage = obj.files[0].name;
           array = fn_saveData('check', 1, dv1, 'N');
           fn_saveData('insert', 2, dv2, 'N', array[0]);

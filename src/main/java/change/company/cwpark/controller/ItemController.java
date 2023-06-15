@@ -1,6 +1,7 @@
 package change.company.cwpark.controller;
 
 import change.company.cwpark.service.ItemService;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ItemController {
   @PostMapping("/save")
   public void saveItem(
         @RequestPart(value = "json") List<Map<String, Object>> param
-      , @RequestPart(value = "file",required = false) List<MultipartFile> fileList) {
+      , @RequestPart(value = "file",required = false) List<MultipartFile> fileList) throws IOException {
     itemService.saveItem(param, fileList);
   }
 
