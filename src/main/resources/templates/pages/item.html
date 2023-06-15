@@ -37,6 +37,90 @@
       storeId.value = document.getElementById('storeId').value;
     });
 
+    // 조회
+    function fn_view() {
+      let store = new Array();
+      let div1 = document.getElementById('div1');
+
+      saveJson = new Array();
+      saveCnt = 0;
+      saveCnt2 = 0;
+      saveCnt3 = 0;
+
+      dv1 = null;
+      dv2 = null;
+      dv3 = null;
+
+      $("#datatable2 tr:not(:first)").remove();
+      $("#datatable3 tr:not(:first)").remove();
+
+      store[0] = {
+          "rowId": ''
+        , "id" : storeId.value
+        , "accountid" : ''
+        , "account" : ''
+        , "storename" : ''
+        , "bizno" : ''
+        , "bizname" : ''
+        , "tel" : ''
+        , "opertime" : ''
+        , "likecnt" : ''
+        , "zipcode" : ''
+        , "address1" : ''
+        , "address2" : ''
+        , "etc" : ''
+        , "colStatus" : ''
+      };
+
+      $.ajax({
+          type: "POST"
+        , url : "/item/view/category"
+        , beforeSend: function(xhr){
+          xhr.setRequestHeader(header, token);
+        }
+        , contentType : "application/json"
+        , data : JSON.stringify(store)
+        , success : function(data) {
+            let view = JSON.parse(data);
+            let str = '<h5 onclick=\"fn_onClickDiv(1); return false;\">카테고리</h5>';
+                str += '<table id=\"datatable1\" style=\"margin:5px;\">';
+                str += '<thead>';
+                str += '<tr>';
+                str += '  <th style=\"width:100px;\" class=\"td_border2\">카테고리 코드</th>';
+                str += '  <th style=\"width:100px;\" class=\"td_border2\">카테고리 명</th>';
+                str += '</tr>';
+                str += '</thead>';
+                str += '<tbody>';
+
+                for(let i=0; i<view.length; i++) {
+                  str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 1);\" ';
+                  str += '         id=\"' + view[i].id + '\"';
+                  str += '         data-rowid=\"' + 'data_' + view[i].id + '\"';
+				          str += '         data-storeId=\"' + view[i].storeId + '\"';
+				          str += '         data-categoryName=\"' + view[i].categoryName + '\"';
+				          str += '         data-status=\"default\"> ';
+                  str += '    <td id=\"' + view[i].id + 'id'+ '\" class=\"td_border\">'
+                  str += '       <a id=\"' + view[i].id + array1[0] + 'a' + '\">' + view[i].id + '</a>';
+                  str += '       <input id=\"' + view[i].id + array1[0] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 1 + ',\'' + array1[0] + '\')\">';
+                  str += '    </td>';
+                  str += '    <td id=\"' + view[i].id + 'categoryName' + '\" class=\"td_border\">';
+                  str += '       <a id=\"' + view[i].id + array1[1] + 'a' + '\">' + view[i].categoryName + '</a>';
+                  str += '       <input id=\"' + view[i].id + array1[1] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 1 + ',\'' + array1[1] + '\')\">';
+                  str += '    </td>';
+                  str += '  </tr>';
+                }
+
+                str += '</tbody>';
+                str += '</table>';
+
+            div1.innerHTML = str;
+        }
+        , error : function(e) {
+          alert(e.responseText);
+        }
+      });
+    }
+
     // 저장
     function fn_save() {
       let formData = new FormData();
@@ -52,8 +136,6 @@
           for (var j = 0; j < fileInput[i].files.length; j++) {
             formData.append('file', $('.files')[i].files[j], $('.files')[i].id);
             $('.files')[i].files[j].name = 'test';
-
-            console.log($('.files')[i].files[j]);
           }
         }
       }
@@ -366,6 +448,7 @@
       dv.style.background = '#F2F2F2';
 
       if(num == 1) {
+        console.log(dv.id + array1[1] + 'a');
         arrayTemp[0] = document.getElementById(dv.id + array1[1] + 'a').innerHTML;
         document.getElementById(dv.id + array1[1] + 'temp0').value = arrayTemp[0]
         document.getElementById(dv.id + array1[1] + 'a').style.display = 'none';
@@ -484,7 +567,7 @@
 <div id="div_one" style="width:20%; float:left; height:95%;">
   <div id="divTable1" class="cardChoice" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div style="width:210px; height:600px; font-size:13px;">
+      <div id="div1" style="width:210px; height:600px; font-size:13px;">
         <h5 onclick="fn_onClickDiv(1); return false;">카테고리</h5>
         <table id="datatable1" style="margin:5px;">
           <thead>

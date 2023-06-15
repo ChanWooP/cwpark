@@ -2,6 +2,12 @@ package change.company.cwpark.service.Impl;
 
 import change.company.cwpark.data.dao.ItemDao;
 import change.company.cwpark.data.dao.StoreDao;
+import change.company.cwpark.data.dto.CategoryDto;
+import change.company.cwpark.data.dto.ItemDto;
+import change.company.cwpark.data.dto.PlusItemDto;
+import change.company.cwpark.data.dto.StoreDto;
+import change.company.cwpark.data.emb.Address;
+import change.company.cwpark.data.emb.Biz;
 import change.company.cwpark.data.entity.Category;
 import change.company.cwpark.data.entity.Item;
 import change.company.cwpark.data.entity.PlusItem;
@@ -10,6 +16,7 @@ import change.company.cwpark.service.ItemService;
 import change.company.cwpark.util.FileUtils;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +75,49 @@ public class ItemServiceImpl implements ItemService {
         }
       }
     }
-
-
   }
+
+  @Override
+  public List<CategoryDto> getCategory(StoreDto storeId) {
+    List<Category> list = itemDao.getCategory(new Store(storeId.getId()
+        , null
+        , storeId.getStorename(), storeId.getTel()
+        , storeId.getOpertime() ,storeId.getLikecnt(), storeId.getEtc()
+        , new Biz(storeId.getBizno(), storeId.getBizname())
+        , new Address(storeId.getAddress1(), storeId.getAddress2(), storeId.getZipcode())));
+
+    List<CategoryDto> rtn = new ArrayList<>();
+
+    for(Category c : list) {
+      rtn.add(new CategoryDto(c.getId(), c.getStoreId().getId(), c.getCategoryName()));
+    }
+
+    return rtn;
+  }
+
+  @Override
+  public List<ItemDto> getItem(Long categoryId) {
+    List<Item> list = itemDao.getItem(categoryId);
+    List<ItemDto> rtn = new ArrayList<>();
+
+    for(Item i : list) {
+      rtn.add(new ItemDto(i.getId(), i.getCategoryId().getId(), i.getItemName(), i.getItemCost(), i.getItemImage()));
+    }
+
+    return null;
+  }
+
+  @Override
+  public List<PlusItemDto> getPlusItem(Long ItemId) {
+    List<PlusItem> list = itemDao.getPlusItem(ItemId);
+    List<PlusItemDto> rtn = new ArrayList<>();
+
+    for(PlusItem p : list) {
+      rtn.add(new PlusItemDto(p.getId(), p.getItemId().getId(), p.getItemName(), p.getItemCost()));
+    }
+
+    return rtn;
+  }
+
+
 }

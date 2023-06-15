@@ -7,10 +7,12 @@ import change.company.cwpark.data.dto.PlusItemDto;
 import change.company.cwpark.data.entity.Category;
 import change.company.cwpark.data.entity.Item;
 import change.company.cwpark.data.entity.PlusItem;
+import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.repository.CategoryRepository;
 import change.company.cwpark.data.repository.ItemRepository;
 import change.company.cwpark.data.repository.PlusItemRepository;
 import change.company.cwpark.data.repository.StoreRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +42,20 @@ public class ItemDaoImpl implements ItemDao {
   @Override
   public PlusItem savePlusItem(PlusItem plusItem) {
     return plusItemRepository.save(plusItem);
+  }
+
+  @Override
+  public List<Category> getCategory(Store storeId) {
+    return categoryRepository.findByStoreId(storeId);
+  }
+
+  @Override
+  public List<Item> getItem(Long categoryId) {
+    return itemRepository.findByCategoryId(categoryId);
+  }
+
+  @Override
+  public List<PlusItem> getPlusItem(Long itemId) {
+    return plusItemRepository.findByItemId(itemId);
   }
 }
