@@ -95,6 +95,7 @@
                 for(let i=0; i<view.length; i++) {
                   str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 1);\" ';
                   str += '         id=\"' + view[i].id + '\"';
+                  str += '         data-id=\"' + view[i].id + '\"';
                   str += '         data-rowId=\"' + 'data_' + view[i].id + '\"';
 				          str += '         data-storeId=\"' + view[i].storeId + '\"';
 				          str += '         data-categoryName=\"' + view[i].categoryName + '\"';
@@ -114,6 +115,7 @@
                 str += '</table>';
 
             div1.innerHTML = str;
+            fn_onClickDiv(1);
         }
         , error : function(e) {
           alert(e.responseText);
@@ -135,7 +137,6 @@
         if (fileInput[i].files.length > 0) {
           for (var j = 0; j < fileInput[i].files.length; j++) {
             formData.append('file', $('.files')[i].files[j], $('.files')[i].id);
-            $('.files')[i].files[j].name = 'test';
           }
         }
       }
@@ -162,6 +163,7 @@
       saveCnt = 0;
       saveCnt2 = 0;
       saveCnt3 = 0;
+      fn_view();
     }
 
     function failFunction(){
@@ -185,7 +187,7 @@
           let itemIdx = saveJson[category].item.findIndex(function(data){return data.rowId === "data_" + iRow.id});
 
           if(itemIdx < 0) {
-            fn_saveData('insert', num, iRow, colStatus);
+            fn_saveData('insert', num, iRow, colStatus, category);
           }
 
           array[0] = category;
@@ -198,15 +200,15 @@
       if(event == 'insert') {
         if(num == 1) {
           if(findIdx >= 0) {
-            saveJson[findIdx].categoryName = iRow.dataset.categoryName;
+            saveJson[findIdx].categoryName = iRow.dataset.categoryname;
             return;
           }
 
           saveJson[saveCnt++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
-            , "storeId" : iRow.dataset.storeId
-            , "categoryName" : iRow.dataset.categoryName
+            , "storeId" : iRow.dataset.storeid
+            , "categoryName" : iRow.dataset.categoryname
             , "item" : new Array()
             , "colStatus" : colStatus
           };
@@ -214,36 +216,37 @@
           let itemIdx = saveJson[category].item.findIndex(function(data){return data.rowId === "data_" + iRow.id});
 
           if(itemIdx >= 0) {
-            saveJson[category].item[itemIdx].itemName = iRow.dataset.itemName;
-            saveJson[category].item[itemIdx].itemCost = iRow.dataset.itemCost;
-            saveJson[category].item[itemIdx].itemImage = iRow.dataset.itemImage;
+            saveJson[category].item[itemIdx].itemName = iRow.dataset.itemname;
+            saveJson[category].item[itemIdx].itemCost = iRow.dataset.itemcost;
+            saveJson[category].item[itemIdx].itemImage = iRow.dataset.itemimage;
             return;
           }
 
           saveJson[category].item[saveCnt2++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
-            , "categoryId" : iRow.dataset.categoryId
-            , "itemName" : iRow.dataset.itemName
-            , "itemCost" : iRow.dataset.itemCost
-            , "itemImage" : iRow.dataset.itemImage
+            , "categoryId" : iRow.dataset.categoryid
+            , "itemName" : iRow.dataset.itemname
+            , "itemCost" : iRow.dataset.itemcost
+            , "itemImage" : iRow.dataset.itemimage
             , "plusItem" : new Array()
             , "colStatus" : colStatus
           };
+
         } else if(num == 3) {
           let itemIdx = saveJson[category].item[item].plusItem.findIndex(function(data){return data.rowId === "data_" + iRow.id});
           if(itemIdx >= 0) {
-            saveJson[category].item[item].plusItem[itemIdx].itemName = iRow.dataset.itemName;
-            saveJson[category].item[item].plusItem[itemIdx].itemCost = iRow.dataset.itemCost;
+            saveJson[category].item[item].plusItem[itemIdx].itemName = iRow.dataset.itemname;
+            saveJson[category].item[item].plusItem[itemIdx].itemCost = iRow.dataset.itemcost;
             return;
           }
 
           saveJson[category].item[item].plusItem[saveCnt3++] = {
               "rowId": "data_" + iRow.id
             , "id" : id
-            , "itemId" : iRow.dataset.itemId
-            , "itemName" : iRow.dataset.itemName
-            , "itemCost" : iRow.dataset.itemCost
+            , "itemId" : iRow.dataset.itemid
+            , "itemName" : iRow.dataset.itemname
+            , "itemCost" : iRow.dataset.itemcost
             , "colStatus" : colStatus
           };
         }
@@ -314,21 +317,21 @@
 
       if(divNum == 1) {
         row = table.insertRow();
-        row.dataset.storeId = storeId.value;
-        row.dataset.categoryName = '';
+        row.dataset.storeid = storeId.value;
+        row.dataset.categoryname = '';
         fn_commonAdd(row, array1, divNum, '', '');
       } else if(divNum == 2) {
         row = table.insertRow();
-        row.dataset.categoryId = '';
-        row.dataset.itemName = '';
-        row.dataset.itemCost = '';
-        row.dataset.itemImage = '';
+        row.dataset.categoryid = dv1.dataset.id;
+        row.dataset.itemname = '';
+        row.dataset.itemcost = 0;
+        row.dataset.itemimage = '';
         fn_commonAdd(row, array2, divNum, dv1, '카테고리');
       } else if(divNum == 3) {
         row = table.insertRow();
-        row.dataset.itemId = '';
-        row.dataset.itemName = '';
-        row.dataset.itemCost = '';
+        row.dataset.itemid = dv2.dataset.id;
+        row.dataset.itemname = '';
+        row.dataset.itemcost = 0;
         fn_commonAdd(row, array3, divNum, dv2, '상품');
       }
     }
@@ -383,7 +386,9 @@
       let array;
       let arrayTemp = new Array();
       let category = new Array();
+      let item = new Array();
       let eventTarget = event.currentTarget;
+      let tempId;
 
       let div2 = document.getElementById('div2');
       let div3 = document.getElementById('div3');
@@ -417,72 +422,6 @@
           document.getElementById(dv.id + array1[1] + 'a').innerHTML = arrayTemp[0]
           document.getElementById(dv.id + array1[1] + 'a').style.display = 'block';
           document.getElementById(dv.id + array1[1] + 'temp0').style.display = 'none';
-
-          if(dv.dataset.id != '') {
-            category[0] = {
-                "id" : dv.id
-            };
-
-            $.ajax({
-                type: "POST"
-              , url : "/item/view/item"
-              , beforeSend: function(xhr){
-                xhr.setRequestHeader(header, token);
-              }
-              , contentType : "application/json"
-              , data : JSON.stringify(category)
-              , success : function(data) {
-                  let view = JSON.parse(data);
-                  let str = '<h5 onclick=\"fn_onClickDiv(2); return false;\">상품</h5>';
-                      str += '<table id=\"datatable2\" style=\"margin:5px;\">';
-                      str += '<thead>';
-                      str += '<tr>';
-                      str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 코드</th>';
-                      str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 명</th>';
-                      str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 가격</th>';
-                      str += '  <th style=\"width:200px;\" class=\"td_border2\">상품 이미지</th>';
-                      str += '</tr>';
-                      str += '</thead>';
-                      str += '<tbody>';
-
-                      for(let i=0; i<view.length; i++) {
-                        str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 2);\" ';
-                        str += '         id=\"' + view[i].id + 'item' + '\"';
-                        str += '         data-rowId=\"' + 'data_' + view[i].id + '\"';
-                        str += '         data-categoryId=\"' + view[i].categoryId + '\"';
-                        str += '         data-itemName=\"' + view[i].itemName + '\"';
-                        str += '         data-itemCost=\"' + view[i].itemCost + '\"';
-                        str += '         data-itemImage=\"' + view[i].itemImage + '\"';
-                        str += '         data-status=\"default\"> ';
-                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemId' + '\" class=\"td_border\">';
-                        str += '       <a id=\"' + view[i].id  + 'item' + array2[0] + 'a' + '\">' + view[i].id + '</a>';
-                        str += '       <input id=\"' + view[i].id  + 'item' + array2[0] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[0] + '\')\">';
-                        str += '    </td>';
-                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemName' + '\" class=\"td_border\">';
-                        str += '       <a id=\"' + view[i].id  + 'item' + array2[1] + 'a' + '\">' + view[i].itemName + '</a>';
-                        str += '       <input id=\"' + view[i].id  + 'item' + array2[1] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[1] + '\')\">';
-                        str += '    </td>';
-                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemCost' + '\" class=\"td_border\">';
-                        str += '       <a id=\"' + view[i].id  + 'item' + array2[2] + 'a' + '\">' + view[i].itemCost + '</a>';
-                        str += '       <input id=\"' + view[i].id  + 'item' + array2[2] + 'temp0' + '\" type=\"number\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[2] + '\')\">';
-                        str += '    </td>';
-                        str += '    <td id=\"' + view[i].id  + 'item' + 'itemImage' + '\" class=\"td_border\">';
-                        str += '       <img id=\"' + view[i].id  + 'item' + array2[3] + 'img' + '\" style=\"width:100px;height:100px;\" accept=\".jpg, .png\" src=\"' + '/files/' + view[i].itemImage + '\"></img>';
-                        str += '       <input id=\"' + view[i].id  + 'item' + array2[3] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\" class=\"files\">';
-                        str += '    </td>';
-                        str += '  </tr>';
-                      }
-
-                      str += '</tbody>';
-                      str += '</table>';
-
-                  div2.innerHTML = str;
-              }
-              , error : function(e) {
-                alert(e.responseText);
-              }
-            });
-          }
         } else if(num == 2) {
           if($("#datatable3 tr:not(:first)").length > 0) {
             if(!confirm('행 변경 시 수정한 내용이 모두 초기화됩니다.')) {
@@ -492,7 +431,7 @@
 
           if(saveJson.length > 0) {
             array = fn_saveData('check', 1, dv1, 'N');
-            if(saveJson(array[0]).item.length > 0) {
+            if(saveJson[array[0]].item.length > 0) {
               array = fn_saveData('check', 2, dv2, 'N', array[0]);
               saveJson[array[0]].item[array[1]].plusItem = new Array();
             }
@@ -533,6 +472,73 @@
         document.getElementById(dv.id + array1[1] + 'temp0').value = arrayTemp[0]
         document.getElementById(dv.id + array1[1] + 'a').style.display = 'none';
         document.getElementById(dv.id + array1[1] + 'temp0').style.display = 'block';
+
+        if(dv.dataset.id != '') {
+          category[0] = {
+              "id" : dv.id
+          };
+
+          $.ajax({
+              type: "POST"
+            , url : "/item/view/item"
+            , beforeSend: function(xhr){
+              xhr.setRequestHeader(header, token);
+            }
+            , contentType : "application/json"
+            , data : JSON.stringify(category)
+            , success : function(data) {
+                let view = JSON.parse(data);
+                let str = '<h5 onclick=\"fn_onClickDiv(2); return false;\">상품</h5>';
+                    str += '<table id=\"datatable2\" style=\"margin:5px;\">';
+                    str += '<thead>';
+                    str += '<tr>';
+                    str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 코드</th>';
+                    str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 명</th>';
+                    str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 가격</th>';
+                    str += '  <th style=\"width:200px;\" class=\"td_border2\">상품 이미지</th>';
+                    str += '</tr>';
+                    str += '</thead>';
+                    str += '<tbody>';
+
+                    for(let i=0; i<view.length; i++) {
+                      str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 2);\" ';
+                      str += '         id=\"' + view[i].id + 'item' + '\"';
+                      str += '         data-id=\"' + view[i].id + '\"';
+                      str += '         data-rowId=\"' + 'data_' + view[i].id + '\"';
+                      str += '         data-categoryId=\"' + view[i].storeId + '\"';
+                      str += '         data-itemName=\"' + view[i].itemName + '\"';
+                      str += '         data-itemCost=\"' + view[i].itemCost + '\"';
+                      str += '         data-itemImage=\"' + view[i].itemImage + '\"';
+                      str += '         data-status=\"default\"> ';
+                      str += '    <td id=\"' + view[i].id  + 'item' + 'itemId' + '\" class=\"td_border\">';
+                      str += '       <a id=\"' + view[i].id  + 'item' + array2[0] + 'a' + '\">' + view[i].id + '</a>';
+                      str += '       <input id=\"' + view[i].id  + 'item' + array2[0] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[0] + '\')\">';
+                      str += '    </td>';
+                      str += '    <td id=\"' + view[i].id  + 'item' + 'itemName' + '\" class=\"td_border\">';
+                      str += '       <a id=\"' + view[i].id  + 'item' + array2[1] + 'a' + '\">' + view[i].itemName + '</a>';
+                      str += '       <input id=\"' + view[i].id  + 'item' + array2[1] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[1] + '\')\">';
+                      str += '    </td>';
+                      str += '    <td id=\"' + view[i].id  + 'item' + 'itemCost' + '\" class=\"td_border\">';
+                      str += '       <a id=\"' + view[i].id  + 'item' + array2[2] + 'a' + '\">' + view[i].itemCost + '</a>';
+                      str += '       <input id=\"' + view[i].id  + 'item' + array2[2] + 'temp0' + '\" type=\"number\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 2 + ',\'' + array2[2] + '\')\">';
+                      str += '    </td>';
+                      str += '    <td id=\"' + view[i].id  + 'item' + 'itemImage' + '\" class=\"td_border\">';
+                      str += '       <img id=\"' + view[i].id  + 'item' + array2[3] + 'img' + '\" style=\"width:100px;height:100px;\" accept=\".jpg, .png\" src=\"' + '/files/' + view[i].itemImage + '\"></img>';
+                      str += '       <input id=\"' + view[i].id  + 'item' + array2[3] + 'temp0' + '\" type=\"file\" style=\"width:200px;display:none;\" onChange=\"fn_changeValue(this)\" class=\"files\">';
+                      str += '    </td>';
+                      str += '  </tr>';
+                    }
+
+                    str += '</tbody>';
+                    str += '</table>';
+
+                    div2.innerHTML = str;
+            }
+            , error : function(e) {
+              alert(e.responseText);
+            }
+          });
+        }
       } else if(num == 2) {
         arrayTemp[0] = document.getElementById(dv.id + array2[1] + 'a').innerHTML;
         arrayTemp[1] = document.getElementById(dv.id + array2[2] + 'a').innerHTML;
@@ -543,6 +549,68 @@
         document.getElementById(dv.id + array2[1] + 'temp0').style.display = 'block';
         document.getElementById(dv.id + array2[2] + 'temp0').style.display = 'block';
         document.getElementById(dv.id + array2[3] + 'temp0').style.display = 'block';
+
+        if(dv.dataset.id != '') {
+          tempId = dv.id;
+          item[0] = {
+              "id" : tempId.substr(0, tempId.length-4)
+          };
+
+          $.ajax({
+              type: "POST"
+            , url : "/item/view/plusItem"
+            , beforeSend: function(xhr){
+              xhr.setRequestHeader(header, token);
+            }
+            , contentType : "application/json"
+            , data : JSON.stringify(item)
+            , success : function(data) {
+                let view = JSON.parse(data);
+                let str = '<h5 onclick=\"fn_onClickDiv(3); return false;\">추가상품</h5>';
+                    str += '<table id=\"datatable3\" style=\"margin:5px;\">';
+                    str += '<thead>';
+                    str += '<tr>';
+                    str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 코드</th>';
+                    str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 명</th>';
+                    str += '  <th style=\"width:100px;\" class=\"td_border2\">상품 가격</th>';
+                    str += '</tr>';
+                    str += '</thead>';
+                    str += '<tbody>';
+
+                    for(let i=0; i<view.length; i++) {
+                      str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnClick(this, 3);\" ';
+                      str += '         id=\"' + view[i].id + 'plusItem' + '\"';
+                      str += '         data-id=\"' + view[i].id + '\"';
+                      str += '         data-rowId=\"' + 'data_' + view[i].id + '\"';
+                      str += '         data-itemId=\"' + view[i].itemId + '\"';
+                      str += '         data-itemName=\"' + view[i].itemName + '\"';
+                      str += '         data-itemCost=\"' + view[i].itemCost + '\"';
+                      str += '         data-status=\"default\"> ';
+                      str += '    <td id=\"' + view[i].id  + 'plusItem' + 'itemId' + '\" class=\"td_border\">';
+                      str += '       <a id=\"' + view[i].id  + 'plusItem' + array3[0] + 'a' + '\">' + view[i].id + '</a>';
+                      str += '       <input id=\"' + view[i].id  + 'plusItem' + array3[0] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 3 + ',\'' + array3[0] + '\')\">';
+                      str += '    </td>';
+                      str += '    <td id=\"' + view[i].id  + 'plusItem' + 'itemName' + '\" class=\"td_border\">';
+                      str += '       <a id=\"' + view[i].id  + 'plusItem' + array3[1] + 'a' + '\">' + view[i].itemName + '</a>';
+                      str += '       <input id=\"' + view[i].id  + 'plusItem' + array3[1] + 'temp0' + '\" type=\"text\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 3 + ',\'' + array3[1] + '\')\">';
+                      str += '    </td>';
+                      str += '    <td id=\"' + view[i].id  + 'plusItem' + 'itemCost' + '\" class=\"td_border\">';
+                      str += '       <a id=\"' + view[i].id  + 'plusItem' + array3[2] + 'a' + '\">' + view[i].itemCost + '</a>';
+                      str += '       <input id=\"' + view[i].id  + 'plusItem' + array3[2] + 'temp0' + '\" type=\"number\" style=\"width:100px;display:none;\" onChange=\"fn_changeValue(this, ' + 3 + ',\'' + array3[2] + '\')\">';
+                      str += '    </td>';
+                      str += '  </tr>';
+                    }
+
+                    str += '</tbody>';
+                    str += '</table>';
+
+                    div3.innerHTML = str;
+            }
+            , error : function(e) {
+              alert(e.responseText);
+            }
+          });
+        }
       } else {
         arrayTemp[0] = document.getElementById(dv.id + array3[1] + 'a').innerHTML;
         arrayTemp[1] = document.getElementById(dv.id + array3[2] + 'a').innerHTML;
@@ -590,22 +658,22 @@
         }
       } else {
         if(num == 1) {
-          dv1.dataset.categoryName = obj.value;
+          dv1.dataset.categoryname = obj.value;
           fn_saveData('insert', num, dv1, 'N');
         } else if(num == 2) {
           if(type == 'itemName') {
-            dv2.dataset.itemName = obj.value;
+            dv2.dataset.itemname = obj.value;
           } else if(type == 'itemCost') {
-            dv2.dataset.itemCost = obj.value;
+            dv2.dataset.itemcost = obj.value;
           }
 
           array = fn_saveData('check', 1, dv1, 'N');
           fn_saveData('insert', num, dv2, 'N', array[0]);
         } else {
           if(type == 'itemName') {
-            dv3.dataset.itemName = obj.value;
+            dv3.dataset.itemname = obj.value;
           } else if(type == 'itemCost') {
-            dv3.dataset.itemCost = obj.value;
+            dv3.dataset.itemcost = obj.value;
           }
 
           array = fn_saveData('check', 1, dv1, 'N');

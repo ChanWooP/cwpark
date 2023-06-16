@@ -58,20 +58,24 @@ public class ItemServiceImpl implements ItemService {
         id = String.valueOf(i.get("id")).equals("") ? null : Long.valueOf((String)i.get("id"));
         saveFileName = String.valueOf(i.get("itemImage"));
 
-        for(MultipartFile mf : fileList) {
-          System.out.println(mf.getOriginalFilename().substring(0, mf.getOriginalFilename().length() - 14) + "_" + i.get("rowId").toString().substring(5));
-          if(mf.getOriginalFilename().substring(0, mf.getOriginalFilename().length() - 14).equals(i.get("rowId").toString().substring(5))) {
-            saveFileName = FileUtils.singleFileUpload(mf);
+        if(fileList != null)  {
+          for (MultipartFile mf : fileList) {
+            if (mf.getOriginalFilename().substring(0, mf.getOriginalFilename().length() - 14)
+                .equals(i.get("rowId").toString().substring(5))) {
+              saveFileName = FileUtils.singleFileUpload(mf);
+            }
           }
         }
 
         item = new Item(id, category, String.valueOf(i.get("itemName")), Integer.parseInt(i.get("itemCost").toString()), saveFileName);
         item = itemDao.saveItem(item);
 
-        for (Map<String, Object> p : (List<Map<String, Object>>) i.get("plusItem")) {
-          id = p.get("id").toString().equals("") ? null : Long.valueOf((String)p.get("id"));
-          plusItem = new PlusItem(id, item, p.get("itemName").toString(), Integer.parseInt(i.get("itemCost").toString()));
-          itemDao.savePlusItem(plusItem);
+        if((List<Map<String, Object>>) i.get("plusItem") != null) {
+          for (Map<String, Object> p : (List<Map<String, Object>>) i.get("plusItem")) {
+            id = p.get("id").toString().equals("") ? null : Long.valueOf((String)p.get("id"));
+            plusItem = new PlusItem(id, item, p.get("itemName").toString(), Integer.parseInt(p.get("itemCost").toString()));
+            itemDao.savePlusItem(plusItem);
+          }
         }
       }
     }

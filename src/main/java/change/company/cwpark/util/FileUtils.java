@@ -13,7 +13,7 @@ public class FileUtils {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     String saveFileName = simpleDateFormat.format(nowDate) + ".png";
 
-    File file = new File("C://uploadFile" + saveFileName);
+    File file = new File("C://uploadFile/" + saveFileName);
 
     if(!file.exists()){
       file.mkdirs(); //디렉토리가 존재하지 않는다면 생성
