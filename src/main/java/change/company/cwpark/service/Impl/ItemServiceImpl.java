@@ -52,7 +52,14 @@ public class ItemServiceImpl implements ItemService {
     for(Map<String, Object> c : param) {
       id = c.get("id").toString().equals("") ? null : Long.valueOf((String)c.get("id"));
       category = new Category(id, store, c.get("categoryName").toString());
-      category = itemDao.saveCategory(category);
+
+      if(String.valueOf(c.get("colStatus")).equals("D")) {
+        itemDao.deleteCategory(category);
+        category = null;
+      } else {
+        category = itemDao.saveCategory(category);
+      }
+
 
       for(Map<String, Object> i : (List<Map<String, Object>>) c.get("item")) {
         id = String.valueOf(i.get("id")).equals("") ? null : Long.valueOf((String)i.get("id"));
@@ -68,13 +75,25 @@ public class ItemServiceImpl implements ItemService {
         }
 
         item = new Item(id, category, String.valueOf(i.get("itemName")), Integer.parseInt(i.get("itemCost").toString()), saveFileName);
-        item = itemDao.saveItem(item);
+
+        if(String.valueOf(i.get("colStatus")).equals("D")) {
+          itemDao.deleteItem(item);
+          item = null;
+        } else {
+          item = itemDao.saveItem(item);
+        }
 
         if((List<Map<String, Object>>) i.get("plusItem") != null) {
           for (Map<String, Object> p : (List<Map<String, Object>>) i.get("plusItem")) {
             id = p.get("id").toString().equals("") ? null : Long.valueOf((String)p.get("id"));
             plusItem = new PlusItem(id, item, p.get("itemName").toString(), Integer.parseInt(p.get("itemCost").toString()));
-            itemDao.savePlusItem(plusItem);
+
+            if(String.valueOf(p.get("colStatus")).equals("D")) {
+              itemDao.deletePlusItem(plusItem);
+            } else {
+              itemDao.savePlusItem(plusItem);
+            }
+
           }
         }
       }

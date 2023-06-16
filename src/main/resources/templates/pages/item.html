@@ -357,7 +357,12 @@
         array = fn_saveData('check', 2, dv2, 'N', array[0]);
       }
 
-      fn_saveData('delete', num, dv, 'N', array[0], array[1]);
+      if(dv.dataset.id == '') {
+        fn_saveData('delete', num, dv, 'N', array[0], array[1]);
+      } else {
+        fn_saveData('insert', num, dv, 'D', array[0], array[1]);
+      }
+
       table.deleteRow(dv.rowIndex);
 
       return true;

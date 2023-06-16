@@ -16,5 +16,8 @@ public interface ItemDao {
   List<Category> getCategory(Store storeId);
   List<Item> getItem(Category categoryId);
   List<PlusItem> getPlusItem(Item ItemId);
+  void deleteCategory(Category category);
+  void deleteItem(Item item);
+  void deletePlusItem(PlusItem plusItem);
 
 }

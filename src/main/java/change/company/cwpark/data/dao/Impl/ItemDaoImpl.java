@@ -58,4 +58,19 @@ public class ItemDaoImpl implements ItemDao {
   public List<PlusItem> getPlusItem(Item itemId) {
     return plusItemRepository.findByItemId(itemId);
   }
+
+  @Override
+  public void deleteCategory(Category category) {
+    categoryRepository.delete(category);
+  }
+
+  @Override
+  public void deleteItem(Item item) {
+    itemRepository.delete(item);
+  }
+
+  @Override
+  public void deletePlusItem(PlusItem plusItem) {
+    plusItemRepository.delete(plusItem);
+  }
 }
