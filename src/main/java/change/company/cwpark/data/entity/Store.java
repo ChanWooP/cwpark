@@ -86,4 +86,8 @@ CREATE TABLE Store (
   @AttributeOverride(name = "address1", column = @Column(name = "address1"))
   @AttributeOverride(name = "address2", column = @Column(name = "address2"))
   private Address address;
+
+  public Store(Long id) {
+    this.id = id;
+  }
 }
