@@ -23,8 +23,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @DynamicUpdate  // 변경된 필드만 적용
 @DynamicInsert  // 같음
-@Table(name = "sale")
-public class Sale extends Base{
+@Table(name = "saleitem")
+public class SaleItem extends Base{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,14 @@ public class Sale extends Base{
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name="store_id")
   private Store store;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name="item_id")
+  private Item item;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name="sale_id")
+  private Sale sale;
 
   @Column(name="sale_date")
   private String saleDate;
