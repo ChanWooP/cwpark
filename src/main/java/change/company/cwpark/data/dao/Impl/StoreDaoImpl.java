@@ -104,4 +104,9 @@ public class StoreDaoImpl implements StoreDao {
     return storeWrapper.orElse(null);
   }
 
+  @Override
+  public Store saveStoreOne(Store store) {
+    return storeRepository.save(store);
+  }
+
 }

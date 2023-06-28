@@ -2,9 +2,14 @@ package change.company.cwpark.service.Impl;
 
 import change.company.cwpark.data.dao.MemberDao;
 import change.company.cwpark.data.dao.StoreDao;
+import change.company.cwpark.data.dao.StoreOpenDao;
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.StoreDto;
+import change.company.cwpark.data.emb.Address;
+import change.company.cwpark.data.emb.Biz;
 import change.company.cwpark.data.entity.Member;
+import change.company.cwpark.data.entity.Store;
+import change.company.cwpark.data.entity.StoreOpen;
 import change.company.cwpark.service.StoreService;
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +23,13 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreDao storeDao;
     private final MemberDao memberDao;
+    private final StoreOpenDao storeOpenDao;
 
     @Autowired
-    public StoreServiceImpl(StoreDao storeDao, MemberDao memberDao) {
+    public StoreServiceImpl(StoreDao storeDao, MemberDao memberDao, StoreOpenDao storeOpenDao) {
         this.storeDao = storeDao;
         this.memberDao = memberDao;
+        this.storeOpenDao = storeOpenDao;
     }
 
     @Override
@@ -43,7 +50,18 @@ public class StoreServiceImpl implements StoreService {
             if(s.getColStatus().equals("D")) {
                 map2.put(s, member);
             } else {
-                map1.put(s, member);
+                if(s.getId() != null) {
+                    map1.put(s, member);
+                } else {
+                    Store store = storeDao.saveStoreOne(new Store(s.getId()
+                        , member
+                        , s.getStorename(), s.getTel()
+                        , s.getOpertime() ,s.getLikecnt(), s.getEtc()
+                        , new Biz(s.getBizno(), s.getBizname())
+                        , new Address(s.getAddress1(), s.getAddress2(), s.getZipcode())));
+
+                    storeOpenDao.saveStore(new StoreOpen(null, store, 0));
+                }
             }
         }
 

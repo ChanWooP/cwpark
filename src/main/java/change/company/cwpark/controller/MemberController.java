@@ -1,8 +1,10 @@
 package change.company.cwpark.controller;
 
 import change.company.cwpark.data.dto.MemberDto;
+import change.company.cwpark.data.dto.StoreDto;
 import change.company.cwpark.service.MemberService;
 import change.company.cwpark.service.MenuService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -59,8 +61,11 @@ public class MemberController {
     @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping("/index")
     public String indexView(Model model) {
+        List<StoreDto> list = memberService.getStore();
+
         model.addAttribute("menu", memberService.getMenu());
-        model.addAttribute("store", memberService.getStore());
+        model.addAttribute("store", list);
+        model.addAttribute("storeOpen", memberService.getStoreOpen(list.get(0)));
 
         return "pages/index";
     }

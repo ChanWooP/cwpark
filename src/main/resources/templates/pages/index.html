@@ -8,13 +8,153 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
         <title>배용비즈니스</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" href="/img/favicon.png">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <style>
+            .switch {
+              position: relative;
+              display: inline-block;
+              width: 45px;
+              height: 25px;
+            }
+
+            .switch input {
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+
+            .slider:before {
+              position: absolute;
+              content: "";
+              height: 20px;
+              width: 20px;
+              left: 2px;
+              bottom: 2px;
+              background-color: white;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+
+            input:checked + .slider {
+              background-color: #2196F3;
+            }
+
+            input:focus + .slider {
+              box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+              -webkit-transform: translateX(20px);
+              -ms-transform: translateX(20px);
+              transform: translateX(20px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                  border-radius: 25px;
+            }
+
+            .slider.round:before {
+              border-radius: 50%;
+            }
+        </style>
         <script th:inline="javascript">
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            var openJson = new Array();
+
+            $(function(){
+              if(document.getElementById('openYn').value == 0) {
+                document.getElementById('openYnCheck').checked = false;
+              } else {
+                document.getElementById('openYnCheck').checked = true;
+              }
+            });
+
+            function fn_openYn(obj) {
+              let store = new Array();
+
+              store[0] = {
+                  "id" : obj.value
+              };
+
+              $.ajax({
+                  type: "POST"
+                , url : "/storeOpen/view"
+                , beforeSend: function(xhr){
+                  xhr.setRequestHeader(header, token);
+                }
+                , contentType : "application/json"
+                , data : JSON.stringify(store)
+                , success : function(data) {
+                  let view = JSON.parse(data);
+
+                  if(view[0].openYn == 0) {
+                    document.getElementById('openYnCheck').checked = false;
+                  } else {
+                    document.getElementById('openYnCheck').checked = true;
+                  }
+
+                  document.getElementById('openId').value = view[0].id;
+                }
+                , error : function(e) {
+                  alert(e.responseText);
+                }
+              });
+            }
+
+            function fn_openCheck(obj) {
+              let store = new Array();
+              let openYn = document.getElementById('openYn');
+
+              if(obj.checked == true) {
+                openYn.value = 1;
+              } else {
+                openYn.value = 0;
+              }
+
+              store[0] = {
+                  "id" : document.getElementById('openId').value
+                  , "storeId" : document.getElementById('storeId').value
+                  , "openYn" : openYn.value
+              };
+
+              $.ajax({
+                  type: "POST"
+                , url : "/storeOpen/save"
+                , beforeSend: function(xhr){
+                  xhr.setRequestHeader(header, token);
+                }
+                , contentType : "application/json"
+                , data : JSON.stringify(store)
+                , success : function(data) {
+                    alert('영업상태 변경이 완료되었습니다.');
+                }
+                , error : function(e) {
+                  alert(e.responseText);
+                }
+              });
+            }
+
             function sendData(url) {
                 $.ajax({
                      url: url
@@ -45,8 +185,13 @@
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                    <input id="openYn" type="hidden" th:value="${storeOpen[0].openYn}">
+                    <input id="openId" type="hidden" th:value="${storeOpen[0].id}">
+                    <b style="color:white; margin-right: 10px;">영업여부</b>
+                    <label class="switch">
+                        <input id="openYnCheck" type="checkbox" onchange="fn_openCheck(this);">
+                        <span class="slider round"></span>
+                    </label>
                 </div>
             </form>
             <!-- Navbar-->
@@ -65,7 +210,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div style="margin:5px;">
-                                <select id="storeId" th:field="*{store}" class="form-select">
+                                <select id="storeId" th:field="*{store}" class="form-select" onchange="fn_openYn(this);">
                                     <option th:each="s : ${store}" th:value="${s.id}"
                                             th:text="${s.storename}"></option>
                                 </select>

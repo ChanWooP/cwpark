@@ -3,6 +3,8 @@ package change.company.cwpark.service;
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.dto.StoreDto;
+import change.company.cwpark.data.dto.StoreOpenDto;
+import change.company.cwpark.data.entity.Store;
 import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,4 +19,5 @@ public interface MemberService extends UserDetailsService {
     MemberDto loginFailureMember(MemberDto memberDto);
     Map<MenuDto, List<MenuDto>> getMenu();
     List<StoreDto> getStore();
+    List<StoreOpenDto> getStoreOpen(StoreDto storeDto);
 }

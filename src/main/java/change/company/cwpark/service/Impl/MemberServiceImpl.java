@@ -3,11 +3,15 @@ package change.company.cwpark.service.Impl;
 import change.company.cwpark.data.dao.MemberDao;
 import change.company.cwpark.data.dao.MenuDao;
 import change.company.cwpark.data.dao.StoreDao;
+import change.company.cwpark.data.dao.StoreOpenDao;
 import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.dto.StoreDto;
+import change.company.cwpark.data.dto.StoreOpenDto;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Menu;
+import change.company.cwpark.data.entity.Store;
+import change.company.cwpark.data.entity.StoreOpen;
 import change.company.cwpark.service.MemberService;
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,12 +40,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDao memberDao;
     private final MenuDao menuDao;
     private final StoreDao storeDao;
+    private final StoreOpenDao storeOpenDao;
 
     @Autowired
-    public MemberServiceImpl(MemberDao memberDao, MenuDao menuDao, StoreDao storeDao) {
+    public MemberServiceImpl(MemberDao memberDao, MenuDao menuDao, StoreDao storeDao, StoreOpenDao storeOpenDao) {
         this.memberDao = memberDao;
         this.menuDao = menuDao;
         this.storeDao = storeDao;
+        this.storeOpenDao = storeOpenDao;
     }
 
     // 사용자 인증
@@ -166,6 +172,19 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return list;
+    }
+
+    @Override
+    public List<StoreOpenDto> getStoreOpen(StoreDto storeDto) {
+        Store store = new Store(storeDto.getId());
+        List<StoreOpen> list = storeOpenDao.getStore(store);
+        List<StoreOpenDto> rtnList = new ArrayList<>();
+
+        for(StoreOpen s : list) {
+            rtnList.add(new StoreOpenDto(s.getId(), s.getStore().getId(), s.getOpenYn()));
+        }
+
+        return rtnList;
     }
 
 }
