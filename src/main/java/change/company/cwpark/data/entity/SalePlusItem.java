@@ -31,15 +31,15 @@ public class SalePlusItem extends Base{
   @Column(name = "id")
   private Long id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="store_id")
   private Store store;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="item_id")
   private PlusItem item;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="sale_id")
   private Sale sale;
 

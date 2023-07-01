@@ -57,7 +57,7 @@ CREATE TABLE Store (
   @Column(name = "id")
   private Long id;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="account")
   private Member account;
 

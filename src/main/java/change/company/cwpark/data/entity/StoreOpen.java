@@ -1,10 +1,6 @@
 package change.company.cwpark.data.entity;
 
-import change.company.cwpark.data.emb.Address;
-import change.company.cwpark.data.emb.Biz;
-import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,7 +31,7 @@ public class StoreOpen extends Base{
   @Column(name = "id")
   private Long id;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="store_id")
   private Store store;
 
