@@ -1,12 +1,13 @@
 package change.company.cwpark.controller;
 
+import change.company.cwpark.data.dto.ReplyDto;
 import change.company.cwpark.data.dto.ReviewDto;
-import change.company.cwpark.data.dto.SaleDto;
+import change.company.cwpark.data.entity.Review;
 import change.company.cwpark.data.entity.Store;
-import change.company.cwpark.data.vo.IdDatePageVO;
 import change.company.cwpark.data.vo.IdDateVO;
+import change.company.cwpark.data.vo.IdVO;
+import change.company.cwpark.service.ReplyService;
 import change.company.cwpark.service.ReviewService;
-import change.company.cwpark.service.SaleService;
 import com.google.gson.Gson;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +20,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value="/review")
-public class ReviewController {
+@RequestMapping(value="/reply")
+public class ReplyController {
   @Autowired
-  private final ReviewService reviewService;
+  private final ReplyService replyService;
 
-  public ReviewController(ReviewService reviewService) {
-    this.reviewService = reviewService;
-  }
-
-  @GetMapping("/")
-  public String view() {
-    return "pages/review";
+  public ReplyController(ReplyService replyService) {
+    this.replyService = replyService;
   }
 
   @ResponseBody
   @PostMapping("/view")
-  public String getReview(@RequestBody IdDatePageVO[] idDatePage) {
-    Page<ReviewDto> reviews = reviewService.getReview(new Store(idDatePage[0].getId()), idDatePage[0].getFrDt(), idDatePage[0].getToDt(), idDatePage[0].getPage());
+  public String getReply(@RequestBody IdVO[] id) {
+    List<ReplyDto> replies = replyService.getReply(new Review(id[0].getId()));
     Gson gson = new Gson();
-    String json = gson.toJson(reviews);
+    String json = gson.toJson(replies);
 
     return json;
   }
+
 }

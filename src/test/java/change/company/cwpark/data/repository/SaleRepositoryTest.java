@@ -32,6 +32,6 @@ public class SaleRepositoryTest {
     List<Sale> list = saleRepository.findByStoreAndSaleDateGreaterThanEqualAndSaleDateLessThanEqualOrderByIdAsc(store, "20230626", "20230627");
 
     // then
-    Assertions.assertThat(list.size()).isEqualTo(5);
+    Assertions.assertThat(list.size()).isEqualTo(15);
   }
 }

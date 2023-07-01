@@ -47,4 +47,9 @@ public class Review extends Base{
 
   @Column(name="contents")
   private String contents;
+
+  public Review(Long id) {
+    this.id = id;
+  }
+
 }

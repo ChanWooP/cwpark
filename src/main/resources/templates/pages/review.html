@@ -24,7 +24,7 @@
     });
 
     // 조회
-    function fn_view() {
+    function fn_view(page) {
       let store = new Array();
       let div1 = document.getElementById('div1');
       let from = frDt.value;
@@ -42,48 +42,19 @@
           "id" : storeId.value
         , "frDt" : from.replace(/-/gi, "")
         , "toDt" : to.replace(/-/gi, "")
+        , "page" : page
       };
 
       $.ajax({
           type: "POST"
-        , url : "/sale/view"
+        , url : "/review/view"
         , beforeSend: function(xhr){
           xhr.setRequestHeader(header, token);
         }
         , contentType : "application/json"
         , data : JSON.stringify(store)
         , success : function(data) {
-          let view = JSON.parse(data);
-          let str = '        <table id=\"datatable1\" style=\"margin:5px;\"> ';
-              str += '          <thead> ';
-              str += '          <tr> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">점포명</th> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">매출일자</th> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">영수증번호</th> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">총금액</th> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">실매출액</th> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">부가세</th> ';
-              str += '            <th style=\"width:100px;\" class=\"td_border2\">수량</th> ';
-              str += '          </tr> ';
-              str += '          </thead> ';
-              str += '          <tbody> ';
-
-              for(let i=0; i<view.length; i++) {
-                  str += '  <tr class=\"tr_hover1\">';
-                  str += '    <td class=\"td_border\">' + view[i].storeName + '</td>';
-                  str += '    <td class=\"td_border\">' + view[i].saleDate + '</td>';
-                  str += '    <td class=\"td_border\">' + view[i].id + '</td>';
-                  str += '    <td class=\"td_border\">' + view[i].amt + '</td>';
-                  str += '    <td class=\"td_border\">' + Math.round(view[i].amt / 1.1) + '</td>';
-                  str += '    <td class=\"td_border\">' + (view[i].amt - Math.round(view[i].amt / 1.1)) + '</td>';
-                  str += '    <td class=\"td_border\">' + view[i].qty + '</td>';
-                  str += '  </tr>';
-              }
-
-              str += '          </tbody> ';
-              str += '        </table> ';
-
-              div1.innerHTML = str;
+          alert(data);
         }
         , error : function(e) {
           alert(e.responseText);
@@ -102,7 +73,7 @@
     </nav>
     <nav style="float:right; display:inline-block; margin-right:5px;">
       <input id="saveStoreId" type="hidden">
-      <button class="button_2" id="viewBtn" onclick="fn_view(); return false;">조회</button>
+      <button class="button_2" id="viewBtn" onclick="fn_view(0); return false;">조회</button>
       <button class="button_2" id="saveBtn" onclick="fn_save(); return false;">저장</button>
     </nav>
   </div>
