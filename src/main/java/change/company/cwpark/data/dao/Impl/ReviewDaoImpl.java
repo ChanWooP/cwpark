@@ -23,7 +23,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
   @Override
   public Page<Review> getReview(Store store, String frDt, String toDt, int page) {
-    Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "sale_id"));
+    Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "sale_id"));
     return reviewRepository.findByStoreAndSaleDateGreaterThanEqualAndSaleDateLessThanEqual(store, frDt, toDt, pageable);
   }
 }

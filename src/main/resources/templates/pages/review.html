@@ -54,7 +54,62 @@
         , contentType : "application/json"
         , data : JSON.stringify(store)
         , success : function(data) {
-          alert(data);
+          let view = JSON.parse(data);
+          let total = view.total / 10;
+          let start = Math.floor(page / 10) * 10;
+          let end = total < (10 * (Math.floor(page / 10)+1))? total : total - (total - (10 * (Math.floor(page / 10)+1)));
+
+          let str = '        <table id=\"datatable1\" style=\"margin:5px;\"> ';
+              str += '          <thead> ';
+              str += '          <tr> ';
+              str += '            <th style=\"width:100px;\" class=\"td_border2\">점포명</th> ';
+              str += '            <th style=\"width:100px;\" class=\"td_border2\">매출일자</th> ';
+              str += '            <th style=\"width:100px;\" class=\"td_border2\">영수증번호</th> ';
+              str += '            <th style=\"width:600px;\" class=\"td_border2\">리뷰</th> ';
+              str += '          </tr> ';
+              str += '          </thead> ';
+              str += '          <tbody> ';
+
+              for(let i=0; i<view.content.length; i++) {
+                  str += '  <tr class=\"tr_hover1\">';
+                  str += '    <td class=\"td_border\">' + view.content[i].storeName + '</td>';
+                  str += '    <td class=\"td_border\">' + view.content[i].saleDate + '</td>';
+                  str += '    <td class=\"td_border\">' + view.content[i].saleId + '</td>';
+                  str += '    <td class=\"td_border\">' + view.content[i].contents + '</td>';
+                  str += '  </tr>';
+              }
+
+              str += '          </tbody> ';
+              str += '        </table> ';
+              str += '<div class="page_wrap"> ';
+              str += '  <div class="page_nation"> ';
+              str += '    <a class="arrow pprev" onclick=\"fn_view(0);\">First</a> ';
+
+              if(page-1 < 0) {
+                str += '    <a class="arrow prev" onclick=\"alert(\'처음 페이지 입니다.\');">&lt;</a> ';
+              } else {
+                str += '    <a class="arrow prev" onclick=\"fn_view(' + (page-1) + ');\">&lt;</a> ';
+              }
+
+              for(var i=start; i<end; i++) {
+                if(page == i) {
+                  str += '<a class=\"active\" onclick=\"fn_view(' + i + ');\">' + (i+1) + '</a>';
+                } else {
+                  str += '<a onclick=\"fn_view(' + i + ');\">' + (i+1) + '</a>';
+                }
+              }
+
+              if(page+1 > Math.floor(view.total / 10)) {
+                str += '    <a class="arrow next" onclick=\"alert(\'마지막 페이지 입니다.\');">&gt;</a> ';
+              } else {
+                str += '    <a class="arrow next" onclick=\"fn_view(' + (page+1) + ');\">&gt;</a> ';
+              }
+
+              str += '    <a class="arrow nnext" onclick=\"fn_view(' + Math.floor(view.total / 10) + ');\">Last</a> ';
+              str += '  </div> ';
+              str += '</div> ';
+
+          div1.innerHTML = str;
         }
         , error : function(e) {
           alert(e.responseText);
@@ -82,7 +137,7 @@
 <div id="div_one" class="card" style="width:100%; float:left; height:95%;">
   <div id="divTable1" style="width:100%; float:left; height:100%;">
     <div style="width:100%; height:100%; overflow:auto;">
-      <div id="div1" style="width:910px; height:600px; font-size:13px;">
+      <div id="div1" style="width:910px; height:540px; font-size:13px;">
         <table id="datatable1" style="margin:5px;">
           <thead>
           <tr>
