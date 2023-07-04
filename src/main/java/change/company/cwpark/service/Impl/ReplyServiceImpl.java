@@ -36,4 +36,15 @@ public class ReplyServiceImpl implements ReplyService {
 
     return rtnList;
   }
+
+  @Override
+  public void saveReply(List<ReplyDto> replyDtoList) {
+    List<Reply> list = new ArrayList<>();
+
+    for(ReplyDto r : replyDtoList) {
+      list.add(new Reply(null, new Review(r.getReviewId()), r.getContents()));
+    }
+
+    replyDao.saveReply(list);
+  }
 }

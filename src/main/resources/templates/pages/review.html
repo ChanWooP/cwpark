@@ -19,9 +19,77 @@
     var header = $("meta[name='_csrf_header']").attr("content");
     var token = $("meta[name='_csrf']").attr("content");
 
+    var dv = null;
+    var num = 0;
+
+    var saveJson = new Array();
+    var saveCnt = 0;
+
     $(function(){
       storeId.value = document.getElementById('storeId').value;
     });
+
+    function saveTable(event, iRow, text) {
+        let findIdx = saveJson.findIndex(function(data){return data.rowId === "data_" + iRow.dataset.id});
+
+        if(event == "insert") {
+            // 업데이트
+            if(findIdx >= 0) {
+              saveJson[findIdx].contents = text;
+              return true;
+            }
+
+            // 신규
+            saveJson[saveCnt++] = {
+                "rowId": "data_" + iRow.dataset.id
+              , "reviewId" : iRow.dataset.id
+              , "contents" : text
+            };
+
+        } else if(event == "delete") {
+            if(findIdx >= 0) {
+                saveJson.splice(findIdx, 1);
+                saveCnt--;
+            }
+        }
+
+        console.log(saveJson);
+    }
+
+    // 저장
+    function fn_save() {
+        if(saveJson.length <= 0) {
+            alert('저장할 데이터가 없습니다');
+            return false;
+        }
+
+        $.ajax({
+            type: "POST"
+          , url : "/reply/save"
+          ,beforeSend: function(xhr){
+            xhr.setRequestHeader(header, token);
+          }
+          , contentType : "application/json"
+          , data : JSON.stringify(saveJson)
+        })
+        .done(successFunction)
+        .fail(failFunction);
+    }
+
+     function successFunction(){
+        alert('저장되었습니다.');
+
+        saveCnt = 0;
+        saveJson = new Array();
+        dv = null;
+        num = 0;
+
+        fn_view();
+    }
+
+    function failFunction(){
+        alert("관리자에게 문의 바랍니다.");
+    }
 
     // 조회
     function fn_view(page) {
@@ -71,7 +139,10 @@
               str += '          <tbody> ';
 
               for(let i=0; i<view.content.length; i++) {
-                  str += '  <tr class=\"tr_hover1\">';
+                  str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnclick(this)\"';
+                  str += '      data-text=\"\" ';
+                  str += '      data-id=\" ' + view.content[i].id + ' \" ';
+                  str += '  >';
                   str += '    <td class=\"td_border\">' + view.content[i].storeName + '</td>';
                   str += '    <td class=\"td_border\">' + view.content[i].saleDate + '</td>';
                   str += '    <td class=\"td_border\">' + view.content[i].saleId + '</td>';
@@ -115,6 +186,43 @@
           alert(e.responseText);
         }
       });
+    }
+
+    function fn_trOnclick(obj) {
+      let table = document.getElementById('datatable1');
+      let row, cell, text;
+
+      if(dv == obj) {
+        return false;
+      } else {
+        if(dv != null) {
+          table.rows[dv.rowIndex - 1].dataset.text = document.getElementById('reply').value;
+          table.deleteRow(dv.rowIndex);
+        }
+      }
+
+      row = table.insertRow(obj.rowIndex+1);
+
+      cell = row.insertCell(0);
+      cell.className = 'td_border';
+      cell.colSpan = 4;
+
+      text = '<img src=\"/img/reply.png\" style=\"width:20px; height:20px;\">  답글쓰기 ';
+      text += '<input id=\"reply\" type=\"textarea\"style=\"width:100%; height:60px;\" onChange=\"fn_changeReply(this)\">';
+      cell.innerHTML = text;
+
+      dv = row;
+      document.getElementById('reply').value = table.rows[dv.rowIndex - 1].dataset.text;
+    }
+
+    function fn_changeReply(obj) {
+      let table = document.getElementById('datatable1');
+
+      if(obj.value == '') {
+        saveTable("delete", table.rows[dv.rowIndex - 1], obj.value)
+      } else {
+        saveTable("insert", table.rows[dv.rowIndex - 1], obj.value)
+      }
     }
   </script>
 </head>

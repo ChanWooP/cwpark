@@ -29,4 +29,9 @@ public class ReplyDaoImpl implements ReplyDao {
   public List<Reply> getReply(Review review) {
     return replyRepository.findByReview(review);
   }
+
+  @Override
+  public void saveReply(List<Reply> reply) {
+    replyRepository.saveAll(reply);
+  }
 }

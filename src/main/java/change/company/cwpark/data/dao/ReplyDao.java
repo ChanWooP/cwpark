@@ -8,4 +8,5 @@ import org.springframework.data.domain.Page;
 
 public interface ReplyDao {
   List<Reply> getReply(Review review);
+  void saveReply(List<Reply> reply);
 }

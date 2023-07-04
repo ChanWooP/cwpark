@@ -9,4 +9,5 @@ import org.springframework.data.domain.Page;
 
 public interface ReplyService {
   List<ReplyDto> getReply(Review review);
+  void saveReply(List<ReplyDto> replyDtoList);
 }
