@@ -25,6 +25,8 @@
     var saveJson = new Array();
     var saveCnt = 0;
 
+    var pages = 0;
+
     $(function(){
       storeId.value = document.getElementById('storeId').value;
     });
@@ -52,8 +54,6 @@
                 saveCnt--;
             }
         }
-
-        console.log(saveJson);
     }
 
     // 저장
@@ -84,7 +84,7 @@
         dv = null;
         num = 0;
 
-        fn_view();
+        fn_view(pages);
     }
 
     function failFunction(){
@@ -133,7 +133,9 @@
               str += '            <th style=\"width:100px;\" class=\"td_border2\">점포명</th> ';
               str += '            <th style=\"width:100px;\" class=\"td_border2\">매출일자</th> ';
               str += '            <th style=\"width:100px;\" class=\"td_border2\">영수증번호</th> ';
-              str += '            <th style=\"width:600px;\" class=\"td_border2\">리뷰</th> ';
+              str += '            <th style=\"width:100px;\" class=\"td_border2\">별점</th> ';
+              str += '            <th style=\"width:100px;\" class=\"td_border2\">답글여부</th> ';
+              str += '            <th style=\"width:400px;\" class=\"td_border2\">리뷰</th> ';
               str += '          </tr> ';
               str += '          </thead> ';
               str += '          <tbody> ';
@@ -142,10 +144,17 @@
                   str += '  <tr class=\"tr_hover1\" onclick=\"fn_trOnclick(this)\"';
                   str += '      data-text=\"\" ';
                   str += '      data-id=\" ' + view.content[i].id + ' \" ';
+                  str += '      data-replyYn=\"' + view.content[i].replyYn + '\" ';
                   str += '  >';
                   str += '    <td class=\"td_border\">' + view.content[i].storeName + '</td>';
                   str += '    <td class=\"td_border\">' + view.content[i].saleDate + '</td>';
                   str += '    <td class=\"td_border\">' + view.content[i].saleId + '</td>';
+                  str += '    <td class=\"td_border\">' + view.content[i].starCnt + '</td>';
+                  if(view.content[i].replyYn == 'Y') {
+                    str += '    <td class=\"td_border\"><div style="text-align : center;"><img src=\"/img/complate.png\" style=\"width:27px; height:17px;\"></div></td>';
+                  } else {
+                    str += '    <td class=\"td_border\"><div style="text-align : center;"><img src=\"/img/wait.png\" style=\"width:27px; height:17px;\"></div></td>';
+                  }
                   str += '    <td class=\"td_border\">' + view.content[i].contents + '</td>';
                   str += '  </tr>';
               }
@@ -181,6 +190,7 @@
               str += '</div> ';
 
           div1.innerHTML = str;
+          pages = page;
         }
         , error : function(e) {
           alert(e.responseText);
@@ -192,20 +202,23 @@
       let table = document.getElementById('datatable1');
       let row, cell, text;
 
-      if(dv == obj) {
-        return false;
-      } else {
-        if(dv != null) {
-          table.rows[dv.rowIndex - 1].dataset.text = document.getElementById('reply').value;
+      if(dv != null) {
+        table.rows[dv.rowIndex - 1].dataset.text = document.getElementById('reply').value;
+
+        if(table.rows[dv.rowIndex - 1] == obj) {
           table.deleteRow(dv.rowIndex);
+          dv = null;
+          return false;
         }
+
+        table.deleteRow(dv.rowIndex);
       }
 
       row = table.insertRow(obj.rowIndex+1);
 
       cell = row.insertCell(0);
       cell.className = 'td_border';
-      cell.colSpan = 4;
+      cell.colSpan = 6;
 
       text = '<img src=\"/img/reply.png\" style=\"width:20px; height:20px;\">  답글쓰기 ';
       text += '<input id=\"reply\" type=\"textarea\"style=\"width:100%; height:60px;\" onChange=\"fn_changeReply(this)\">';
@@ -213,6 +226,33 @@
 
       dv = row;
       document.getElementById('reply').value = table.rows[dv.rowIndex - 1].dataset.text;
+
+      if(obj.dataset.replyyn == 'Y') {
+        let review = new Array();
+
+        review[0] = {
+            "id" : obj.dataset.id
+        };
+
+        $.ajax({
+            type: "POST"
+          , url : "/reply/view"
+          , beforeSend: function(xhr){
+            xhr.setRequestHeader(header, token);
+          }
+          , contentType : "application/json"
+          , data : JSON.stringify(review)
+          , success : function(data) {
+            let view = JSON.parse(data);
+
+            document.getElementById('reply').value = view[0].contents;
+            document.getElementById('reply').readOnly = true;
+          }
+          , error : function(e) {
+            alert(e.responseText);
+          }
+        });
+      }
     }
 
     function fn_changeReply(obj) {
@@ -252,7 +292,9 @@
             <th style="width:100px;" class="td_border2">점포명</th>
             <th style="width:100px;" class="td_border2">매출일자</th>
             <th style="width:100px;" class="td_border2">영수증번호</th>
-            <th style="width:600px;" class="td_border2">리뷰</th>
+            <th style="width:100px;" class="td_border2">별점</th>
+            <th style="width:100px;" class="td_border2">답글여부</th>
+            <th style="width:400px;" class="td_border2">리뷰</th>
           </tr>
           </thead>
           <tbody>

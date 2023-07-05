@@ -36,8 +36,22 @@ public class ReviewServiceImpl implements ReviewService {
         .saleDate(p.getSaleDate())
         .image(p.getImage())
         .contents(p.getContents())
+        .starCnt(p.getStarCnt())
+        .replyYn(p.getReplyYn())
         .build());
 
     return rtnPage;
+  }
+
+  @Override
+  public void saveReview(List<ReviewDto> list) {
+    List<Review> reviews = new ArrayList<>();
+
+    for(ReviewDto r : list) {
+      reviews.add(new Review(null, new Store(r.getStoreId()), new Sale(r.getSaleId())
+      , r.getSaleDate(), r.getImage(), r.getContents(), r.getStarCnt(), r.getReplyYn()));
+    }
+
+    reviewDao.saveReview(reviews);
   }
 }

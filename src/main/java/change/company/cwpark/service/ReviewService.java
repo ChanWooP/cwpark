@@ -8,4 +8,5 @@ import org.springframework.data.domain.Page;
 
 public interface ReviewService {
   Page<ReviewDto> getReview(Store store, String frDt, String toDt, int page);
+  void saveReview(List<ReviewDto> list);
 }

@@ -20,9 +20,11 @@ public class ReplyServiceImpl implements ReplyService {
 
   @Autowired
   private final ReplyDao replyDao;
+  private final ReviewDao reviewDao;
 
-  public ReplyServiceImpl(ReplyDao replyDao) {
+  public ReplyServiceImpl(ReplyDao replyDao, ReviewDao reviewDao) {
     this.replyDao = replyDao;
+    this.reviewDao = reviewDao;
   }
 
   @Override
@@ -42,9 +44,14 @@ public class ReplyServiceImpl implements ReplyService {
     List<Reply> list = new ArrayList<>();
 
     for(ReplyDto r : replyDtoList) {
-      list.add(new Reply(null, new Review(r.getReviewId()), r.getContents()));
+      Review review = new Review(r.getReviewId());
+      review.setReplyYn("Y");
+      reviewDao.updateReview(review);
+
+      list.add(new Reply(null, review, r.getContents()));
     }
 
     replyDao.saveReply(list);
+
   }
 }

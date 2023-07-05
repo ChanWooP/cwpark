@@ -43,4 +43,8 @@ public class Sale extends Base{
 
   @Column(name="qty")
   private int qty;
+
+  public Sale(Long id) {
+    this.id = id;
+  }
 }

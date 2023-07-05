@@ -26,4 +26,8 @@ public class ReviewDto {
     private String image;
 
     private String contents;
+
+    private int starCnt;
+
+    private String replyYn;
 }

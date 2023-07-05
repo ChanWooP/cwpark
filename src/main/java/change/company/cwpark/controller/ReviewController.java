@@ -5,9 +5,11 @@ import change.company.cwpark.data.dto.SaleDto;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.vo.IdDatePageVO;
 import change.company.cwpark.data.vo.IdDateVO;
+import change.company.cwpark.data.vo.ReviewVO;
 import change.company.cwpark.service.ReviewService;
 import change.company.cwpark.service.SaleService;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,5 +43,18 @@ public class ReviewController {
     String json = gson.toJson(reviews);
 
     return json;
+  }
+
+  @ResponseBody
+  @PostMapping("/save")
+  public void saveReview(@RequestBody ReviewVO[] reviewVOS) {
+    List<ReviewDto> reviews = new ArrayList<>();
+
+    for(ReviewVO r : reviewVOS) {
+      reviews.add(new ReviewDto(null, r.getStoreId(), null, r.getSaleId(), r.getSaleDate()
+          , r.getImage(), r.getContents(), r.getStarCnt(), "N"));
+    }
+
+    reviewService.saveReview(reviews);
   }
 }

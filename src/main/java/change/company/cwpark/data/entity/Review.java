@@ -48,6 +48,12 @@ public class Review extends Base{
   @Column(name="contents")
   private String contents;
 
+  @Column(name="star_cnt")
+  private int starCnt;
+
+  @Column(name="reply_yn")
+  private String replyYn;
+
   public Review(Long id) {
     this.id = id;
   }
