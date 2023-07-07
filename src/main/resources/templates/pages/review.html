@@ -155,7 +155,14 @@
                   } else {
                     str += '    <td class=\"td_border\"><div style="text-align : center;"><img src=\"/img/wait.png\" style=\"width:27px; height:17px;\"></div></td>';
                   }
-                  str += '    <td class=\"td_border\">' + view.content[i].contents + '</td>';
+                  str += '    <td class=\"td_border\">';
+
+                  if(typeof view.content[i].image != "undefined") {
+                    str += '      <img style=\"width:100px;height:100px;margin:5px;\" accept=\".jpg, .png\" src=\"' + '/files/' + view.content[i].image + '\"></img>';
+                  }
+
+                  str += view.content[i].contents;
+                  str += '    </td>';
                   str += '  </tr>';
               }
 
