@@ -99,7 +99,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionRegistry(sessionRegistry());
 
         http.headers().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-        
+
+        http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
     }
 
     // AuthenticationManager는 사용자 인증을 담당합니다.

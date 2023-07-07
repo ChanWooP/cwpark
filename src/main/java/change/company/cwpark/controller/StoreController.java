@@ -1,20 +1,12 @@
 package change.company.cwpark.controller;
 
-import change.company.cwpark.data.dto.MemberDto;
-import change.company.cwpark.data.dto.MenuDto;
 import change.company.cwpark.data.dto.StoreDto;
-import change.company.cwpark.data.entity.Member;
-import change.company.cwpark.data.entity.Store;
-import change.company.cwpark.data.vo.MenuVO;
 import change.company.cwpark.data.vo.StoreVO;
-import change.company.cwpark.service.MenuService;
 import change.company.cwpark.service.StoreService;
 import com.google.gson.Gson;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,5 +54,15 @@ public class StoreController {
         }
 
         storeService.saveStore(storeDtoList);
+    }
+
+    @ResponseBody
+    @GetMapping("/gets/address")
+    public String getStoreAddress() {
+        List<StoreDto> storeDtoList = storeService.getStoreAddress("경기");
+        Gson gson = new Gson();
+        String storeJson = gson.toJson(storeDtoList);
+
+        return storeJson;
     }
 }

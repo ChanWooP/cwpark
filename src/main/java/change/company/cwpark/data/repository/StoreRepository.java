@@ -1,5 +1,6 @@
 package change.company.cwpark.data.repository;
 
+import change.company.cwpark.data.emb.Address;
 import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Menu;
 import change.company.cwpark.data.entity.Store;
@@ -20,4 +21,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
   List<Store> findAllStore();
 
   List<Store> findByAccount(Member account);
+
+  List<Store> findByAddressAddress1Containing(String address1);
 }

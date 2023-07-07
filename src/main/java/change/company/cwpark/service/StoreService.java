@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface StoreService {
     List<StoreDto> getStore(String storeName);
-
     void saveStore(List<StoreDto> storeDtoList);
+    List<StoreDto> getStoreAddress(String address1);
 }

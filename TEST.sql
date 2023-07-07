@@ -32,3 +32,5 @@ INSERT INTO storeOpen(store_id, open_yn, REG_DATE, REG_ID, UPD_DATE, UPD_ID) val
 
 INSERT INTO review(store_id, sale_id, sale_date, image, contents)
 VALUES(8, 4, '20230703', NULL, '에라모르게따');
+
+SELECT * FROM store;

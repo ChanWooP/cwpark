@@ -109,4 +109,9 @@ public class StoreDaoImpl implements StoreDao {
     return storeRepository.save(store);
   }
 
+  @Override
+  public List<Store> getStoreAddress(String address1) {
+    return storeRepository.findByAddressAddress1Containing(address1);
+  }
+
 }

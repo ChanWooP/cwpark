@@ -3,7 +3,6 @@ package change.company.cwpark.service.Impl;
 import change.company.cwpark.data.dao.MemberDao;
 import change.company.cwpark.data.dao.StoreDao;
 import change.company.cwpark.data.dao.StoreOpenDao;
-import change.company.cwpark.data.dto.MemberDto;
 import change.company.cwpark.data.dto.StoreDto;
 import change.company.cwpark.data.emb.Address;
 import change.company.cwpark.data.emb.Biz;
@@ -11,6 +10,7 @@ import change.company.cwpark.data.entity.Member;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.entity.StoreOpen;
 import change.company.cwpark.service.StoreService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,5 +67,21 @@ public class StoreServiceImpl implements StoreService {
 
         storeDao.saveStore(map1);
         storeDao.deleteStore(map2);
+    }
+
+    @Override
+    public List<StoreDto> getStoreAddress(String address1) {
+        List<Store> list = storeDao.getStoreAddress(address1);
+        List<StoreDto> rtnList = new ArrayList<>();
+
+        for(Store s : list) {
+            rtnList.add(new StoreDto(s.getId()
+                , s.getAccount().getId(), s.getAccount().getAccount()
+                , s.getStoreName(), s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc()
+                , s.getBiz().getBizNo(), s.getBiz().getBizName()
+                , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode(), "default"));
+        }
+
+        return rtnList;
     }
 }

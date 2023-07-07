@@ -43,4 +43,13 @@ public class StoreRepositoryTest {
         // then
         Assertions.assertThat("test3").isEqualTo(storeList2.get(0).getAccount().getAccount());
     }
+
+    @Test
+    @DisplayName("주소로 점포 검색")
+    void findByAddressContaining() {
+        List<Store> storeList = storeRepository.findByAddressAddress1Containing("경기");
+
+        Assertions.assertThat(3).isEqualTo(storeList.size());
+    }
+
 }
