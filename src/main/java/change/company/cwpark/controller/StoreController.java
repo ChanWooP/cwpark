@@ -1,11 +1,13 @@
 package change.company.cwpark.controller;
 
+import change.company.cwpark.data.api.StoreAPI;
 import change.company.cwpark.data.dto.StoreDto;
 import change.company.cwpark.data.vo.StoreVO;
 import change.company.cwpark.service.StoreService;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,12 +59,8 @@ public class StoreController {
     }
 
     @ResponseBody
-    @GetMapping("/gets/address")
-    public String getStoreAddress() {
-        List<StoreDto> storeDtoList = storeService.getStoreAddress("경기");
-        Gson gson = new Gson();
-        String storeJson = gson.toJson(storeDtoList);
-
-        return storeJson;
+    @GetMapping("/gets/store")
+    public List<StoreAPI> getStoreAPI(HttpServletRequest request) {
+        return storeService.getStoreAPI(request.getParameter("address1"));
     }
 }

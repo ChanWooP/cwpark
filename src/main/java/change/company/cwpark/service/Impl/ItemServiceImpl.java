@@ -1,5 +1,8 @@
 package change.company.cwpark.service.Impl;
 
+import change.company.cwpark.data.api.CategoryAPI;
+import change.company.cwpark.data.api.ItemAPI;
+import change.company.cwpark.data.api.PlusItemAPI;
 import change.company.cwpark.data.dao.ItemDao;
 import change.company.cwpark.data.dao.StoreDao;
 import change.company.cwpark.data.dto.CategoryDto;
@@ -140,6 +143,31 @@ public class ItemServiceImpl implements ItemService {
     }
 
     return rtn;
+  }
+
+  @Override
+  public List<CategoryAPI> getItemAPI(Store store) {
+    List<CategoryAPI> rtnList = new ArrayList<>();
+    List<Category> categoryList = itemDao.getCategory(store);
+
+    for(Category c : categoryList) {
+      List<ItemAPI> itemAPIList = new ArrayList<>();
+      List<Item> itemList = itemDao.getItem(c);
+
+      for(Item i : itemList) {
+        List<PlusItemAPI> plusItemAPIList = new ArrayList<>();
+        List<PlusItem> plusItemList = itemDao.getPlusItem(i);
+
+        for(PlusItem p : plusItemList) {
+          plusItemAPIList.add(new PlusItemAPI(p.getId(), p.getItemName(), p.getItemCost()));
+        }
+
+        itemAPIList.add(new ItemAPI(i.getId(), i.getItemName(), i.getItemCost(), i.getItemImage(), plusItemAPIList));
+      }
+      rtnList.add(new CategoryAPI(c.getId(), c.getCategoryName(), itemAPIList));
+    }
+
+    return rtnList;
   }
 
 

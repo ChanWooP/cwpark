@@ -1,5 +1,6 @@
 package change.company.cwpark.service.Impl;
 
+import change.company.cwpark.data.api.StoreAPI;
 import change.company.cwpark.data.dao.MemberDao;
 import change.company.cwpark.data.dao.StoreDao;
 import change.company.cwpark.data.dao.StoreOpenDao;
@@ -70,16 +71,15 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<StoreDto> getStoreAddress(String address1) {
-        List<Store> list = storeDao.getStoreAddress(address1);
-        List<StoreDto> rtnList = new ArrayList<>();
+    public List<StoreAPI> getStoreAPI(String address1) {
+        List<Store> list = storeDao.getStoreAPI(address1);
+        List<StoreAPI> rtnList = new ArrayList<>();
 
         for(Store s : list) {
-            rtnList.add(new StoreDto(s.getId()
-                , s.getAccount().getId(), s.getAccount().getAccount()
+            rtnList.add(new StoreAPI(s.getId()
                 , s.getStoreName(), s.getTel(), s.getOperTime(), s.getLikeCnt(), s.getEtc()
                 , s.getBiz().getBizNo(), s.getBiz().getBizName()
-                , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode(), "default"));
+                , s.getAddress().getAddress1(), s.getAddress().getAddress2(), s.getAddress().getZipcode()));
         }
 
         return rtnList;

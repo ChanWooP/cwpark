@@ -34,3 +34,10 @@ INSERT INTO review(store_id, sale_id, sale_date, image, contents)
 VALUES(8, 4, '20230703', NULL, '에라모르게따');
 
 SELECT * FROM store;
+
+SELECT * 
+  FROM category c
+ INNER 
+  JOIN item i
+ 	 ON c.id = i.category_id
+ WHERE c.store_id = 8

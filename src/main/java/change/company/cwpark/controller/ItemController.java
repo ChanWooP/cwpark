@@ -1,5 +1,6 @@
 package change.company.cwpark.controller;
 
+import change.company.cwpark.data.api.CategoryAPI;
 import change.company.cwpark.data.dto.CategoryDto;
 import change.company.cwpark.data.dto.ItemDto;
 import change.company.cwpark.data.dto.PlusItemDto;
@@ -14,8 +15,10 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,4 +87,10 @@ public class ItemController {
     return json;
   }
 
+  @ResponseBody
+  @GetMapping("/gets/item")
+  public List<CategoryAPI> getItemAPI(HttpServletRequest request) {
+    List<CategoryAPI> categoryAPIList = itemService.getItemAPI(new Store(Long.valueOf(request.getParameter("storeId"))));;
+    return categoryAPIList;
+  }
 }

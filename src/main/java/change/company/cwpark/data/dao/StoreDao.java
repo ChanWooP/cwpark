@@ -15,5 +15,5 @@ public interface StoreDao {
     StoreDto getAccount(Member account);
     Store getStores(Long storeId);
     Store saveStoreOne(Store store);
-    List<Store> getStoreAddress(String address1);
+    List<Store> getStoreAPI(String address1);
 }

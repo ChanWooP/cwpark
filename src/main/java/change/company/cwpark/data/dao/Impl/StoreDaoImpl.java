@@ -110,7 +110,7 @@ public class StoreDaoImpl implements StoreDao {
   }
 
   @Override
-  public List<Store> getStoreAddress(String address1) {
+  public List<Store> getStoreAPI(String address1) {
     return storeRepository.findByAddressAddress1Containing(address1);
   }
 
