@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -74,7 +75,11 @@ public class ReviewServiceImpl implements ReviewService {
         .build());
 
     for(int i=0; i<pages.getSize(); i++) {
-      List<Reply> reply = replyDao.getReply(pages.getContent().get(i));
+      List<Reply> reply = null;
+
+      if(pages.getContent().get(i).getReplyYn() == "Y") {
+        reply = replyDao.getReply(pages.getContent().get(i));
+      }
 
       if(reply.size() > 0) {
         rtnPage.getContent().get(0).setReplyAPI(new ReplyAPI(reply.get(0).getId(), reply.get(0).getContents()));
