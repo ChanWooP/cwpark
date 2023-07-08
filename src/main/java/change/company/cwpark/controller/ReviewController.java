@@ -1,5 +1,6 @@
 package change.company.cwpark.controller;
 
+import change.company.cwpark.data.api.ReviewAPI;
 import change.company.cwpark.data.dto.ReviewDto;
 import change.company.cwpark.data.dto.SaleDto;
 import change.company.cwpark.data.entity.Store;
@@ -11,6 +12,7 @@ import change.company.cwpark.service.SaleService;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -56,5 +58,16 @@ public class ReviewController {
     }
 
     reviewService.saveReview(reviews);
+  }
+
+  @ResponseBody
+  @GetMapping("/gets/review")
+  public Page<ReviewAPI> getReviewAPI(HttpServletRequest request) {
+    Store store = new Store(Long.valueOf(request.getParameter("storeId")));
+    String frDt = request.getParameter("frDt");
+    String toDt = request.getParameter("toDt");
+    int page = Integer.parseInt(request.getParameter("page"));
+
+    return reviewService.getReviewAPI(store, frDt, toDt, page);
   }
 }
