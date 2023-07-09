@@ -41,4 +41,8 @@ public class Item extends Base {
 
   @Column(name="item_image")
   private String itemImage;
+
+  public Item(Long id) {
+    this.id = id;
+  }
 }

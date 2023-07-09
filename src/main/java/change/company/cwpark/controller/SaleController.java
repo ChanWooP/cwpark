@@ -1,11 +1,19 @@
 package change.company.cwpark.controller;
 
+import change.company.cwpark.data.api.SaleAPI;
 import change.company.cwpark.data.dto.CategoryDto;
 import change.company.cwpark.data.dto.ItemDto;
 import change.company.cwpark.data.dto.SaleDto;
+import change.company.cwpark.data.dto.SaleItemDto;
+import change.company.cwpark.data.dto.SalePlusItemDto;
+import change.company.cwpark.data.entity.SaleItem;
+import change.company.cwpark.data.entity.SalePlusItem;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.data.vo.IdDateVO;
 import change.company.cwpark.data.vo.IdVO;
+import change.company.cwpark.data.vo.SaleItemVO;
+import change.company.cwpark.data.vo.SalePlusItemVO;
+import change.company.cwpark.data.vo.SaleVO;
 import change.company.cwpark.service.SaleService;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -44,4 +52,27 @@ public class SaleController {
 
     return json;
   }
+
+  @ResponseBody
+  @PostMapping("/posts/sale")
+  public void saveItem(@RequestBody SaleAPI saleAPI) {
+    SaleVO saleVO = saleAPI.getSale();
+    List<SaleItemVO> saleItemVO = saleAPI.getSaleItem();
+    List<SalePlusItemVO> salePlusItemVO = saleAPI.getSalePlusItem();
+
+    SaleDto saleDto = new SaleDto(null, saleVO.getStoreId(), null, saleVO.getSaleDate(), saleVO.getAmt(), saleVO.getQty());
+    List<SaleItemDto> saleItemDto = new ArrayList<>();
+    List<SalePlusItemDto> salePlusItemDto = new ArrayList<>();
+
+    for(SaleItemVO s : saleItemVO) {
+      saleItemDto.add(new SaleItemDto(null, null, null, s.getItemId(), null, null, null, s.getAmt(), s.getQty()));
+    }
+
+    for(SalePlusItemVO s : salePlusItemVO) {
+      salePlusItemDto.add(new SalePlusItemDto(null, null, null, s.getItemId(), null, null, null, s.getAmt(), s.getQty()));
+    }
+
+    saleService.saveSale(saleDto, saleItemDto, salePlusItemDto);
+  }
+
 }

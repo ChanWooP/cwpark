@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface SalePlusItemDao {
   List<SalePlusItem> getSale(Store store, String frDt, String toDt);
-  void SaveSalePlusItem(SalePlusItem salePlusItem);
+  void saveSalePlusItem(List<SalePlusItem> salePlusItem);
 
 }

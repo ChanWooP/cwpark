@@ -26,7 +26,7 @@ public class SaleDaoImpl implements SaleDao {
   }
 
   @Override
-  public void saveSale(Sale sale) {
-    saleRepository.save(sale);
+  public Sale saveSale(Sale sale) {
+    return saleRepository.save(sale);
   }
 }

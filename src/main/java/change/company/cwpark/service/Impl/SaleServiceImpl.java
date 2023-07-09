@@ -1,8 +1,16 @@
 package change.company.cwpark.service.Impl;
 
 import change.company.cwpark.data.dao.SaleDao;
+import change.company.cwpark.data.dao.SaleItemDao;
+import change.company.cwpark.data.dao.SalePlusItemDao;
 import change.company.cwpark.data.dto.SaleDto;
+import change.company.cwpark.data.dto.SaleItemDto;
+import change.company.cwpark.data.dto.SalePlusItemDto;
+import change.company.cwpark.data.entity.Item;
+import change.company.cwpark.data.entity.PlusItem;
 import change.company.cwpark.data.entity.Sale;
+import change.company.cwpark.data.entity.SaleItem;
+import change.company.cwpark.data.entity.SalePlusItem;
 import change.company.cwpark.data.entity.Store;
 import change.company.cwpark.service.SaleService;
 import java.util.ArrayList;
@@ -15,9 +23,13 @@ public class SaleServiceImpl implements SaleService {
 
   @Autowired
   private final SaleDao saleDao;
+  private final SaleItemDao saleItemDao;
+  private final SalePlusItemDao salePlusItemDao;
 
-  public SaleServiceImpl(SaleDao saleDao) {
+  public SaleServiceImpl(SaleDao saleDao, SaleItemDao saleItemDao, SalePlusItemDao salePlusItemDao) {
     this.saleDao = saleDao;
+    this.saleItemDao = saleItemDao;
+    this.salePlusItemDao = salePlusItemDao;
   }
 
   @Override
@@ -30,5 +42,27 @@ public class SaleServiceImpl implements SaleService {
     }
 
     return listDto;
+  }
+
+  @Override
+  public void saveSale(SaleDto saleDto, List<SaleItemDto> saleItemDto, List<SalePlusItemDto> salePlusItemDto) {
+    Store store = new Store(saleDto.getStoreId());
+    Sale sale = new Sale(saleDto.getId(), store, saleDto.getSaleDate(), saleDto.getAmt(), saleDto.getQty());
+    List<SaleItem> saleItem = new ArrayList<>();
+    List<SalePlusItem> salePlusItem = new ArrayList<>();
+
+    sale = saleDao.saveSale(sale);
+
+    for(SaleItemDto s : saleItemDto) {
+      saleItem.add(new SaleItem(s.getId(), store, new Item(s.getItemId()), sale, sale.getSaleDate(), s.getAmt(), s.getQty()));
+    }
+
+    saleItemDao.saveSaleItem(saleItem);
+
+    for(SalePlusItemDto s : salePlusItemDto) {
+      salePlusItem.add(new SalePlusItem(s.getId(), store, new PlusItem(s.getItemId()), sale, sale.getSaleDate(), s.getAmt(), s.getQty()));
+    }
+
+    salePlusItemDao.saveSalePlusItem(salePlusItem);
   }
 }

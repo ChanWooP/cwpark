@@ -29,7 +29,7 @@ public class SalePlusItemDaoImpl implements SalePlusItemDao {
   }
 
   @Override
-  public void SaveSalePlusItem(SalePlusItem salePlusItem) {
-    saleRepository.save(salePlusItem);
+  public void saveSalePlusItem(List<SalePlusItem> salePlusItem) {
+    saleRepository.saveAll(salePlusItem);
   }
 }

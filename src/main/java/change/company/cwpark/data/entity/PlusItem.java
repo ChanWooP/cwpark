@@ -38,4 +38,8 @@ public class PlusItem extends Base {
 
   @Column(name="item_cost")
   private Integer itemCost;
+
+  public PlusItem (Long id) {
+    this.id = id;
+  }
 }
