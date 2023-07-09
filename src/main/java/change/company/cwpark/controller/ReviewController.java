@@ -48,7 +48,7 @@ public class ReviewController {
   }
 
   @ResponseBody
-  @PostMapping("/save")
+  @PostMapping("/posts/review")
   public void saveReview(@RequestBody ReviewVO[] reviewVOS) {
     List<ReviewDto> reviews = new ArrayList<>();
 

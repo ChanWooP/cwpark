@@ -81,7 +81,7 @@ public class ReviewServiceImpl implements ReviewService {
         reply = replyDao.getReply(pages.getContent().get(i));
       }
 
-      if(reply.size() > 0) {
+      if(reply != null) {
         rtnPage.getContent().get(0).setReplyAPI(new ReplyAPI(reply.get(0).getId(), reply.get(0).getContents()));
       }
     }
