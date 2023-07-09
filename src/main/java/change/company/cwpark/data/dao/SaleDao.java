@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface SaleDao {
   List<Sale> getSale(Store store, String frDt, String toDt);
+  void saveSale(Sale sale);
 
 }
